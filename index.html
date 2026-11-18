@@ -821,6 +821,135 @@ body.wgrabbing,body.wgrabbing *{cursor:grabbing!important}
 @keyframes rise{from{opacity:0;transform:translateY(8px) scale(.99)}}
 
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+/* ===== v6: cores, simplicidade, notas e documentos, movimento ===== */
+:root{--brand-tint:12%}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--brand-tint:22%}}
+:root[data-theme="dark"]{--brand-tint:22%}
+/* ícones das áreas: cores do sistema Apple, degradê sutil sem escurecer */
+.ti{background:linear-gradient(180deg,var(--a) 0%,var(--b) 100%);box-shadow:inset 0 .5px 0 rgba(255,255,255,.35),0 .5px 1.5px rgba(0,0,0,.12)}
+.ti svg.i{stroke:#fff}
+.ti[style*="#FFD84D"] svg.i{stroke:#3A2E00}
+/* apps de terceiros: fundo claro tingido e letra na cor da marca, sempre legível */
+.logo,.gmark,.dock button,.appswitch button,.ti.brand{background:color-mix(in srgb,var(--c,#8E8E93) var(--brand-tint),var(--bg))!important;color:var(--c,#8E8E93)!important;background-image:none!important;box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--c,#8E8E93) 18%,transparent)!important;font-weight:700;letter-spacing:-.02em}
+.dock button[data-act=goapps]{box-shadow:none!important;background:transparent!important;color:var(--muted)!important}
+.ti.brand b{color:var(--c)}
+.tile.hl{background:linear-gradient(180deg,color-mix(in srgb,var(--accent) 86%,#fff) 0%,var(--accent) 100%);color:#fff}
+.btn.primary{background:var(--ink)}
+.btn.accent{background:linear-gradient(180deg,color-mix(in srgb,var(--accent) 88%,#fff),var(--accent))}
+#syncBadge{display:none}
+.top h1{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;min-width:0}
+.vsub{font-size:13px;font-weight:400;color:var(--muted);letter-spacing:-.01em}
+@media (max-width:1100px){.vsub{display:none}}
+.nav-label.more{margin-top:14px}
+.nav a.more{font-size:13px;color:var(--muted);padding:5px 10px}
+.nav a.more .ti{width:22px;height:22px;border-radius:6px}
+.nav a.more .ti svg.i{width:13px;height:13px}
+/* foco compacto */
+.focus{padding:10px 12px;gap:6px;border-radius:14px}
+.focus-top{display:none}
+.focus-time{font-size:20px}
+.focus select{font-size:11px;padding:4px 6px}
+.focus .btn{padding:6px 10px;font-size:12px}
+/* comece por aqui */
+.guide{background:var(--tile);border-radius:var(--r);padding:16px 18px;margin-bottom:18px}
+.guide-h{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.guide-h strong{font-size:16px}
+.guide-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.guide-steps button{border:0;background:var(--bg);border-radius:14px;padding:14px;text-align:left;display:flex;flex-direction:column;gap:3px;transition:transform .35s var(--apple),box-shadow .3s}
+.guide-steps button:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.06)}
+.guide-steps b{width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-size:12px;margin-bottom:6px}
+.guide-steps span{font-size:13px;color:var(--muted)}
+@media (max-width:760px){.guide-steps{grid-template-columns:1fr}}
+/* abas de notas e ideias */
+.tabs-line{display:flex;gap:4px;margin-bottom:20px;border-bottom:1px solid var(--hair);overflow-x:auto}
+.tabs-line button{border:0;background:none;padding:10px 12px;font-weight:600;font-size:14px;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap;transition:color .2s,border-color .25s var(--apple)}
+.tabs-line button.on{color:var(--ink);border-bottom-color:var(--ink)}
+.in-notas>.toolbar:first-child .seg{display:none}
+/* notas estilo Apple Notes */
+.notes-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.newnote{display:inline-flex;align-items:center;gap:8px;border:0;background:var(--tile);border-radius:12px;padding:10px 14px;font-weight:600;font-size:14px;transition:transform .35s var(--apple)}
+.newnote:hover{transform:translateY(-1px)}
+.note{cursor:text;border:0!important;padding:16px 16px 10px;border-radius:18px}
+.note .pinbtn{position:absolute;top:8px;right:8px;border:0;background:none;color:var(--muted);opacity:0;padding:6px;border-radius:8px;transition:opacity .2s}
+.note .pinbtn.on{opacity:1;color:var(--accent)}
+.note:hover .pinbtn{opacity:1}
+.n-title{font-weight:700;font-size:16px;letter-spacing:-.02em;outline:none;margin-right:26px;min-height:22px}
+.n-body{outline:none;font-size:14px;line-height:1.55;margin-top:6px;min-height:40px;white-space:pre-wrap}
+.n-title:empty:before,.n-body:empty:before,.n-item span:empty:before{content:attr(data-ph);color:var(--muted);opacity:.7}
+.n-list{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+.n-item{display:flex;gap:8px;align-items:flex-start;font-size:14px}
+.n-item .check{width:17px;height:17px;margin-top:2px}
+.n-item span{flex:1;outline:none;min-height:20px}
+.n-item.ok span{text-decoration:line-through;color:var(--muted)}
+.n-add{border:0;background:none;color:var(--muted);font-size:13px;display:inline-flex;align-items:center;gap:6px;padding:2px 0;align-self:flex-start}
+.n-add svg.i{width:14px;height:14px}
+.note .nb{display:flex;align-items:center;gap:2px;margin-top:10px;opacity:0;transition:opacity .2s}
+.note:hover .nb,.note:focus-within .nb{opacity:1}
+.note .sw{width:14px;height:14px}
+.emptybig{display:flex;flex-direction:column;gap:4px;align-items:flex-start;padding:28px;background:var(--tile);border-radius:var(--r);max-width:520px}
+.emptybig strong{font-size:16px}
+.emptybig span{color:var(--muted);font-size:14px}
+.mini-notes{display:block;columns:3 220px;column-gap:12px}
+.mini-notes .note{margin-bottom:12px}
+/* documentos estilo Notion */
+.docs2{display:grid;grid-template-columns:240px 1fr;gap:20px;min-height:calc(100vh - 150px)}
+.doclist2{display:flex;flex-direction:column;gap:12px;position:sticky;top:0;align-self:start;max-height:calc(100vh - 140px);overflow:auto;padding-right:4px}
+.doclist2 .input{padding:8px 12px;background:var(--tile);border:0}
+.page{background:var(--bg);border-radius:var(--r);box-shadow:0 0 0 1px var(--hair);min-width:0;display:flex;flex-direction:column}
+.pagebar{display:flex;align-items:center;gap:8px;padding:10px 16px;border-bottom:1px solid var(--hair)}
+.page-in{max-width:740px;width:100%;margin:0 auto;padding:48px 28px 160px}
+.doctitle2{border:0;outline:none;background:none;font-size:40px;font-weight:700;letter-spacing:-.04em;width:100%;padding:0;margin-bottom:10px;line-height:1.1}
+.doctitle2::placeholder{color:var(--muted);opacity:.5}
+.docmeta2{display:flex;gap:16px;flex-wrap:wrap;color:var(--muted);font-size:13px;margin-bottom:28px}
+.docmeta2 select{border:0;background:var(--tile);border-radius:8px;padding:4px 8px;margin-left:6px;font-size:13px;color:var(--ink)}
+.editor2{outline:none;font-size:17px;line-height:1.7;letter-spacing:-.012em;min-height:300px}
+.editor2>*{margin:0 0 6px;padding:2px 0;border-radius:6px;position:relative}
+.editor2 h2{font-size:27px;letter-spacing:-.03em;margin:28px 0 8px;line-height:1.25}
+.editor2 h3{font-size:20px;letter-spacing:-.02em;margin:20px 0 6px}
+.editor2 ul,.editor2 ol{padding-left:24px}
+.editor2 blockquote{border-left:3px solid var(--accent);padding:4px 16px;background:none;color:var(--ink)}
+.editor2 hr{border:0;border-top:1px solid var(--line);margin:24px 0}
+.editor2 table{border-collapse:collapse;width:100%;margin:8px 0 14px;font-size:15px}
+.editor2 td,.editor2 th{border:1px solid var(--line);padding:8px 10px;text-align:left}
+.editor2 th{background:var(--tile);font-weight:600}
+.editor2 .todo{list-style:none;padding-left:0}
+.editor2 .todo li{display:flex;gap:10px;align-items:flex-start;padding-left:0}
+.editor2 .todo li:before{content:"";width:16px;height:16px;border:1.5px solid var(--muted);border-radius:5px;margin-top:6px;flex:none;cursor:pointer}
+.editor2 .todo li.ok:before{background:var(--accent);border-color:var(--accent)}
+.editor2 .todo li.ok{color:var(--muted);text-decoration:line-through}
+.editor2 [data-empty]:before{content:"Escreva, ou digite / para inserir título, lista, checklist, tabela…";color:var(--muted);opacity:.6;pointer-events:none;position:absolute}
+.editor2 h2[data-empty]:before{content:"Título"}
+.editor2 h3[data-empty]:before{content:"Subtítulo"}
+.slash{position:fixed;z-index:60;width:260px;max-height:320px;overflow:auto;background:var(--bg);border-radius:14px;box-shadow:0 0 0 1px var(--hair),0 16px 40px rgba(0,0,0,.14);padding:6px;animation:zoom .25s var(--apple);transform-origin:top left}
+.slash button{display:flex;flex-direction:column;align-items:flex-start;width:100%;border:0;background:none;text-align:left;padding:8px 10px;border-radius:9px}
+.slash button strong{font-size:14px}
+.slash button span{font-size:12px;color:var(--muted)}
+.slash button.on,.slash button:hover{background:var(--tile)}
+.seltool{position:fixed;z-index:60;transform:translate(-50%,-100%);display:flex;gap:2px;background:#1D1D1F;color:#fff;border-radius:10px;padding:4px;box-shadow:0 10px 30px rgba(0,0,0,.25);animation:zoom .2s var(--apple)}
+.seltool button{border:0;background:none;color:#fff;font-size:13px;font-weight:600;padding:6px 9px;border-radius:7px}
+.seltool button:hover{background:rgba(255,255,255,.14)}
+@media (max-width:860px){.docs2{grid-template-columns:1fr}.doclist2{position:static;max-height:220px}.page-in{padding:28px 18px 100px}.doctitle2{font-size:30px}}
+/* movimento dos blocos */
+.w-lifted{opacity:.35;transition:opacity .25s var(--apple)}
+.wghost{position:fixed!important;z-index:90;pointer-events:none;margin:0;border-radius:var(--r);background:var(--tile);transform-origin:center;transition:box-shadow .35s var(--apple);will-change:transform;opacity:1}
+.wghost.up{box-shadow:0 30px 70px rgba(0,0,0,.18)!important}
+.wdrop{position:absolute;left:0;top:0;width:4px;border-radius:4px;background:var(--accent);z-index:6;pointer-events:none;transition:transform .28s var(--apple),height .28s var(--apple);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 18%,transparent)}
+.wpreview{position:absolute;z-index:6;pointer-events:none;border-radius:var(--r);border:2px solid var(--accent);background:color-mix(in srgb,var(--accent) 6%,transparent);transition:width .22s var(--apple),height .22s var(--apple)}
+.wpreview .wsize-badge{bottom:12px}
+.w.resizing{outline:none}
+::view-transition-group(*){animation-duration:.55s;animation-timing-function:cubic-bezier(.32,.72,0,1)}
+::view-transition-old(*),::view-transition-new(*){height:100%;width:100%;object-fit:none;object-position:0 0;animation-duration:.4s}
+::view-transition-image-pair(*){overflow:hidden;border-radius:22px}
+::view-transition-image-pair(root){overflow:visible;border-radius:0}
+::view-transition-old(root),::view-transition-new(root){object-fit:fill;height:auto}
+
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.wgrid>.w{z-index:1}
+.wguides{z-index:0}
+.banner{background:#1D1D1F!important;color:#F5F5F7}
+:root{--n-branco:#F5F5F7}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--n-branco:#1C1C1E}}
+:root[data-theme="dark"]{--n-branco:#1C1C1E}
 .exemplo{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:var(--tile);border-radius:16px;padding:14px 16px;margin-bottom:18px;font-size:14px}
 .exemplo>div{flex:1;min-width:240px}
 #boot{animation:none}
@@ -1146,11 +1275,9 @@ function login(acc){S.session={email:acc.email};S.user={name:acc.name,email:acc.
 
 /* ============ Navegação ============ */
 const NAV=[
-  ['hoje','Hoje','home',''],['projetos','Projetos','board',''],['agenda','Agenda','cal',''],['documentos','Documentos','doc',''],['notas','Notas','note',''],
-  ['cerebro','Segundo cérebro','brain',''],['assistentes','Assistentes IA','spark',''],['apps','Apps','grid',''],
+  ['hoje','Hoje','home',''],['projetos','Projetos','board',''],['agenda','Agenda','cal',''],['documentos','Documentos','doc',''],['notas','Notas e ideias','note',''],['assistentes','IA','spark',''],
   ['clientes','Clientes','users','Negócio'],['financeiro','Financeiro','money','Negócio'],
-  ['referencias','Referências','image','Acervo'],
-  ['integracoes','Integrações','plug','Ajustes'],['personalizar','Personalizar','brush','Ajustes']];
+  ['apps','Apps','grid','Mais'],['integracoes','Integrações','plug','Mais'],['personalizar','Personalizar','brush','Mais']];
 const FIXED=['hoje','personalizar','integracoes'];
 let route=location.hash.slice(1)||'hoje';
 window.addEventListener('hashchange',()=>{route=location.hash.slice(1)||'hoje';if(document.startViewTransition&&!matchMedia('(prefers-reduced-motion: reduce)').matches){document.startViewTransition(()=>render())}else render();$('#side').classList.remove('open')});
@@ -1158,13 +1285,14 @@ window.addEventListener('hashchange',()=>{route=location.hash.slice(1)||'hoje';i
 function render(){
   if(!S.session){$('#auth').hidden=false;$('#app').hidden=true;renderAuth();return}
   $('#auth').hidden=true;$('#app').hidden=false;
-  if(!VIEWS[route])route='hoje';
+  if(route==='cerebro'){route='notas';S.ui.notesTab=S.ui.brainTab||'ideias'}if(route==='referencias'){route='notas';S.ui.notesTab='refs'}
+  if(!VIEWS[route]||!NAV.some(n=>n[0]===route))route='hoje';
   const late=S.tasks.filter(t=>!t.done&&diff(t.date)<=0).length;
   applyLook();
   let lastG='';
-  $('#nav').innerHTML=NAV.filter(n=>!(S.ui.hidden||[]).includes(n[0])).map(([r,l,i,g])=>{const lab=g&&g!==lastG?`<div class="nav-label">${g}</div>`:'';lastG=g||lastG;return `${lab}<a href="#${r}" data-r="${r}" class="${r===route?'on':''}">${tile(r)}${l}${r==='hoje'&&late?`<span class="count">${late}</span>`:''}</a>`}).join('');
+  $('#nav').innerHTML=NAV.filter(n=>!(S.ui.hidden||[]).includes(n[0])).map(([r,l,i,g])=>{const lab=g&&g!==lastG?`<div class="nav-label ${g==='Mais'?'more':''}">${g}</div>`:'';lastG=g||lastG;return `${lab}<a href="#${r}" data-r="${r}" class="${r===route?'on':''} ${g==='Mais'?'more':''}">${tile(r)}${l}${r==='hoje'&&late?`<span class="count">${late}</span>`:''}</a>`}).join('');
   renderDock();
-  $('#viewTitle').textContent=NAV.find(n=>n[0]===route)[1];
+  $('#viewTitle').innerHTML=esc(NAV.find(n=>n[0]===route)[1])+(SUBT[route]?`<span class="vsub">${SUBT[route]}</span>`:'');
   const on=Object.values(S.integrations).filter(Boolean).length;
   $('#syncBadge').innerHTML=`${ic('sync')} ${S.integrations.gcal||S.integrations.drive?'Google sincronizado agora':'Google desconectado'}`;
   const v=$('#view');const changed=route!==window._lastRoute;window._lastRoute=route;const st=changed?0:v.scrollTop;
@@ -1197,7 +1325,7 @@ const VIEWS={},AFTER={};
 /* ---- Hoje: painel de widgets ---- */
 const SIZE_L={4:'Pequeno',5:'Médio',6:'Médio',7:'Grande',8:'Grande',12:'Inteiro'};
 const SIZES=[4,6,8,12];
-const srcBadge=s=>`<span class="gbadge"><span class="gmark" style="background:${s[0]}">${s[1]}</span>${s[2]}</span>`;
+const srcBadge=s=>`<span class="gbadge"><span class="gmark" style="--c:${s[0]}">${s[1]}</span>${s[2]}</span>`;
 const WIDGETS={
   numeros:{t:'Números do mês',d:'Recebido, projetos, prazos e horas',bare:true,f:wNumeros},
   tarefas:{t:'Tarefas',d:'O que precisa sair hoje',f:wTarefas,head:()=>`<a class="btn ghost sm" href="#agenda">Ver semana</a>`},
@@ -1226,12 +1354,12 @@ VIEWS.hoje=()=>{
   const lay=[...S.ui.layout].sort((a,b)=>(b.pin?1:0)-(a.pin?1:0));
   return `${EXEMPLO_BANNER()}<div class="greet"><div><h2>${hi}, ${esc(u.name.split(' ')[0])}.</h2><p>${dstr.charAt(0).toUpperCase()+dstr.slice(1)} · ${pend} tarefas pendentes e ${evs} compromissos hoje.</p></div>
   <div class="row">${edit?`<button class="btn" data-act="waddmenu">${ic('plus')}Adicionar widget</button><button class="btn" data-act="wreset">Voltar ao padrão</button><button class="btn primary" data-act="wedit">${ic('check')}Concluir</button>`:`<button class="btn" data-act="wedit">${ic('grid')}Organizar tela</button>`}</div></div>
-  ${edit?`<div class="edit-tip">${ic('grid')}Fixe no topo com o alfinete, tire da tela com o X ou adicione novos blocos. Para mover e mudar o tamanho, nem precisa entrar aqui: arraste o bloco pelo título e puxe o canto de baixo.</div>`:''}
+  ${GUIDE()}${edit?`<div class="edit-tip">${ic('grid')}Fixe no topo com o alfinete, tire da tela com o X ou adicione novos blocos. Para mover e mudar o tamanho, nem precisa entrar aqui: arraste o bloco pelo título e puxe o canto de baixo.</div>`:''}
   <div class="wgrid">${lay.map((it,i)=>widgetHTML(it,edit,i)).join('')}</div>`;
 };
 function widgetHTML(it,edit,i=0){const W=WIDGETS[it.id];if(!W)return'';
-  const head=(!W.bare||edit)?`<div class="card-h w-h"><span class="w-grip" title="Arraste para mover" aria-hidden="true">${ic('drag')}</span>${W.src?`<span class="ti" style="--a:${W.src[0]};--b:${W.src[0]}"><b>${W.src[1]}</b></span>`:tile(WTILE[it.id]||it.id)}<h3>${W.t}</h3>${it.pin?`<span class="pinmark" title="Fixado no topo">${ic('pin')}</span>`:''}<div class="sp"></div>${edit?`<div class="w-tools"><button class="btn sm" data-act="wsize" data-id="${it.id}" title="Mudar tamanho">${SIZE_L[it.w]||'Tamanho'}</button><button class="iconbtn ${it.pin?'on':''}" data-act="wpin" data-id="${it.id}" title="${it.pin?'Desafixar':'Fixar no topo'}" aria-label="Fixar">${ic('pin')}</button><button class="iconbtn" data-act="wdel" data-id="${it.id}" title="Tirar da tela" aria-label="Tirar da tela">${ic('x')}</button></div>`:(W.head?W.head():'')}</div>`:'';
-  return `<section class="w ${W.bare?'bare':'card'} ${edit?'editing':''} ${it.w>=7?'big':''}" style="--span:${it.w};--i:${i}${it.h?`;min-height:${it.h*ROWH}px`:''}" data-w="${it.id}">${head}<div class="w-b">${W.f()}</div><span class="w-resize" title="Arraste para mudar o tamanho" aria-hidden="true"></span></section>`}
+  const head=(!W.bare||edit)?`<div class="card-h w-h"><span class="w-grip" title="Arraste para mover" aria-hidden="true">${ic('drag')}</span>${W.src?`<span class="ti brand" style="--c:${W.src[0]}"><b>${W.src[1]}</b></span>`:tile(WTILE[it.id]||it.id)}<h3>${W.t}</h3>${it.pin?`<span class="pinmark" title="Fixado no topo">${ic('pin')}</span>`:''}<div class="sp"></div>${edit?`<div class="w-tools"><button class="btn sm" data-act="wsize" data-id="${it.id}" title="Mudar tamanho">${SIZE_L[it.w]||'Tamanho'}</button><button class="iconbtn ${it.pin?'on':''}" data-act="wpin" data-id="${it.id}" title="${it.pin?'Desafixar':'Fixar no topo'}" aria-label="Fixar">${ic('pin')}</button><button class="iconbtn" data-act="wdel" data-id="${it.id}" title="Tirar da tela" aria-label="Tirar da tela">${ic('x')}</button></div>`:(W.head?W.head():'')}</div>`:'';
+  return `<section class="w ${W.bare?'bare':'card'} ${edit?'editing':''} ${it.w>=7?'big':''}" style="--span:${it.w};--i:${i}${it.h?`;min-height:${it.h*ROWH}px`:''};view-transition-name:w-${it.id}" data-w="${it.id}">${head}<div class="w-b">${W.f()}</div><span class="w-resize" title="Arraste para mudar o tamanho" aria-hidden="true"></span></section>`}
 
 function wNumeros(){
   const inMonth=d=>{const x=parse(d);return x.getMonth()===T0.getMonth()&&x.getFullYear()===T0.getFullYear()};
@@ -1271,7 +1399,7 @@ function wFin(){const sum=a=>a.reduce((x,y)=>x+y.amount,0);const ms=[5,4,3,2,1,0
 function wFoco(){const by={};S.timelog.filter(l=>diff(l.date)>-7).forEach(l=>by[l.projectId]=(by[l.projectId]||0)+l.hours);const mx=Math.max(...Object.values(by),1);
   return `<div class="list">${Object.entries(by).sort((a,b)=>b[1]-a[1]).map(([id,h])=>`<div class="li"><div class="grow"><div class="t">${esc(project(id)?.title||'')}</div><div class="prog" style="margin-top:6px"><i style="width:${h/mx*100}%"></i></div></div><span class="num">${h.toFixed(1).replace('.',',')}h</span></div>`).join('')||'<div class="empty">Ligue o modo foco para registrar horas.</div>'}</div>`}
 function wRascunho(){return `<textarea class="input" data-scratch rows="6" placeholder="Jogue aqui qualquer ideia. Salva sozinho." aria-label="Rascunho">${esc(S.ui.scratch||'')}</textarea>`}
-function wAtalhos(){return `<div class="shortcuts">${S.apps.filter(a=>a.pin).map(a=>`<button data-act="openapp" data-id="${a.id}"><span class="logo" style="background:${a.c}">${esc(a.l)}</span>${esc(a.n)}</button>`).join('')}</div>`}
+function wAtalhos(){return `<div class="shortcuts">${S.apps.filter(a=>a.pin).map(a=>`<button data-act="openapp" data-id="${a.id}"><span class="logo" style="--c:${a.c}">${esc(a.l)}</span>${esc(a.n)}</button>`).join('')}</div>`}
 
 function connectPrompt(k,txt){return `<div class="row" style="align-items:flex-start;gap:12px"><p class="muted" style="margin:0;flex:1">${txt}</p><button class="btn sm primary" data-act="toggleint" data-k="${k}">Conectar</button></div>`}
 function waBtn(c,msg){if(!c?.phone)return'';return `<a class="btn sm" href="https://wa.me/${c.phone}?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener" title="Abrir WhatsApp com mensagem pronta">${ic('chat')}WhatsApp</a>`}
@@ -1314,7 +1442,7 @@ function openProject(id){
   const p=project(id);if(!p)return;const si=STAGES.indexOf(p.stage);
   const docs=S.docs.filter(d=>d.projectId===id);const c=client(p.clientId);
   layer(`<div class="overlay right" data-act="closelayer"><aside class="drawer" role="dialog" aria-label="Projeto">
-    <div class="drawer-h"><span class="pill">${p.type}</span>${p.drive?`<span class="gbadge"><span class="gmark" style="background:#1D7F46">D</span>Pasta no Drive</span>`:''}<div style="flex:1"></div><button class="iconbtn" data-act="delproj" data-id="${p.id}" title="Apagar projeto" aria-label="Apagar projeto">${ic('trash')}</button><button class="iconbtn" data-act="closelayer" aria-label="Fechar">${ic('x')}</button></div>
+    <div class="drawer-h"><span class="pill">${p.type}</span>${p.drive?`<span class="gbadge"><span class="gmark" style="--c:#1D7F46">D</span>Pasta no Drive</span>`:''}<div style="flex:1"></div><button class="iconbtn" data-act="delproj" data-id="${p.id}" title="Apagar projeto" aria-label="Apagar projeto">${ic('trash')}</button><button class="iconbtn" data-act="closelayer" aria-label="Fechar">${ic('x')}</button></div>
     <div class="drawer-b">
       <input class="dtitle" data-pf="title" data-id="${p.id}" value="${esc(p.title)}" aria-label="Nome do projeto">
       <div><div class="sub-h">Etapa</div><div class="stagebar">${STAGES.map((s,i)=>`<button class="${i<si?'past':i===si?'cur':''}" data-act="setstage" data-id="${p.id}" data-v="${s}" title="${s}">${s}</button>`).join('')}</div></div>
@@ -1364,13 +1492,13 @@ VIEWS.documentos=()=>{
   return `<div class="docs">
   <div class="doclist">
     <div class="row"><button class="btn primary sm" data-act="new" data-k="doc" style="flex:1">${ic('plus')}Novo documento</button><button class="btn sm" data-act="templates">Modelos</button></div>
-    ${folders.map(f=>`<div class="folder"><h4>${esc(f)}</h4>${S.docs.filter(d=>d.folder===f).map(d=>`<button class="docitem ${d.id===cur?.id?'on':''}" data-act="opendoc" data-id="${d.id}">${ic('doc')}<span>${esc(d.title)}</span>${d.gdoc?'<span class="gmark" style="background:#2F6FDE" title="Sincronizado com Google Docs">G</span>':''}</button>`).join('')}</div>`).join('')}
+    ${folders.map(f=>`<div class="folder"><h4>${esc(f)}</h4>${S.docs.filter(d=>d.folder===f).map(d=>`<button class="docitem ${d.id===cur?.id?'on':''}" data-act="opendoc" data-id="${d.id}">${ic('doc')}<span>${esc(d.title)}</span>${d.gdoc?'<span class="gmark" style="--c:#2F6FDE" title="Sincronizado com Google Docs">G</span>':''}</button>`).join('')}</div>`).join('')}
   </div>
   ${cur?`<div class="docpane">
     <div class="docbar"><div class="fmt">
       <button data-fmt="h2">Título</button><button data-fmt="h3">Subtítulo</button><button data-fmt="p">Texto</button><button data-fmt="bold"><b>N</b></button><button data-fmt="italic"><i>I</i></button><button data-fmt="ul">Lista</button><button data-fmt="todo">Checklist</button><button data-fmt="quote">Citação</button><button data-fmt="hr">Linha</button><button data-fmt="kit">Kit de marca</button></div>
       <div style="flex:1"></div>
-      <button class="btn sm" data-act="gdoc" data-id="${cur.id}">${cur.gdoc?'<span class="gmark" style="background:#2F6FDE">G</span>Sincronizado':'Salvar no Google Docs'}</button>
+      <button class="btn sm" data-act="gdoc" data-id="${cur.id}">${cur.gdoc?'<span class="gmark" style="--c:#2F6FDE">G</span>Sincronizado':'Salvar no Google Docs'}</button>
       <button class="iconbtn" data-act="deldoc" data-id="${cur.id}" title="Apagar documento" aria-label="Apagar documento">${ic('trash')}</button></div>
     <div class="docbody">
       <input class="doctitle" id="docTitle" value="${esc(cur.title)}" aria-label="Título do documento">
@@ -1415,7 +1543,7 @@ VIEWS.notas=()=>{
   ${pin.length?`<div class="sec-t">Fixadas</div><div class="masonry">${pin.map(noteCard).join('')}</div>`:''}
   ${oth.length?`<div class="sec-t" style="margin-top:8px">Outras</div><div class="masonry">${oth.map(noteCard).join('')}</div>`:''}`;
 };
-function noteCard(n){
+function noteCardOld(n){
   return `<div class="note" style="background:var(--n-${n.color})" data-act="editnote" data-id="${n.id}" tabindex="0">
   ${n.pinned?`<span class="pinned">${ic('pin')}</span>`:''}
   ${n.title?`<h4>${esc(n.title)}</h4>`:''}
@@ -1535,19 +1663,19 @@ const IMPORTS=[
   {k:'csv',n:'Planilha',c:'#6C6C68',l:'CSV',d:'Importe clientes ou lançamentos financeiros de uma planilha que você já usa.'},
 ];
 VIEWS.integracoes=()=>{
-  const card=(x,imp)=>{const on=!imp&&S.integrations[x.k];return `<div class="intc ${on?'on':''}"><div class="int-top"><div class="logo" style="background:${x.c}">${x.l}</div><h4>${x.n}</h4><div style="flex:1"></div>${imp?'':`<span class="pill ${on?'ok':''}">${on?'<span class="dot"></span>conectado':'desconectado'}</span>`}</div><p>${x.d}</p><div class="int-foot"><span class="small muted">${on?'Última sincronização agora':imp?'Importação única':''}</span>${imp?`<button class="btn sm" data-act="import" data-k="${x.k}">Importar</button>`:`<button class="btn sm ${on?'':'primary'}" data-act="toggleint" data-k="${x.k}">${on?'Desconectar':'Conectar'}</button>`}</div></div>`};
+  const card=(x,imp)=>{const on=!imp&&S.integrations[x.k];return `<div class="intc ${on?'on':''}"><div class="int-top"><div class="logo" style="--c:${x.c}">${x.l}</div><h4>${x.n}</h4><div style="flex:1"></div>${imp?'':`<span class="pill ${on?'ok':''}">${on?'<span class="dot"></span>conectado':'desconectado'}</span>`}</div><p>${x.d}</p><div class="int-foot"><span class="small muted">${on?'Última sincronização agora':imp?'Importação única':''}</span>${imp?`<button class="btn sm" data-act="import" data-k="${x.k}">Importar</button>`:`<button class="btn sm ${on?'':'primary'}" data-act="toggleint" data-k="${x.k}">${on?'Desconectar':'Conectar'}</button>`}</div></div>`};
   return `<div class="howto"><div><b>1</b><strong>Clique em Conectar</strong><span>Em qualquer serviço desta tela, ou direto no widget da tela Hoje.</span></div><div><b>2</b><strong>Entre e escolha o que liberar</strong><span>Abre a tela de login do próprio serviço. Você marca as permissões.</span></div><div><b>3</b><strong>Pronto, já aparece</strong><span>Os dados entram nos widgets, nas janelas de apps e no assistente.</span></div></div>
   <div class="banner"><div><h3>Uma conexão com o Google liga tudo</h3><p>Ao conectar a sua conta Google, a Mesa Criativa pede permissão separada para cada serviço. Você escolhe o que liberar e pode desligar quando quiser. No protótipo as conexões são simuladas.</p></div><div class="sp"></div><button class="btn accent" data-act="connectall">Conectar todos os serviços Google</button></div>
   <div class="sec-t">Google</div><div class="int-grid">${INTS.map(x=>card(x)).join('')}</div>
   <div class="sec-t">Trazer o que você já tem</div><div class="int-grid">${IMPORTS.map(x=>card(x,true)).join('')}</div>
   <div class="sec-t">Música e vídeo</div><div class="int-grid">
-   <div class="intc on"><div class="int-top"><div class="logo" style="background:#E62117">Yt</div><h4>YouTube</h4><div style="flex:1"></div><span class="pill ok"><span class="dot"></span>pronto</span></div><p>Cole o link de qualquer vídeo no widget. Entrando com a conta Google, suas playlists aparecem também.</p><div class="int-foot"><span class="small muted">Player oficial embutido</span></div></div>
-   <div class="intc on"><div class="int-top"><div class="logo" style="background:#1DB954">Sp</div><h4>Spotify</h4><div style="flex:1"></div><span class="pill ok"><span class="dot"></span>conectado</span></div><p>Entre com o Spotify e suas playlists tocam aqui. A música completa exige Spotify Premium.</p><div class="int-foot"><span class="small muted">Player oficial embutido</span></div></div>
-   ${['Netflix','Prime Video','Disney+','Globoplay'].map(n=>{const a=S.apps.find(x=>x.n===n);return `<div class="intc"><div class="int-top"><div class="logo" style="background:${a?a.c:'#333'}">${a?a.l:n[0]}</div><h4>${n}</h4><div style="flex:1"></div><span class="pill">app de desktop</span></div><p>Abre numa janela da Mesa Criativa no app de Mac e Windows, com a sua conta. Não tem conexão para sites.</p><div class="int-foot"><span class="small muted">Aba interna</span>${a?`<button class="btn sm" data-act="openapp" data-id="${a.id}">Ver como fica</button>`:''}</div></div>`}).join('')}
+   <div class="intc on"><div class="int-top"><div class="logo" style="--c:#E62117">Yt</div><h4>YouTube</h4><div style="flex:1"></div><span class="pill ok"><span class="dot"></span>pronto</span></div><p>Cole o link de qualquer vídeo no widget. Entrando com a conta Google, suas playlists aparecem também.</p><div class="int-foot"><span class="small muted">Player oficial embutido</span></div></div>
+   <div class="intc on"><div class="int-top"><div class="logo" style="--c:#1DB954">Sp</div><h4>Spotify</h4><div style="flex:1"></div><span class="pill ok"><span class="dot"></span>conectado</span></div><p>Entre com o Spotify e suas playlists tocam aqui. A música completa exige Spotify Premium.</p><div class="int-foot"><span class="small muted">Player oficial embutido</span></div></div>
+   ${['Netflix','Prime Video','Disney+','Globoplay'].map(n=>{const a=S.apps.find(x=>x.n===n);return `<div class="intc"><div class="int-top"><div class="logo" style="--c:${a?a.c:'#333'}">${a?a.l:n[0]}</div><h4>${n}</h4><div style="flex:1"></div><span class="pill">app de desktop</span></div><p>Abre numa janela da Mesa Criativa no app de Mac e Windows, com a sua conta. Não tem conexão para sites.</p><div class="int-foot"><span class="small muted">Aba interna</span>${a?`<button class="btn sm" data-act="openapp" data-id="${a.id}">Ver como fica</button>`:''}</div></div>`}).join('')}
   </div>
   <div class="sec-t">Ferramentas de criação</div><div class="int-grid">${OTHER.map(x=>card(x)).join('')}</div>
   <div class="banner" style="margin-top:8px"><div><h3>Conectores MCP do assistente</h3><p>MCP é o padrão aberto que deixa a IA usar outras ferramentas por você. Com esses conectores, o assistente manda mensagem no Slack, marca reunião, cria pasta no Drive ou comenta no Figma sem você sair daqui. Nada acontece sem a sua aprovação.</p></div></div>
-  <div class="int-grid">${MCPS.map(([k,n,c,l,d])=>`<div class="intc ${S.mcp[k]?'on':''}"><div class="int-top"><div class="logo" style="background:${c}">${l}</div><h4>${n}</h4><div style="flex:1"></div><span class="pill ${S.mcp[k]?'ok':''}">${S.mcp[k]?'<span class="dot"></span>ativo':'desligado'}</span></div><p>${d}</p><div class="int-foot"><span class="small muted">Pede aprovação antes de agir</span><button class="btn sm ${S.mcp[k]?'':'primary'}" data-act="togglemcp" data-k="${k}">${S.mcp[k]?'Desligar':'Ligar'}</button></div></div>`).join('')}</div>`;
+  <div class="int-grid">${MCPS.map(([k,n,c,l,d])=>`<div class="intc ${S.mcp[k]?'on':''}"><div class="int-top"><div class="logo" style="--c:${c}">${l}</div><h4>${n}</h4><div style="flex:1"></div><span class="pill ${S.mcp[k]?'ok':''}">${S.mcp[k]?'<span class="dot"></span>ativo':'desligado'}</span></div><p>${d}</p><div class="int-foot"><span class="small muted">Pede aprovação antes de agir</span><button class="btn sm ${S.mcp[k]?'':'primary'}" data-act="togglemcp" data-k="${k}">${S.mcp[k]?'Desligar':'Ligar'}</button></div></div>`).join('')}</div>`;
 };
 
 /* ============ Universos, humor e papel de parede ============ */
@@ -1586,7 +1714,7 @@ function applyLook(){
   $('#app').classList.toggle('has-wall',!!S.ui.wall&&!['auto','dots'].includes(S.ui.wall));
 }
 function renderDock(){
-  $('#dock').innerHTML=S.apps.filter(a=>a.pin).slice(0,8).map(a=>`<button data-act="openapp" data-id="${a.id}" style="background:${a.c}" title="${esc(a.n)}" aria-label="${esc(a.n)}">${esc(a.l)}</button>`).join('')+`<button data-act="goapps" title="Todos os apps" aria-label="Todos os apps">${ic('grid')}</button>`;
+  $('#dock').innerHTML=S.apps.filter(a=>a.pin).slice(0,5).map(a=>`<button data-act="openapp" data-id="${a.id}" style="--c:${a.c}" title="${esc(a.n)}" aria-label="${esc(a.n)}">${esc(a.l)}</button>`).join('')+`<button data-act="goapps" title="Todos os apps" aria-label="Todos os apps">${ic('grid')}</button>`;
 }
 
 /* ---- Assistentes IA ---- */
@@ -1616,13 +1744,13 @@ VIEWS.assistentes=()=>{
   const ai=S.ai;const p=project(ai.ctx);const prov=PROVIDERS.find(x=>x[0]===ai.provider);
   return `<div class="ai"><div class="ai-side">
     <div class="sec-t" style="margin:0">Sua IA</div>
-    ${PROVIDERS.map(([k,n,co,c,l])=>`<button class="prov ${ai.provider===k?'on':''}" data-act="aiprov" data-k="${k}"><span class="logo" style="background:${c}">${l}</span><div style="flex:1"><strong style="display:block;font-size:13px">${n}</strong><span class="small muted">${co}</span></div><span class="pill ${ai.keys[k]?'ok':''}">${ai.keys[k]?'conectado':'conectar'}</span></button>`).join('')}
+    ${PROVIDERS.map(([k,n,co,c,l])=>`<button class="prov ${ai.provider===k?'on':''}" data-act="aiprov" data-k="${k}"><span class="logo" style="--c:${c}">${l}</span><div style="flex:1"><strong style="display:block;font-size:13px">${n}</strong><span class="small muted">${co}</span></div><span class="pill ${ai.keys[k]?'ok':''}">${ai.keys[k]?'conectado':'conectar'}</span></button>`).join('')}
     <p class="small muted" style="margin:0">Cada pessoa conecta a própria conta de IA. A Mesa Criativa só envia o contexto do projeto junto com a pergunta.</p>
     <div class="sec-t" style="margin:8px 0 0">Papel</div>
     <div class="roles">${Object.keys(ROLES).map(r=>`<button class="chip ${ai.role===r?'on':''}" data-act="airole" data-v="${r}">${r}</button>`).join('')}</div>
   </div>
   <div class="chat">
-    <div class="chat-h"><span class="logo" style="background:${prov[3]};width:28px;height:28px;font-size:11px;border-radius:8px">${prov[4]}</span><strong>${prov[1]} como ${ai.role}</strong><div style="flex:1"></div><label class="small muted" for="aiCtx">Contexto</label><select id="aiCtx" data-act-change="aictx"><option value="">Nenhum projeto</option>${S.projects.map(x=>`<option value="${x.id}" ${x.id===ai.ctx?'selected':''}>${esc(x.title)} · ${esc(cname(x.clientId))}</option>`).join('')}</select>${ai.msgs.length?`<button class="btn ghost sm" data-act="aiclear">Limpar</button>`:''}</div>
+    <div class="chat-h"><span class="logo" style="--c:${prov[3]};width:28px;height:28px;font-size:11px;border-radius:8px">${prov[4]}</span><strong>${prov[1]} como ${ai.role}</strong><div style="flex:1"></div><label class="small muted" for="aiCtx">Contexto</label><select id="aiCtx" data-act-change="aictx"><option value="">Nenhum projeto</option>${S.projects.map(x=>`<option value="${x.id}" ${x.id===ai.ctx?'selected':''}>${esc(x.title)} · ${esc(cname(x.clientId))}</option>`).join('')}</select>${ai.msgs.length?`<button class="btn ghost sm" data-act="aiclear">Limpar</button>`:''}</div>
     <div class="msgs" id="msgs">${ai.msgs.length?ai.msgs.map((m,i)=>m.me?`<div class="msg me">${esc(m.t)}</div>`:m.tool?`<div class="msg bot"><div class="who">${esc(m.who)}</div>${esc(m.t)}${toolCard(m,i)}</div>`:`<div class="msg bot"><div class="who">${esc(m.who)}</div>${esc(m.t)}<div class="msg-actions"><button class="btn sm" data-act="ai2note" data-i="${i}">Salvar como nota</button><button class="btn sm" data-act="ai2doc" data-i="${i}">Criar documento</button><button class="btn sm" data-act="ai2task" data-i="${i}">Virar tarefa</button></div></div>`).join(''):`<div class="empty" style="max-width:52ch">${p?`A IA já sabe que <strong>${esc(p.title)}</strong> é da <strong>${esc(cname(p.clientId))}</strong>, está em <strong>${p.stage}</strong> e entrega ${relDay(p.due)}. Ela também lê o briefing, as notas e o kit de marca do cliente.`:'Escolha um projeto em Contexto para a IA responder já sabendo do briefing, da etapa e do prazo.'} Comece por uma das sugestões abaixo.</div>`}</div>
     <div class="prompts"><span class="small muted" style="width:100%">Ideias como ${ai.role.toLowerCase()}</span>${ROLES[ai.role].map(q=>`<button class="chip" data-act="aiprompt" data-v="${esc(q)}">${esc(q)}</button>`).join('')}<span class="small muted" style="width:100%;margin-top:4px">Faça por mim, com conectores</span>${DOIT.map(q=>`<button class="chip" data-act="aiprompt" data-v="${esc(q)}">${esc(q)}</button>`).join('')}</div>
     <form class="chat-in" data-form="aisend"><textarea class="input" name="q" id="aiQ" placeholder="Pergunte para ${prov[1]} como ${ai.role.toLowerCase()}" aria-label="Mensagem"></textarea><button class="btn primary" type="submit" aria-label="Enviar">${ic('send')}</button></form>
@@ -1638,8 +1766,8 @@ const DOIT=['Avise a Marina no Slack que a apresentação é às 15h30','Marque 
 /* ---- Apps ---- */
 VIEWS.apps=()=>{
   const cats=[...new Set(S.apps.map(a=>a.cat))];
-  return `<div class="banner"><div><h3>Tudo abre aqui dentro</h3><p>Slack, WhatsApp, Gmail, Agenda, Drive, Figma, YouTube e Spotify abrem numa janela da Mesa Criativa, ligados pela API oficial de cada um. Os demais abrem numa aba interna no app de desktop, com o seu login salvo. Fixe os mais usados para aparecerem no topo de todas as telas.</p></div></div>
-  ${cats.map(c=>`<div class="sec-t">${esc(c)}</div><div class="apps-grid">${S.apps.filter(a=>a.cat===c).map(a=>`<div class="app" data-act="openapp" data-id="${a.id}" tabindex="0" role="button"><span class="logo" style="background:${a.c}">${esc(a.l)}</span><strong>${esc(a.n)}</strong><span>${esc(a.u.replace(/^https?:\/\//,'').split('/')[0])}</span><button class="iconbtn pinb" data-act="pinapp" data-id="${a.id}" title="${a.pin?'Tirar do topo':'Fixar no topo'}" aria-label="Fixar" style="${a.pin?'color:var(--accent)':''}">${ic('pin')}</button></div>`).join('')}</div>`).join('')}
+  return `<div class="banner"><div><h3>Tudo abre aqui dentro</h3><p>Clique num app para abrir numa janela da Mesa. Use o alfinete para deixar os favoritos no topo de todas as telas.</p></div></div>
+  ${cats.map(c=>`<div class="sec-t">${esc(c)}</div><div class="apps-grid">${S.apps.filter(a=>a.cat===c).map(a=>`<div class="app" data-act="openapp" data-id="${a.id}" tabindex="0" role="button"><span class="logo" style="--c:${a.c}">${esc(a.l)}</span><strong>${esc(a.n)}</strong><span>${esc(a.u.replace(/^https?:\/\//,'').split('/')[0])}</span><button class="iconbtn pinb" data-act="pinapp" data-id="${a.id}" title="${a.pin?'Tirar do topo':'Fixar no topo'}" aria-label="Fixar" style="${a.pin?'color:var(--accent)':''}">${ic('pin')}</button></div>`).join('')}</div>`).join('')}
   <div class="sec-t">Adicionar app</div>
   <form class="drop" data-form="addapp" style="border-style:solid">${ic('plus')}<input class="input" name="n" placeholder="Nome, ex.: Notion do cliente" aria-label="Nome do app"><input class="input" name="u" placeholder="Link, ex.: https://..." aria-label="Link do app"><button class="btn primary" type="submit">Adicionar</button></form>`;
 };
@@ -1734,11 +1862,11 @@ const APPV={
   'Figma':a=>['Visualizador embutido do Figma',`<div class="appscroll"><div class="figma-canvas">${['Rota 1','Rota 2','Rota 3'].map((r,i)=>`<div class="artboard"><div style="background:${['#2B1A12','#E58A3A','#F3D9B1'][i]}"></div><span>${r}</span></div>`).join('')}</div><p class="small muted">Arquivo: Logo_rotas_v2 · Identidade visual · Café Alvorada</p><form class="addline" data-form="figmacomment"><input class="input" name="t" placeholder="Deixar comentário no arquivo" aria-label="Comentário"><button class="btn" type="submit">Comentar</button></form></div>`],
 };
 const STREAM_V=a=>['Só no app de desktop',`<div class="appscroll"><div class="player-big" style="background:${(STREAM.find(s=>s[0]===a.n)||STREAM[0])[3]}"><span>${ic('play')}</span><strong>${esc((STREAM.find(s=>s[0]===a.n)||[0,a.n])[1])}</strong></div><div class="card" style="margin-top:16px"><h3 style="font-size:16px;margin-bottom:6px">Como o ${esc(a.n)} entra na Mesa Criativa</h3><p class="muted" style="margin:0">Streamings não têm conexão para outros apps e protegem o vídeo contra cópia. No app de desktop da Mesa Criativa, o ${esc(a.n)} abre nesta janela como num navegador: você entra com a sua própria conta e assiste aqui, podendo soltar num mini player por cima do trabalho. No navegador, ele não deixa ser aberto dentro de outro site.</p></div></div>`];
-const DESKTOP_ONLY=a=>['Aba interna no app de desktop',`<div class="appscroll"><div class="fakebrowser"><div class="fb-bar"><i></i><i></i><i></i><span>${esc(a.u)}</span></div><div class="fb-body"><span class="logo" style="background:${a.c};width:56px;height:56px;font-size:18px;border-radius:14px">${esc(a.l)}</span><h3>${esc(a.n)} abre aqui no app de desktop</h3><p class="muted">No app de Mac e Windows da Mesa Criativa, ${esc(a.n)} roda nesta janela com o seu login salvo, e as notificações chegam junto com as outras. No navegador, esse site não deixa ser aberto dentro de outro.</p></div></div></div>`];
+const DESKTOP_ONLY=a=>['Aba interna no app de desktop',`<div class="appscroll"><div class="fakebrowser"><div class="fb-bar"><i></i><i></i><i></i><span>${esc(a.u)}</span></div><div class="fb-body"><span class="logo" style="--c:${a.c};width:56px;height:56px;font-size:18px;border-radius:14px">${esc(a.l)}</span><h3>${esc(a.n)} abre aqui no app de desktop</h3><p class="muted">No app de Mac e Windows da Mesa Criativa, ${esc(a.n)} roda nesta janela com o seu login salvo, e as notificações chegam junto com as outras. No navegador, esse site não deixa ser aberto dentro de outro.</p></div></div></div>`];
 function openApp(id){const a=S.apps.find(x=>x.id===id);if(!a)return;if(a.cat==='Streaming'&&!APPV[a.n])APPV[a.n]=STREAM_V;
   if(['Claude','ChatGPT','Gemini'].includes(a.n)){S.ai.provider={Claude:'claude',ChatGPT:'chatgpt',Gemini:'gemini'}[a.n];S.ai.keys[S.ai.provider]=true;save();closeLayer();location.hash='assistentes';render();return}
   S.ui.appOpen=id;const [how,body]=(APPV[a.n]||DESKTOP_ONLY)(a);
-  layer(`<div class="overlay right" data-act="closelayer"><aside class="drawer appwin" role="dialog" aria-label="${esc(a.n)}"><div class="drawer-h"><span class="logo" style="background:${a.c};width:30px;height:30px;font-size:11px;border-radius:8px">${esc(a.l)}</span><strong>${esc(a.n)}</strong><span class="pill">${how}</span><div style="flex:1"></div><div class="appswitch">${S.apps.filter(x=>x.pin&&x.id!==a.id).slice(0,6).map(x=>`<button data-act="openapp" data-id="${x.id}" style="background:${x.c}" title="${esc(x.n)}">${esc(x.l)}</button>`).join('')}</div><button class="iconbtn" data-act="closelayer" aria-label="Fechar">${ic('x')}</button></div><div class="appbody">${body}</div></aside></div>`);
+  layer(`<div class="overlay right" data-act="closelayer"><aside class="drawer appwin" role="dialog" aria-label="${esc(a.n)}"><div class="drawer-h"><span class="logo" style="--c:${a.c};width:30px;height:30px;font-size:11px;border-radius:8px">${esc(a.l)}</span><strong>${esc(a.n)}</strong><span class="pill">${how}</span><div style="flex:1"></div><div class="appswitch">${S.apps.filter(x=>x.pin&&x.id!==a.id).slice(0,6).map(x=>`<button data-act="openapp" data-id="${x.id}" style="--c:${x.c}" title="${esc(x.n)}">${esc(x.l)}</button>`).join('')}</div><button class="iconbtn" data-act="closelayer" aria-label="Fechar">${ic('x')}</button></div><div class="appbody">${body}</div></aside></div>`);
   const th=$('#layer .thread');if(th)th.scrollTop=th.scrollHeight;save();
 }
 const appByName=n=>S.apps.find(a=>a.n===n);
@@ -1757,7 +1885,7 @@ function detectTool(q){
   if(/canva/.test(low))return T('canva','Canva','Criar peça no Canva',body,{});
   return null;
 }
-function toolCard(m,i){const x=m.tool;return `<div class="toolcard ${x.status}"><div class="row"><span class="logo" style="background:${x.c};width:30px;height:30px;font-size:11px;border-radius:8px">${x.l}</span><div style="flex:1"><strong>${esc(x.action)}</strong><div class="small muted">Conector MCP · ${esc(x.app)}</div></div><span class="pill ${x.status==='done'?'ok':x.status==='cancel'?'':'warn'}">${x.status==='done'?'feito':x.status==='cancel'?'cancelado':'aguardando você'}</span></div><div class="tool-detail">${esc(x.detail)}</div>${x.status==='pending'?`<div class="row" style="gap:6px"><button class="btn sm primary" data-act="toolok" data-i="${i}">${ic('check')}Aprovar</button><button class="btn sm" data-act="toolno" data-i="${i}">Cancelar</button></div>`:''}</div>`}
+function toolCard(m,i){const x=m.tool;return `<div class="toolcard ${x.status}"><div class="row"><span class="logo" style="--c:${x.c};width:30px;height:30px;font-size:11px;border-radius:8px">${x.l}</span><div style="flex:1"><strong>${esc(x.action)}</strong><div class="small muted">Conector MCP · ${esc(x.app)}</div></div><span class="pill ${x.status==='done'?'ok':x.status==='cancel'?'':'warn'}">${x.status==='done'?'feito':x.status==='cancel'?'cancelado':'aguardando você'}</span></div><div class="tool-detail">${esc(x.detail)}</div>${x.status==='pending'?`<div class="row" style="gap:6px"><button class="btn sm primary" data-act="toolok" data-i="${i}">${ic('check')}Aprovar</button><button class="btn sm" data-act="toolno" data-i="${i}">Cancelar</button></div>`:''}</div>`}
 
 /* ============ v3: ícones próprios, mídia, mini player, conexões ============ */
 const TILE={hoje:['home','#FF7A45','#F43217'],projetos:['board','#5AA0FF','#1F63E6'],agenda:['cal','#FF6B6B','#E0282E'],documentos:['doc','#6FC3FF','#2B86E8'],notas:['note','#FFD54A','#F2A600'],cerebro:['brain','#FF7AB6','#C2369B'],assistentes:['spark','#A08BFF','#5B5BF0'],apps:['grid','#9A9AA1','#4A4A4F'],clientes:['users','#4CD964','#1E9E45'],financeiro:['money','#3EDBB0','#0E9A74'],referencias:['image','#FFB340','#FF6A00'],integracoes:['plug','#B6B6BC','#6E6E73'],personalizar:['brush','#FF8A65','#8E5BF0'],
@@ -1800,7 +1928,7 @@ const CONSENT={
 };
 const BRANDC={Google:'#4285F4',Figma:'#8A4DFF',Pinterest:'#E60023',Slack:'#4A154B',Spotify:'#1DB954','WhatsApp Business':'#1FA855',Canva:'#00A3B4',Notion:'#0A0A0A',Adobe:'#E1251B',YouTube:'#E62117'};
 function consent(brand,perms,onOk,extra=''){
-  layer(`<div class="overlay" data-act="closelayer"><div class="modal oauth" role="dialog" aria-label="Entrar com ${brand}"><div class="oauth-h"><span class="logo" style="background:${BRANDC[brand]||'#6E6E73'}">${brand[0]}</span><div><div class="small muted">Entrar com ${brand}</div><strong>${esc(S.user.email)}</strong></div></div>
+  layer(`<div class="overlay" data-act="closelayer"><div class="modal oauth" role="dialog" aria-label="Entrar com ${brand}"><div class="oauth-h"><span class="logo" style="--c:${BRANDC[brand]||'#6E6E73'}">${brand[0]}</span><div><div class="small muted">Entrar com ${brand}</div><strong>${esc(S.user.email)}</strong></div></div>
   <div class="modal-b"><h3 style="font-size:20px;margin-bottom:6px">A Mesa Criativa quer acessar sua conta ${brand}</h3><p class="muted small" style="margin:0 0 14px">Ela poderá:</p><div class="perms">${perms.map(p=>`<label class="perm"><input type="checkbox" checked>${esc(p)}</label>`).join('')}</div>${extra}<p class="small muted" style="margin-top:14px">Você escolhe o que liberar e pode tirar o acesso quando quiser, nas configurações da sua conta ${brand} ou aqui em Integrações. Este é um exemplo da tela que aparece no produto.</p></div>
   <div class="modal-f"><button class="btn" data-act="closelayer">Cancelar</button><button class="btn primary" id="okConsent">Permitir</button></div></div></div>`);
   $('#okConsent').addEventListener('click',()=>{closeLayer();onOk()});
@@ -1828,47 +1956,157 @@ function kitHTML(clientId){const k=kitOf(clientId);const c=client(clientId);if(!
 const ROWH=120;
 const SIZE_NAME=s=>s<=4?'Pequeno':s<=6?'Médio':s<=8?'Grande':s<12?'Destaque':'Linha inteira';
 if(!S.ui.v5){S.ui.v5=S.ui.v4=1;S.ui.wall='dots';S.ui.theme='estudio';S.ui.accent='';}
+
+/* ============ v6: mais simples, notas e documentos novos, cores, movimento fluido ============ */
+const SUBT={hoje:'',projetos:'Cada card é um projeto. Arraste para a próxima etapa quando avançar.',agenda:'Compromissos, tarefas e prazos do mês num calendário só.',documentos:'Briefings, propostas e atas. Digite / numa linha vazia para inserir blocos.',notas:'Anote rápido. Tudo se salva sozinho enquanto você escreve.',assistentes:'Converse com a IA já sabendo do seu projeto e do seu cliente.',clientes:'Quem está negociando, quem já fechou e o kit de marca de cada um.',financeiro:'O que entrou, o que falta receber e para onde vai o dinheiro.',apps:'Seus aplicativos a um clique, sem sair daqui.',integracoes:'Conecte suas contas para trazer tudo para a Mesa.',personalizar:'Deixe a Mesa com a sua cara.'};
+Object.assign(TILE,{hoje:['home','#FF5A36','#F43217'],projetos:['board','#6E6CF0','#5856D6'],agenda:['cal','#FF6159','#FF3B30'],documentos:['doc','#3D9BFF','#007AFF'],notas:['note','#FFD84D','#FFC300'],cerebro:['brain','#C46BF0','#AF52DE'],assistentes:['spark','#4FC3D9','#30B0C7'],apps:['grid','#A1A1A8','#8E8E93'],clientes:['users','#4FD272','#34C759'],financeiro:['money','#2ED3C8','#00C7BE'],referencias:['image','#FFAD33','#FF9500'],integracoes:['plug','#A1A1A8','#8E8E93'],personalizar:['brush','#FF5577','#FF2D55'],
+  numeros:['money','#FF5A36','#F43217'],tarefas:['check','#3D9BFF','#007AFF'],prazos:['clock','#FF6159','#FF3B30'],ia:['spark','#4FC3D9','#30B0C7'],notas_w:['note','#FFD84D','#FFC300'],propostas:['send','#4FD272','#34C759'],financeiro_w:['money','#2ED3C8','#00C7BE'],foco:['clock','#6E6CF0','#5856D6'],rascunho:['note','#A1A1A8','#8E8E93'],atalhos:['grid','#A1A1A8','#8E8E93'],cinema:['play','#48484A','#1D1D1F']});
+if(!S.ui.v6){S.ui.v6=1;S.ui.guide=true;S.ui.notesTab='notas';
+  S.ui.layout=[{id:'numeros',w:12,pin:true},{id:'tarefas',w:7},{id:'agenda',w:5},{id:'prazos',w:7},{id:'musica',w:5},{id:'notas',w:12}];
+  S.apps.forEach(a=>a.pin=['Google Agenda','Gmail','WhatsApp','Figma','Spotify'].includes(a.n));}
+S.ui.notesTab??='notas';
+
+/* ---- Notas e ideias (abas) ---- */
+const NOTE_TABS=[['notas','Notas'],['ideias','Ideias'],['prompts','Prompts'],['links','Links de arquivos'],['refs','Referências']];
+VIEWS.notas=()=>{const t=S.ui.notesTab;let body;
+  if(t==='notas')body=notesUI();
+  else if(t==='refs')body=`<div class="in-notas">${VIEWS.referencias()}</div>`;
+  else{S.ui.brainTab=t;body=`<div class="in-notas">${VIEWS.cerebro()}</div>`}
+  return `<div class="tabs-line">${NOTE_TABS.map(([k,l])=>`<button class="${t===k?'on':''}" data-act="ntab" data-v="${k}">${l}</button>`).join('')}</div>${body}`};
+AFTER.notas=()=>{const t=S.ui.notesTab;if(t==='refs')AFTER.referencias();else if(t!=='notas')AFTER.cerebro()};
+function notesUI(){const labels=[...new Set(S.notes.flatMap(n=>n.labels))];const f=S.ui.noteLabel;const ns=S.notes.filter(n=>!f||n.labels.includes(f));
+  const pin=ns.filter(n=>n.pinned),oth=ns.filter(n=>!n.pinned);
+  return `<div class="notes-top"><button class="newnote" data-act="nn" data-k="text">${ic('plus')}Nova nota</button><button class="newnote" data-act="nn" data-k="list">${ic('check')}Nova lista</button><div class="sp"></div>${labels.length?`<div class="chips"><button class="chip ${!f?'on':''}" data-act="notelabel" data-v="">Todas</button>${labels.map(l=>`<button class="chip ${f===l?'on':''}" data-act="notelabel" data-v="${esc(l)}">${esc(l)}</button>`).join('')}</div>`:''}</div>
+  ${ns.length?'':'<div class="emptybig"><strong>Nenhuma nota ainda.</strong><span>Clique em Nova nota e comece a escrever. Não precisa salvar.</span></div>'}
+  ${pin.length?`<div class="sec-t">Fixadas</div><div class="masonry">${pin.map(noteCard).join('')}</div>`:''}
+  ${oth.length?`${pin.length?'<div class="sec-t" style="margin-top:8px">Outras</div>':''}<div class="masonry">${oth.map(noteCard).join('')}</div>`:''}`}
+function noteCard(n){const brt=s=>esc(s).replace(/\n/g,'<br>');
+  return `<div class="note" style="background:var(--n-${n.color})" data-nid="${n.id}">
+  <button class="pinbtn ${n.pinned?'on':''}" data-act="pinnote" data-id="${n.id}" title="${n.pinned?'Desafixar':'Fixar'}" aria-label="Fixar">${ic('pin')}</button>
+  <div class="n-title" contenteditable="true" spellcheck="true" data-nf="title" data-ph="Título">${esc(n.title)}</div>
+  ${n.list?`<div class="n-list">${n.list.map((it,i)=>`<div class="n-item ${it.done?'ok':''}"><button class="check ${it.done?'on':''}" data-act="noteitem" data-id="${n.id}" data-i="${i}" aria-label="Marcar">${it.done?ic('check'):''}</button><span contenteditable="true" spellcheck="true" data-ni="${i}" data-ph="Item">${esc(it.t)}</span></div>`).join('')}<button class="n-add" data-act="nadd" data-id="${n.id}">${ic('plus')}Item</button></div>`
+  :`<div class="n-body" contenteditable="true" spellcheck="true" data-nf="body" data-ph="Escreva aqui…">${brt(n.body||'')}</div>`}
+  ${n.labels.length?`<div class="labels">${n.labels.map(l=>`<span class="pill">${esc(l)}</span>`).join('')}</div>`:''}
+  <div class="nb"><div class="swatches">${NOTE_COLORS.map(c=>`<button class="sw ${n.color===c?'on':''}" style="background:var(--n-${c})" data-act="ncolor" data-id="${n.id}" data-v="${c}" aria-label="Cor ${c}"></button>`).join('')}</div><div class="sp"></div><button class="iconbtn" data-act="note2task" data-id="${n.id}" title="Virar tarefa" aria-label="Virar tarefa">${ic('check')}</button><button class="iconbtn" data-act="note2doc" data-id="${n.id}" title="Virar documento" aria-label="Virar documento">${ic('doc')}</button><button class="iconbtn" data-act="delnote" data-id="${n.id}" title="Apagar" aria-label="Apagar">${ic('trash')}</button></div></div>`}
+function focusEnd(el){if(!el)return;el.focus();const r=document.createRange();r.selectNodeContents(el);r.collapse(false);const s=getSelection();s.removeAllRanges();s.addRange(r)}
+document.addEventListener('input',e=>{const t=e.target;const card=t.closest?.('.note[data-nid]');if(!card)return;const n=S.notes.find(x=>x.id===card.dataset.nid);if(!n)return;
+  if(t.dataset.nf==='title')n.title=t.innerText.trim();
+  else if(t.dataset.nf==='body')n.body=t.innerText.replace(/\n$/,'');
+  else if(t.dataset.ni!=null)n.list[+t.dataset.ni].t=t.innerText.trim();
+  save()});
+document.addEventListener('keydown',e=>{const t=e.target;if(t.dataset?.ni==null)return;const card=t.closest('.note[data-nid]');const n=S.notes.find(x=>x.id===card.dataset.nid);const i=+t.dataset.ni;
+  if(e.key==='Enter'){e.preventDefault();n.list.splice(i+1,0,{t:'',done:false});save();render();focusEnd($(`.note[data-nid="${n.id}"] [data-ni="${i+1}"]`))}
+  else if(e.key==='Backspace'&&!t.innerText.trim()&&n.list.length>1){e.preventDefault();n.list.splice(i,1);save();render();focusEnd($(`.note[data-nid="${n.id}"] [data-ni="${Math.max(0,i-1)}"]`))}});
+
+/* ---- Documentos: página branca, / para inserir, barra ao selecionar ---- */
+const SLASH=[['Texto','p','Parágrafo simples'],['Título','h2','Seção grande'],['Subtítulo','h3','Seção menor'],['Lista','ul','Com marcadores'],['Lista numerada','ol','1, 2, 3'],['Checklist','todo','Itens para marcar'],['Citação','quote','Destaque com barra'],['Divisor','hr','Linha separadora'],['Tabela','table','Três colunas'],['Kit de marca','kit','Cores, fontes e voz do cliente']];
+VIEWS.documentos=()=>{
+  const q=(S.ui.docQ||'').toLowerCase();const folders=[...new Set(S.docs.map(d=>d.folder))];
+  let cur=S.docs.find(d=>d.id===S.ui.doc)||S.docs[0];if(cur)S.ui.doc=cur.id;
+  const match=d=>!q||(d.title+' '+d.content.replace(/<[^>]+>/g,' ')).toLowerCase().includes(q);
+  return `<div class="docs2">
+  <aside class="doclist2"><input class="input" id="docQ" placeholder="Buscar documentos" value="${esc(S.ui.docQ||'')}" aria-label="Buscar documentos">
+    <div class="row" style="gap:6px"><button class="btn primary sm" data-act="new" data-k="doc" style="flex:1">${ic('plus')}Novo</button><button class="btn sm" data-act="templates">Modelos</button></div>
+    ${folders.map(f=>{const ds=S.docs.filter(d=>d.folder===f&&match(d));return ds.length?`<div class="folder"><h4>${esc(f)}</h4>${ds.map(d=>`<button class="docitem ${d.id===cur?.id?'on':''}" data-act="opendoc" data-id="${d.id}">${ic('doc')}<span>${esc(d.title||'Sem título')}</span></button>`).join('')}</div>`:''}).join('')}
+    ${S.docs.length?'':'<p class="muted small">Nenhum documento ainda. Comece por um modelo.</p>'}
+  </aside>
+  ${cur?`<section class="page">
+    <div class="pagebar"><span class="small muted">${esc(cur.folder)} · <span id="docSaved">Salvo</span></span><div class="sp"></div>
+      <button class="btn ghost sm" data-act="gdoc" data-id="${cur.id}">${cur.gdoc?'No Google Docs':'Salvar no Google Docs'}</button>
+      <button class="iconbtn" data-act="deldoc" data-id="${cur.id}" title="Apagar documento" aria-label="Apagar documento">${ic('trash')}</button></div>
+    <div class="page-in">
+      <input class="doctitle2" id="docTitle" value="${esc(cur.title)}" placeholder="Sem título" aria-label="Título do documento">
+      <div class="docmeta2"><label>Pasta <select id="docFolder">${[...new Set([...folders,'Briefings','Propostas','Processos','Reuniões','Estudos'])].map(f=>`<option ${f===cur.folder?'selected':''}>${f}</option>`).join('')}</select></label>
+      <label>Projeto <select id="docProj"><option value="">Nenhum</option>${S.projects.map(p=>`<option value="${p.id}" ${p.id===cur.projectId?'selected':''}>${esc(p.title)} · ${esc(cname(p.clientId))}</option>`).join('')}</select></label></div>
+      <div class="editor2" id="editor" contenteditable="true" spellcheck="true">${cur.content||'<p><br></p>'}</div>
+    </div></section>`:`<section class="page"><div class="emptybig" style="margin:80px auto"><strong>Escolha um documento ou crie um novo.</strong><span>Os modelos de briefing e proposta ajudam a começar.</span></div></section>`}
+  </div><div class="slash" id="slash" hidden></div><div class="seltool" id="seltool" hidden>
+    <button data-cmd="bold"><b>N</b></button><button data-cmd="italic"><i>I</i></button><button data-cmd="h2">Título</button><button data-cmd="ul">Lista</button><button data-cmd="quote">Citação</button></div>`};
+AFTER.documentos=()=>{
+  const qi=$('#docQ');qi.addEventListener('input',()=>{S.ui.docQ=qi.value;const p=qi.selectionStart;render();const n=$('#docQ');n.focus();n.setSelectionRange(p,p)});
+  const cur=S.docs.find(d=>d.id===S.ui.doc);if(!cur)return;const ed=$('#editor');try{document.execCommand('defaultParagraphSeparator',false,'p')}catch(_){}
+  let st;const touch=()=>{cur.content=ed.innerHTML;cur.updated=day(0);const s=$('#docSaved');if(s)s.textContent='Salvando…';clearTimeout(st);st=setTimeout(()=>{const s=$('#docSaved');if(s)s.textContent='Salvo'},700);save()};
+  $('#docTitle').addEventListener('input',e=>{cur.title=e.target.value;touch();const b=$('.docitem.on span');if(b)b.textContent=cur.title||'Sem título'});
+  $('#docFolder').addEventListener('change',e=>{cur.folder=e.target.value;touch();render()});
+  $('#docProj').addEventListener('change',e=>{cur.projectId=e.target.value||null;touch();toast('Documento ligado ao projeto')});
+  const blockOf=n=>{while(n&&n.parentNode!==ed)n=n.parentNode;return n&&n.parentNode===ed?n:null};
+  const caretIn=el=>{const r=document.createRange();r.selectNodeContents(el);r.collapse(true);const s=getSelection();s.removeAllRanges();s.addRange(r)};
+  const markEmpty=()=>{ed.querySelectorAll('[data-empty]').forEach(x=>x.removeAttribute('data-empty'));const s=getSelection();if(!s.rangeCount)return;const b=blockOf(s.anchorNode);if(b&&b.nodeType===1&&!b.textContent.trim()&&!b.querySelector('img,hr,table')&&/^(P|DIV|H2|H3)$/.test(b.tagName))b.setAttribute('data-empty','')};
+  const sl=$('#slash');let items=[],sel=0,slBlock=null;
+  const hideSlash=()=>{sl.hidden=true;slBlock=null};
+  const drawSlash=()=>{sl.innerHTML=items.map((c,i)=>`<button class="${i===sel?'on':''}" data-i="${i}"><strong>${c[0]}</strong><span>${c[2]}</span></button>`).join('')||'<div class="small muted" style="padding:8px 10px">Nada com esse nome</div>';
+    sl.querySelectorAll('button').forEach(b=>b.addEventListener('mousedown',e=>{e.preventDefault();apply(items[+b.dataset.i])}))};
+  const showSlash=(b,q)=>{const n=s=>s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');items=SLASH.filter(c=>n(c[0]).includes(n(q)));sel=Math.min(sel,Math.max(items.length-1,0));slBlock=b;const r=b.getBoundingClientRect();sl.style.left=r.left+'px';sl.style.top=(r.bottom+6)+'px';sl.hidden=false;drawSlash()};
+  const apply=c=>{if(!c||!slBlock)return;const b=slBlock;hideSlash();let el,focus;
+    const mk=(tag,cls)=>{const x=document.createElement(tag);if(cls)x.className=cls;return x};
+    if(['p','h2','h3'].includes(c[1])){el=mk(c[1]);el.innerHTML='<br>';focus=el}
+    else if(c[1]==='quote'){el=mk('blockquote');el.innerHTML='<br>';focus=el}
+    else if(c[1]==='ul'||c[1]==='ol'||c[1]==='todo'){el=mk(c[1]==='todo'?'ul':c[1],c[1]==='todo'?'todo':'');const li=mk('li');li.innerHTML='<br>';el.appendChild(li);focus=li}
+    else if(c[1]==='hr'){el=mk('hr');const p=mk('p');p.innerHTML='<br>';b.replaceWith(el);el.after(p);caretIn(p);touch();return}
+    else if(c[1]==='table'){el=mk('table');el.innerHTML='<tr><th>Coluna</th><th>Coluna</th><th>Coluna</th></tr><tr><td><br></td><td><br></td><td><br></td></tr><tr><td><br></td><td><br></td><td><br></td></tr>';const p=mk('p');p.innerHTML='<br>';b.replaceWith(el);el.after(p);caretIn(el.querySelector('td'));touch();return}
+    else if(c[1]==='kit'){const pr=project(cur.projectId);if(!pr||!kitOf(pr.clientId)){b.innerHTML='<br>';caretIn(b);toast('Ligue o documento a um projeto de cliente com kit de marca');return}const w=mk('div');w.innerHTML=kitHTML(pr.clientId);const frag=[...w.childNodes];b.replaceWith(...frag);touch();return}
+    b.replaceWith(el);caretIn(focus);markEmpty();touch()};
+  ed.addEventListener('input',()=>{touch();const s=getSelection();const b=s.rangeCount&&blockOf(s.anchorNode);const tx=b?b.textContent:'';if(b&&tx.startsWith('/')&&tx.length<24)showSlash(b,tx.slice(1));else hideSlash();markEmpty()});
+  ed.addEventListener('keydown',e=>{if(!sl.hidden){if(e.key==='ArrowDown'){sel=(sel+1)%Math.max(items.length,1);drawSlash();e.preventDefault()}else if(e.key==='ArrowUp'){sel=(sel-1+items.length)%Math.max(items.length,1);drawSlash();e.preventDefault()}else if(e.key==='Enter'){e.preventDefault();apply(items[sel])}else if(e.key==='Escape'){hideSlash()}}});
+  ed.addEventListener('click',e=>{const li=e.target.closest('.todo li');if(li&&e.offsetX<24){li.classList.toggle('ok');touch()}markEmpty()});
+  ed.addEventListener('keyup',markEmpty);ed.addEventListener('focus',markEmpty);
+  ed.addEventListener('blur',()=>setTimeout(()=>{hideSlash();ed.querySelectorAll('[data-empty]').forEach(x=>x.removeAttribute('data-empty'))},150));
+  const tool=$('#seltool');
+  tool.querySelectorAll('button').forEach(b=>b.addEventListener('mousedown',e=>{e.preventDefault();const c=b.dataset.cmd;if(c==='bold'||c==='italic')document.execCommand(c);else if(c==='h2')document.execCommand('formatBlock',false,'h2');else if(c==='ul')document.execCommand('insertUnorderedList');else if(c==='quote')document.execCommand('formatBlock',false,'blockquote');touch()}));
+  if(!window._selBound){window._selBound=true;document.addEventListener('selectionchange',()=>{const t=$('#seltool'),e2=$('#editor');if(!t||!e2)return;const s=getSelection();if(!s.rangeCount||s.isCollapsed||!e2.contains(s.anchorNode)){t.hidden=true;return}const r=s.getRangeAt(0).getBoundingClientRect();if(!r.width){t.hidden=true;return}t.hidden=false;t.style.left=(r.left+r.width/2)+'px';t.style.top=(r.top-10)+'px'})}
+  if(!ed.textContent.trim()&&!ed.querySelector('hr,table')){setTimeout(()=>{caretIn(ed.firstElementChild||ed);markEmpty()},60)}
+};
+
+/* ---- Hoje: comece por aqui ---- */
+const GUIDE=()=>S.ui.guide?`<div class="guide"><div class="guide-h"><strong>Comece por aqui</strong><span class="muted small">Três passos para a Mesa ficar sua.</span><div class="sp"></div><button class="iconbtn" data-act="guideoff" aria-label="Fechar">${ic('x')}</button></div>
+  <div class="guide-steps"><button data-act="new" data-k="project"><b>1</b><strong>Crie um projeto</strong><span>Cliente, prazo e etapas num card.</span></button>
+  <button data-act="gonotas2"><b>2</b><strong>Anote uma ideia</strong><span>Escreva direto na nota, sem salvar.</span></button>
+  <button data-act="wedit"><b>3</b><strong>Monte sua tela</strong><span>Arraste os blocos pelo título e puxe o canto.</span></button></div></div>`:'';
+
+/* ---- Movimento fluido dos blocos ---- */
+const reduceMotion=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
+function vt(fn){if(document.startViewTransition&&!reduceMotion())return document.startViewTransition(fn);fn()}
 let wd=null;
-function wBadge(w,txt){let b=w.querySelector('.wsize-badge');if(!b){b=document.createElement('div');b.className='wsize-badge';w.appendChild(b)}b.textContent=txt}
 document.addEventListener('pointerdown',e=>{
   if(e.button!==0||window.innerWidth<760)return;
   const rh=e.target.closest('.w-resize');const w=e.target.closest('.wgrid>.w[data-w]');if(!w)return;
   if(rh){e.preventDefault();const grid=w.parentElement,gr=grid.getBoundingClientRect(),gap=parseFloat(getComputedStyle(grid).columnGap)||18;
-    const prevMin=w.style.minHeight;w.style.minHeight='';const natural=w.getBoundingClientRect().height;w.style.minHeight=prevMin;
+    const prevMin=w.style.minHeight;w.style.minHeight='';const natural=w.getBoundingClientRect().height;w.style.minHeight=prevMin;const wr=w.getBoundingClientRect();
     const g=document.createElement('div');g.className='wguides';g.innerHTML=Array.from({length:12},()=>'<i></i>').join('');grid.appendChild(g);
-    wd={mode:'resize',w,grid,gr,gap,colW:(gr.width-11*gap)/12,wr:w.getBoundingClientRect(),natural,guides:g};w.classList.add('resizing');document.body.classList.add('wbusy');
-    try{w.setPointerCapture(e.pointerId)}catch(_){}return}
-  if(e.target.closest('button,a,input,textarea,select,label,[contenteditable],.chip,.ytplayer,.poster,.li,.mail,.note,.check'))return;
+    const pv=document.createElement('div');pv.className='wpreview';pv.style.left=(wr.left-gr.left)+'px';pv.style.top=(wr.top-gr.top)+'px';pv.style.width=wr.width+'px';pv.style.height=wr.height+'px';grid.appendChild(pv);
+    wd={mode:'resize',w,grid,gr,gap,colW:(gr.width-11*gap)/12,wr,natural,guides:g,pv,span:null,rows:undefined};w.classList.add('resizing');document.body.classList.add('wbusy');return}
+  if(e.target.closest('button,a,input,textarea,select,label,[contenteditable],.chip,.ytplayer,.poster,.li,.mail,.note,.check,iframe'))return;
   if(!e.target.closest('.w-h')&&!w.classList.contains('bare'))return;
   wd={mode:'pending',w,x0:e.clientX,y0:e.clientY};
 });
 document.addEventListener('pointermove',e=>{
   if(!wd)return;
   if(wd.mode==='pending'){if(Math.hypot(e.clientX-wd.x0,e.clientY-wd.y0)<6)return;
-    const r=wd.w.getBoundingClientRect();const gh=wd.w.cloneNode(true);gh.className+=' wghost';gh.style.width=r.width+'px';gh.style.height=r.height+'px';gh.style.left=r.left+'px';gh.style.top=r.top+'px';document.body.appendChild(gh);
-    wd={mode:'move',w:wd.w,gh,dx:e.clientX-r.left,dy:e.clientY-r.top,last:null,tx:r.left,ty:r.top,cx:r.left,cy:r.top,timer:null};wd.w.classList.add('w-placeholder');document.body.classList.add('wbusy','wgrabbing');
-    const d0=wd;(function loop(){if(wd!==d0)return;d0.cx+=(d0.tx-d0.cx)*.28;d0.cy+=(d0.ty-d0.cy)*.28;d0.gh.style.left=d0.cx+'px';d0.gh.style.top=d0.cy+'px';requestAnimationFrame(loop)})();}
-  if(wd.mode==='move'){e.preventDefault();wd.tx=e.clientX-wd.dx;wd.ty=e.clientY-wd.dy;
+    const r=wd.w.getBoundingClientRect();const gh=wd.w.cloneNode(true);gh.className+=' wghost';gh.style.width=r.width+'px';gh.style.height=r.height+'px';gh.style.left=r.left+'px';gh.style.top=r.top+'px';gh.style.viewTransitionName='none';document.body.appendChild(gh);
+    const bar=document.createElement('div');bar.className='wdrop';bar.hidden=true;wd.w.parentElement.appendChild(bar);
+    wd={mode:'move',w:wd.w,gh,bar,dx:e.clientX-r.left,dy:e.clientY-r.top,target:null,before:true};wd.w.classList.add('w-lifted');document.body.classList.add('wbusy','wgrabbing');requestAnimationFrame(()=>gh.classList.add('up'))}
+  if(wd.mode==='move'){e.preventDefault();wd.gh.style.transform=`translate(${e.clientX-wd.dx-parseFloat(wd.gh.style.left)}px,${e.clientY-wd.dy-parseFloat(wd.gh.style.top)}px) scale(1.02)`;
     const el=document.elementsFromPoint(e.clientX,e.clientY).find(x=>x.matches?.('.wgrid>.w[data-w]')&&x!==wd.w);
-    if(el){const r=el.getBoundingClientRect();const before=e.clientX<r.left+r.width/2;const key=el.dataset.w+before;
-      if(key!==wd.last){wd.last=key;clearTimeout(wd.timer);const d=wd;d.timer=setTimeout(()=>{if(wd!==d)return;flipGrid(el.parentElement,()=>el.parentElement.insertBefore(d.w,before?el:el.nextSibling),d.w)},110)}}}
-  if(wd.mode==='resize'){e.preventDefault();const {w,wr,gap,colW,natural}=wd;
+    if(el){const grid=el.parentElement,gr=grid.getBoundingClientRect(),r=el.getBoundingClientRect();const before=e.clientX<r.left+r.width/2;wd.target=el;wd.before=before;
+      const x=(before?r.left-9:r.right+9)-gr.left;wd.bar.hidden=false;wd.bar.style.transform=`translate(${x-2}px,${r.top-gr.top}px)`;wd.bar.style.height=r.height+'px'}}
+  if(wd.mode==='resize'){e.preventDefault();const {wr,gap,colW,natural,gr,pv}=wd;
     const span=Math.max(3,Math.min(12,Math.round((e.clientX-wr.left+gap)/(colW+gap))));
-    const hpx=e.clientY-wr.top;let rows=Math.max(1,Math.min(7,Math.round(hpx/ROWH)));const auto=rows*ROWH<=natural+10;
-    if(span!==wd.span||(auto?null:rows)!==wd.rows){flipGrid(w.parentElement,()=>{w.style.setProperty('--span',span);w.style.gridColumn=`span ${span}`;w.style.minHeight=auto?'':rows*ROWH+'px'},w)}wd.span=span;wd.rows=auto?null:rows;
-    wd.guides.style.setProperty('--cover',span);
-    wBadge(w,`${SIZE_NAME(span)} · ${span} de 12 colunas${auto?'':' · altura '+rows}`);}
+    const rows=Math.max(1,Math.min(7,Math.round((e.clientY-wr.top)/ROWH)));const auto=rows*ROWH<=natural+10;
+    wd.span=span;wd.rows=auto?null:rows;
+    pv.style.width=(span*colW+(span-1)*gap)+'px';pv.style.height=(auto?natural:rows*ROWH)+'px';
+    let b=pv.querySelector('.wsize-badge');if(!b){b=document.createElement('div');b.className='wsize-badge';pv.appendChild(b)}b.textContent=`${SIZE_NAME(span)} · ${span} de 12 colunas${auto?'':' · altura '+rows}`}
 });
-function flipGrid(grid,mutate,skip){const items=[...grid.children].filter(c=>c.matches&&c.matches('.w'));const first=new Map(items.map(c=>[c,c.getBoundingClientRect()]));mutate();
-  items.forEach(c=>{if(c===skip)return;const o=first.get(c),n=c.getBoundingClientRect();const dx=o.left-n.left,dy=o.top-n.top,sx=o.width/n.width,sy=o.height/n.height;
-    if(Math.abs(dx)>.5||Math.abs(dy)>.5||Math.abs(sx-1)>.01){c.getAnimations().forEach(a=>a.cancel());c.animate([{transformOrigin:'0 0',transform:`translate(${dx}px,${dy}px) scale(${sx},${sy})`},{transformOrigin:'0 0',transform:'none'}],{duration:520,easing:'cubic-bezier(.2,.8,.2,1)'})}})}
 document.addEventListener('pointerup',e=>{
   if(!wd)return;const d=wd;wd=null;document.body.classList.remove('wbusy','wgrabbing');
-  if(d.mode==='move'){clearTimeout(d.timer);const r=d.w.getBoundingClientRect();d.gh.style.transition='left .5s cubic-bezier(.2,.8,.2,1),top .5s cubic-bezier(.2,.8,.2,1),transform .5s cubic-bezier(.2,.8,.2,1),box-shadow .5s';requestAnimationFrame(()=>{d.gh.style.left=r.left+'px';d.gh.style.top=r.top+'px';d.gh.style.transform='none';d.gh.style.boxShadow='none'});setTimeout(()=>{d.gh.remove();d.w.classList.remove('w-placeholder')},500);
-    const order=[...d.w.parentElement.children].filter(c=>c.dataset&&c.dataset.w).map(c=>c.dataset.w);S.ui.layout.sort((a,b)=>order.indexOf(a.id)-order.indexOf(b.id));save();}
-  if(d.mode==='resize'){d.guides.remove();d.w.classList.remove('resizing');d.w.querySelector('.wsize-badge')?.remove();const it=S.ui.layout.find(x=>x.id===d.w.dataset.w);if(it&&d.span){it.w=d.span;it.h=d.rows;save();render()}}
+  if(d.mode==='move'){d.bar.remove();
+    const id=d.w.dataset.w;const L=S.ui.layout;const it=L.find(x=>x.id===id);
+    if(d.target){d.gh.style.viewTransitionName='w-'+id;d.w.style.viewTransitionName='none';
+      vt(()=>{d.gh.remove();const from=L.indexOf(it);L.splice(from,1);let to=L.findIndex(x=>x.id===d.target.dataset.w);if(!d.before)to++;L.splice(to,0,it);save();render()})}
+    else{d.gh.classList.remove('up');d.gh.style.transition='transform .45s var(--apple),box-shadow .45s';d.gh.style.transform='none';setTimeout(()=>{d.gh.remove();d.w.classList.remove('w-lifted')},450)}}
+  if(d.mode==='resize'){const it=S.ui.layout.find(x=>x.id===d.w.dataset.w);d.w.classList.remove('resizing');
+    if(it&&d.span){vt(()=>{d.guides.remove();d.pv.remove();it.w=d.span;it.h=d.rows;save();render()})}else{d.guides.remove();d.pv.remove()}}
 });
-document.addEventListener('pointercancel',()=>{if(wd?.gh)wd.gh.remove();if(wd?.guides)wd.guides.remove();if(wd?.w)wd.w.classList.remove('w-placeholder','resizing');wd=null;document.body.classList.remove('wbusy','wgrabbing')});
+document.addEventListener('pointercancel',()=>{if(!wd)return;['gh','bar','guides','pv'].forEach(k=>wd[k]?.remove?.());wd.w?.classList.remove('w-lifted','resizing');wd=null;document.body.classList.remove('wbusy','wgrabbing')});
 
 /* ============ Versão no ar ============ */
 if(S.session&&S.ui.firstSave){delete S.ui.firstSave;save()}
@@ -2002,6 +2240,12 @@ const A={
   trocasenha:()=>modal('Trocar senha',fld('ts-p','Nova senha (mínimo 8 caracteres)','<input class="input" id="ts-p" name="p" type="password" autocomplete="new-password" autofocus>'),'Salvar senha',o=>{if((o.p||'').length<8){toast('A senha precisa ter pelo menos 8 caracteres');return false}window.__SB__.auth.updateUser({password:o.p}).then(({error})=>toast(error?'Não deu para trocar: '+error.message:'Senha trocada'))}),
   exok:()=>{S.ui.exemplo=false;save();render()},
   feedback:()=>modal('Mandar feedback',`<p class="muted small" style="margin-top:0">O que funcionou, o que travou, o que faltou. Vai direto para o Edson.</p>${fld('fb-n','De 1 a 5, o quanto a Mesa Criativa resolveria seu dia?','<select class="input" id="fb-n" name="nota"><option>5</option><option>4</option><option selected>3</option><option>2</option><option>1</option></select>')}${fld('fb-t','Seu comentário','<textarea class="input" id="fb-t" name="texto" rows="5" autofocus placeholder="Ex.: senti falta de..."></textarea>')}`,'Enviar',o=>{if(!o.texto.trim())return false;window.__SB__.from('mesa_feedback').insert({email:S.user.email,nota:+o.nota,texto:o.texto.trim(),tela:route}).then(({error})=>toast(error?'Não deu para enviar agora. Tente de novo.':'Obrigado! Feedback enviado.'))}),
+  ntab:d=>{S.ui.notesTab=d.v;save();render()},
+  nn:d=>{const n={id:uid(),title:'',body:'',list:d.k==='list'?[{t:'',done:false}]:null,color:'branco',pinned:false,labels:[],created:day(0)};S.notes.unshift(n);S.ui.noteLabel='';save();render();focusEnd($(`.note[data-nid="${n.id}"] .n-title`))},
+  nadd:d=>{const n=S.notes.find(x=>x.id===d.id);n.list.push({t:'',done:false});save();render();focusEnd($(`.note[data-nid="${n.id}"] [data-ni="${n.list.length-1}"]`))},
+  ncolor:(d,el,e)=>{e.stopPropagation();const n=S.notes.find(x=>x.id===d.id);n.color=d.v;save();const c=el.closest('.note');c.style.background=`var(--n-${d.v})`;c.querySelectorAll('.sw').forEach(x=>x.classList.toggle('on',x.dataset.v===d.v))},
+  guideoff:()=>{S.ui.guide=false;save();render()},
+  gonotas2:()=>{S.ui.notesTab='notas';location.hash='notas'},
   editkit:d=>{const c=client(d.id);const k=kitOf(d.id)||{colors:['#1D1D1F','#F5F5F7'],fonts:[['','Títulos']],voz:'',words:[],logo:null};
     modal(`Kit de marca: ${c.company}`,fld('k-c','Cores em hex, separadas por vírgula',`<input class="input" id="k-c" name="colors" value="${esc(k.colors.join(', '))}">`)+fld('k-f','Fontes, uma por linha no formato Nome: uso',`<textarea class="input" id="k-f" name="fonts" rows="3">${esc(k.fonts.map(f=>f[0]+': '+f[1]).join('\n'))}</textarea>`)+fld('k-v','Tom de voz',`<textarea class="input" id="k-v" name="voz" rows="2">${esc(k.voz)}</textarea>`)+fld('k-w','Palavras da marca',`<input class="input" id="k-w" name="words" value="${esc(k.words.join(', '))}">`)+fld('k-l','Logo','<input class="input" id="k-l" name="logo" type="file" accept="image/*">'),'Salvar kit',o=>{
       const colors=o.colors.split(',').map(x=>x.trim()).filter(x=>/^#[0-9a-f]{3,8}$/i.test(x));if(!colors.length){toast('Use cores no formato #F43217');return false}
@@ -2027,7 +2271,7 @@ const A={
   wdel:d=>{S.ui.layout=S.ui.layout.filter(x=>x.id!==d.id);save();render();toast(`${WIDGETS[d.id].t} saiu da tela. Dá pra voltar em Adicionar widget.`)},
   wreset:()=>{S.ui.layout=DEFAULT_LAYOUT.map(x=>({...x}));save();render()},
   waddmenu:()=>{const used=S.ui.layout.map(x=>x.id);const free=Object.entries(WIDGETS).filter(([k])=>!used.includes(k));
-    layer(`<div class="overlay" data-act="closelayer"><div class="modal" role="dialog" aria-label="Adicionar widget"><div class="modal-h"><h3>Adicionar widget</h3><button class="iconbtn" data-act="closelayer" aria-label="Fechar">${ic('x')}</button></div><div class="modal-b"><div class="wcat">${free.map(([k,w])=>`<button class="wopt" data-act="wadd" data-id="${k}">${w.src?`<span class="gmark" style="background:${w.src[0]};width:28px;height:28px;font-size:10px;border-radius:8px">${w.src[1]}</span>`:`<span class="gmark" style="background:var(--ink);width:28px;height:28px;border-radius:8px;color:var(--bg)">${ic('grid')}</span>`}<div><strong>${w.t}</strong><div class="small muted">${w.d}</div></div>${ic('plus')}</button>`).join('')||'<p class="muted">Todos os widgets já estão na sua tela.</p>'}</div></div><div class="modal-f"></div></div></div>`)},
+    layer(`<div class="overlay" data-act="closelayer"><div class="modal" role="dialog" aria-label="Adicionar widget"><div class="modal-h"><h3>Adicionar widget</h3><button class="iconbtn" data-act="closelayer" aria-label="Fechar">${ic('x')}</button></div><div class="modal-b"><div class="wcat">${free.map(([k,w])=>`<button class="wopt" data-act="wadd" data-id="${k}">${w.src?`<span class="gmark" style="--c:${w.src[0]};width:28px;height:28px;font-size:10px;border-radius:8px">${w.src[1]}</span>`:`<span class="gmark" style="--c:var(--ink);width:28px;height:28px;border-radius:8px;color:var(--bg)">${ic('grid')}</span>`}<div><strong>${w.t}</strong><div class="small muted">${w.d}</div></div>${ic('plus')}</button>`).join('')||'<p class="muted">Todos os widgets já estão na sua tela.</p>'}</div></div><div class="modal-f"></div></div></div>`)},
   wadd:d=>{S.ui.layout.push({id:d.id,w:d.id==='numeros'?12:6});closeLayer();save();render();setTimeout(()=>$(`.w[data-w="${d.id}"]`)?.scrollIntoView({behavior:'smooth',block:'center'}),50)},
   toolok:d=>{const m=S.ai.msgs[+d.i];const x=m.tool;x.status='done';const pl=x.payload;
     if(x.k==='slack'){S.slack.channels.find(c=>c.id===pl.ch).msgs.push({who:'Você',me:true,t:pl.t,time:'agora'})}
