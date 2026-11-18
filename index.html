@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Mesa Criativa</title>
 <meta name="robots" content="noindex">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='15' fill='%231D1D1F'/%3E%3Cpath d='M15 46V18h7l10 15 10-15h7v28h-7V30l-10 14-10-14v16z' fill='%23FFFFFF'/%3E%3Ccircle cx='52' cy='47' r='4.5' fill='%23F43217'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#FFFFFF">
 <style>
 :root{
   /* Layout: barra lateral fixa à esquerda + área de trabalho em cartões brancos sobre cinza claro, laranja só para destaque */
@@ -950,6 +953,12 @@ body.wgrabbing,body.wgrabbing *{cursor:grabbing!important}
 :root{--n-branco:#F5F5F7}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--n-branco:#1C1C1E}}
 :root[data-theme="dark"]{--n-branco:#1C1C1E}
+/* troca de tela: só um fade curto, sem tremer */
+#view.enter>*{animation:viewFade .22s ease-out both!important}
+#view.enter .wgrid>.w{animation:none!important}
+@keyframes viewFade{from{opacity:0}to{opacity:1}}
+.msg.pending{opacity:.6;animation:pulse 1.2s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.35}}
 .exemplo{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:var(--tile);border-radius:16px;padding:14px 16px;margin-bottom:18px;font-size:14px}
 .exemplo>div{flex:1;min-width:240px}
 #boot{animation:none}
@@ -1280,7 +1289,7 @@ const NAV=[
   ['apps','Apps','grid','Mais'],['integracoes','Integrações','plug','Mais'],['personalizar','Personalizar','brush','Mais']];
 const FIXED=['hoje','personalizar','integracoes'];
 let route=location.hash.slice(1)||'hoje';
-window.addEventListener('hashchange',()=>{route=location.hash.slice(1)||'hoje';if(document.startViewTransition&&!matchMedia('(prefers-reduced-motion: reduce)').matches){document.startViewTransition(()=>render())}else render();$('#side').classList.remove('open')});
+window.addEventListener('hashchange',()=>{route=location.hash.slice(1)||'hoje';render();$('#side').classList.remove('open')});
 
 function render(){
   if(!S.session){$('#auth').hidden=false;$('#app').hidden=true;renderAuth();return}
@@ -1744,21 +1753,33 @@ VIEWS.assistentes=()=>{
   const ai=S.ai;const p=project(ai.ctx);const prov=PROVIDERS.find(x=>x[0]===ai.provider);
   return `<div class="ai"><div class="ai-side">
     <div class="sec-t" style="margin:0">Sua IA</div>
-    ${PROVIDERS.map(([k,n,co,c,l])=>`<button class="prov ${ai.provider===k?'on':''}" data-act="aiprov" data-k="${k}"><span class="logo" style="--c:${c}">${l}</span><div style="flex:1"><strong style="display:block;font-size:13px">${n}</strong><span class="small muted">${co}</span></div><span class="pill ${ai.keys[k]?'ok':''}">${ai.keys[k]?'conectado':'conectar'}</span></button>`).join('')}
-    <p class="small muted" style="margin:0">Cada pessoa conecta a própria conta de IA. A Mesa Criativa só envia o contexto do projeto junto com a pergunta.</p>
+    ${PROVIDERS.map(([k,n,co,c,l])=>`<button class="prov ${ai.provider===k?'on':''}" data-act="aiprov" data-k="${k}"><span class="logo" style="--c:${c}">${l}</span><div style="flex:1"><strong style="display:block;font-size:13px">${n}</strong><span class="small muted">${co}</span></div><span class="pill ${aiKey(k)?'ok':''}">${aiKey(k)?'conectado':'conectar'}</span></button>`).join('')}
+    <p class="small muted" style="margin:0">Cada pessoa conecta a própria chave de IA. Junto com a pergunta, a Mesa Criativa envia o projeto, o checklist, os documentos e o kit de marca do cliente.</p>${aiKey('claude')?'<button class="btn ghost sm" data-act="aikeyoff" style="align-self:flex-start">Desconectar Claude</button>':''}
     <div class="sec-t" style="margin:8px 0 0">Papel</div>
     <div class="roles">${Object.keys(ROLES).map(r=>`<button class="chip ${ai.role===r?'on':''}" data-act="airole" data-v="${r}">${r}</button>`).join('')}</div>
   </div>
   <div class="chat">
     <div class="chat-h"><span class="logo" style="--c:${prov[3]};width:28px;height:28px;font-size:11px;border-radius:8px">${prov[4]}</span><strong>${prov[1]} como ${ai.role}</strong><div style="flex:1"></div><label class="small muted" for="aiCtx">Contexto</label><select id="aiCtx" data-act-change="aictx"><option value="">Nenhum projeto</option>${S.projects.map(x=>`<option value="${x.id}" ${x.id===ai.ctx?'selected':''}>${esc(x.title)} · ${esc(cname(x.clientId))}</option>`).join('')}</select>${ai.msgs.length?`<button class="btn ghost sm" data-act="aiclear">Limpar</button>`:''}</div>
-    <div class="msgs" id="msgs">${ai.msgs.length?ai.msgs.map((m,i)=>m.me?`<div class="msg me">${esc(m.t)}</div>`:m.tool?`<div class="msg bot"><div class="who">${esc(m.who)}</div>${esc(m.t)}${toolCard(m,i)}</div>`:`<div class="msg bot"><div class="who">${esc(m.who)}</div>${esc(m.t)}<div class="msg-actions"><button class="btn sm" data-act="ai2note" data-i="${i}">Salvar como nota</button><button class="btn sm" data-act="ai2doc" data-i="${i}">Criar documento</button><button class="btn sm" data-act="ai2task" data-i="${i}">Virar tarefa</button></div></div>`).join(''):`<div class="empty" style="max-width:52ch">${p?`A IA já sabe que <strong>${esc(p.title)}</strong> é da <strong>${esc(cname(p.clientId))}</strong>, está em <strong>${p.stage}</strong> e entrega ${relDay(p.due)}. Ela também lê o briefing, as notas e o kit de marca do cliente.`:'Escolha um projeto em Contexto para a IA responder já sabendo do briefing, da etapa e do prazo.'} Comece por uma das sugestões abaixo.</div>`}</div>
+    <div class="msgs" id="msgs">${ai.msgs.length?ai.msgs.map((m,i)=>m.me?`<div class="msg me">${esc(m.t)}</div>`:m.tool?`<div class="msg bot"><div class="who">${esc(m.who)}</div>${esc(m.t)}${toolCard(m,i)}</div>`:(m.sys||m.pending)?`<div class="msg bot ${m.pending?'pending':''}"><div class="who">${esc(m.who)}</div>${esc(m.t)}</div>`:`<div class="msg bot"><div class="who">${esc(m.who)}</div>${esc(m.t)}<div class="msg-actions"><button class="btn sm" data-act="ai2note" data-i="${i}">Salvar como nota</button><button class="btn sm" data-act="ai2doc" data-i="${i}">Criar documento</button><button class="btn sm" data-act="ai2task" data-i="${i}">Virar tarefa</button></div></div>`).join(''):`<div class="empty" style="max-width:52ch">${p?`A IA já sabe que <strong>${esc(p.title)}</strong> é da <strong>${esc(cname(p.clientId))}</strong>, está em <strong>${p.stage}</strong> e entrega ${relDay(p.due)}. Ela também lê o briefing, as notas e o kit de marca do cliente.`:'Escolha um projeto em Contexto para a IA responder já sabendo do briefing, da etapa e do prazo.'} Comece por uma das sugestões abaixo.</div>`}</div>
     <div class="prompts"><span class="small muted" style="width:100%">Ideias como ${ai.role.toLowerCase()}</span>${ROLES[ai.role].map(q=>`<button class="chip" data-act="aiprompt" data-v="${esc(q)}">${esc(q)}</button>`).join('')}<span class="small muted" style="width:100%;margin-top:4px">Faça por mim, com conectores</span>${DOIT.map(q=>`<button class="chip" data-act="aiprompt" data-v="${esc(q)}">${esc(q)}</button>`).join('')}</div>
     <form class="chat-in" data-form="aisend"><textarea class="input" name="q" id="aiQ" placeholder="Pergunte para ${prov[1]} como ${ai.role.toLowerCase()}" aria-label="Mensagem"></textarea><button class="btn primary" type="submit" aria-label="Enviar">${ic('send')}</button></form>
   </div></div>`;
 };
 AFTER.assistentes=()=>{const m=$('#msgs');m.scrollTop=m.scrollHeight;$('#aiCtx').addEventListener('change',e=>{S.ai.ctx=e.target.value;save();render()});$('#aiQ').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();e.target.form.requestSubmit()}})};
 
-function aiAsk(q){const prov=PROVIDERS.find(x=>x[0]===S.ai.provider);S.ai.msgs.push({me:true,t:q});const tool=detectTool(q);
+function aiKey(k){try{return localStorage.getItem('mesa-key-'+k)||''}catch(e){return ''}}
+function aiContext(){const p=project(S.ai.ctx);if(!p)return 'Nenhum projeto selecionado.';const c=client(p.clientId);const docs=S.docs.filter(d=>d.projectId===p.id).map(d=>`# ${d.title}\n${d.content.replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').slice(0,2500)}`).join('\n\n');
+  return `Projeto: ${p.title}\nCliente: ${c?c.company:''}\nTipo: ${p.type}\nEtapa: ${p.stage}\nPrazo: ${p.due}\nChecklist: ${p.checklist.map(x=>(x.done?'[feito] ':'[a fazer] ')+x.t).join('; ')}\n${kitOf(p.clientId)?'Kit de marca: '+kitText(p.clientId)+'\n':''}${docs?'Documentos do projeto:\n'+docs:''}`}
+async function askClaude(){const key=aiKey('claude');let msgs=[];S.ai.msgs.filter(m=>!m.tool&&!m.pending&&!m.sys).slice(-14).forEach(m=>{const role=m.me?'user':'assistant';if(msgs.length&&msgs[msgs.length-1].role===role)msgs[msgs.length-1].content+='\n\n'+m.t;else msgs.push({role,content:m.t})});while(msgs.length&&msgs[0].role!=='user')msgs.shift();
+  const system=`Você é o assistente da Mesa Criativa, a ferramenta onde um profissional criativo organiza o trabalho. Responda em português do Brasil, direto e concreto, com frases curtas e linguagem de gente, sem floreio e sem frases de efeito. Seu papel agora: ${S.ai.role}. Quem pergunta: ${S.user.name}, ${S.ui.prof||'designer'}.\n\nContexto do projeto aberto:\n${aiContext()}`;
+  const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'content-type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-5-5',max_tokens:1500,system,messages:msgs})});
+  const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error&&j.error.message||('erro '+r.status));return (j.content||[]).map(c=>c.text||'').join('').trim()}
+function aiAsk(q){const prov=PROVIDERS.find(x=>x[0]===S.ai.provider);
+  if(!aiKey(S.ai.provider)){S.ai.msgs.push({me:true,t:q});S.ai.msgs.push({sys:true,who:prov[1],t:`Para eu responder de verdade, conecte a sua conta do ${prov[1]}: clique em ${prov[1]} na lista ao lado e cole a sua chave.`});return}
+  if(S.ai.provider!=='claude'){S.ai.msgs.push({me:true,t:q});S.ai.msgs.push({sys:true,who:prov[1],t:`${prov[1]} chega na próxima versão. Por enquanto, use o Claude.`});return}
+  S.ai.msgs.push({me:true,t:q});const pend={who:`Claude · ${S.ai.role}`,t:'Pensando…',pending:true};S.ai.msgs.push(pend);
+  askClaude().then(t=>{pend.t=t||'Sem resposta.';delete pend.pending}).catch(e=>{pend.t=`Não consegui responder: ${e.message}. Confira a chave em IA e se há crédito na sua conta da Anthropic.`;pend.sys=true;delete pend.pending}).finally(()=>{save();if(route==='assistentes')render()});}
+function aiAskOld(q){const prov=PROVIDERS.find(x=>x[0]===S.ai.provider);S.ai.msgs.push({me:true,t:q});const tool=detectTool(q);
   if(tool&&tool.off)S.ai.msgs.push({who:prov[1],t:`Para fazer isso eu preciso do conector ${tool.off}. Ligue em Integrações, na parte de conectores do assistente.`});
   else if(tool)S.ai.msgs.push({who:`${prov[1]} · usando o conector ${tool.app}`,t:'Preparei isso para você. Confere e aprova:',tool});
   else S.ai.msgs.push({who:`${prov[1]} · ${S.ai.role} · resposta de exemplo do protótipo`,t:fakeReply(S.ai.role,project(S.ai.ctx),q)});}
@@ -1934,7 +1955,7 @@ function consent(brand,perms,onOk,extra=''){
   $('#okConsent').addEventListener('click',()=>{closeLayer();onOk()});
 }
 function keyModal(k){const P={claude:['Claude','console.anthropic.com','sk-ant-...'],chatgpt:['ChatGPT','platform.openai.com','sk-...'],gemini:['Gemini','aistudio.google.com','AIza...']}[k];
-  modal(`Conectar ${P[0]}`,`<ol class="steps"><li>Entre em <strong>${P[1]}</strong> com a sua conta.</li><li>Crie uma chave de API e copie.</li><li>Cole aqui embaixo. Ela fica guardada criptografada e só a sua conta usa.</li></ol>${fld('m-k','Chave de API',`<input class="input" id="m-k" name="key" placeholder="${P[2]}" autocomplete="off">`)}<p class="small muted">A chave é cobrada pelo uso direto no ${P[0]}, separada da assinatura Pro ou Plus.</p>`,'Conectar',o=>{if(!o.key.trim())return false;S.ai.keys[k]=true;S.ai.provider=k;toast(`${P[0]} conectado`)})}
+  modal(`Conectar ${P[0]}`,`<ol class="steps"><li>Entre em <strong>${P[1]}</strong> com a sua conta.</li><li>Crie uma chave de API e copie.</li><li>Cole aqui embaixo. Ela fica guardada só neste navegador.</li></ol>${fld('m-k','Chave de API',`<input class="input" id="m-k" name="key" placeholder="${P[2]}" autocomplete="off">`)}<p class="small muted">A chave é cobrada pelo uso direto no ${P[0]}, separada da assinatura Pro ou Plus.</p>`,'Conectar',o=>{if(!o.key.trim())return false;try{localStorage.setItem('mesa-key-'+k,o.key.trim())}catch(e){}S.ai.keys[k]=true;S.ai.provider=k;toast(`${P[0]} conectado`)})}
 
 /* ============ Kit de marca por cliente ============ */
 S.kits??={
@@ -2294,9 +2315,10 @@ const A={
   copyprompt:d=>{const p=S.brain.prompts.find(x=>x.id===d.id);navigator.clipboard?.writeText(p.b).then(()=>toast('Prompt copiado'),()=>toast('Não deu para copiar aqui'))},
   copylink:d=>{navigator.clipboard?.writeText(d.v).then(()=>toast('Link copiado'),()=>toast(d.v))},
   newprompt:()=>modal('Novo prompt',fld('m-t','Nome','<input class="input" id="m-t" name="t" required autofocus placeholder="Ex.: Mockup de embalagem">')+`<div class="two">${fld('m-f','Pasta','<input class="input" id="m-f" name="f" placeholder="Ex.: Imagem" list="pfold">')}${fld('m-o','Ferramenta','<select class="input" id="m-o" name="tool"><option>Claude</option><option>ChatGPT</option><option>Gemini</option><option>Magnific</option><option>Midjourney</option><option>Freepik</option><option>Outra</option></select>')}</div>`+fld('m-b','Prompt','<textarea class="input" id="m-b" name="b" rows="6" placeholder="Use {{variavel}} para o que muda a cada uso"></textarea>')+`<datalist id="pfold">${[...new Set(S.brain.prompts.map(p=>p.f))].map(f=>`<option value="${esc(f)}">`).join('')}</datalist>`,'Salvar prompt',o=>{if(!o.t.trim()||!o.b.trim())return false;S.brain.prompts.unshift({id:uid(),t:o.t.trim(),f:o.f.trim()||'Geral',b:o.b,tool:o.tool,uses:0});S.ui.brainTab='prompts';toast('Prompt guardado')}),
-  aiprov:d=>{if(!S.ai.keys[d.k]){keyModal(d.k);return}S.ai.provider=d.k;save();render()},
+  aiprov:d=>{if(!aiKey(d.k)){keyModal(d.k);return}S.ai.provider=d.k;save();render()},
   airole:d=>{S.ai.role=d.v;save();render()},
   aiprompt:d=>{const q=$('#aiQ');q.value=d.v;q.focus()},
+  aikeyoff:()=>{try{localStorage.removeItem('mesa-key-claude')}catch(e){}render();toast('Claude desconectado neste navegador')},
   aiclear:()=>{S.ai.msgs=[];save();render()},
   ai2note:d=>{const m=S.ai.msgs[+d.i];S.notes.unshift({id:uid(),title:`${S.ai.role}: ${cname(project(S.ai.ctx)?.clientId)||'ideia'}`,body:m.t,color:'azul',pinned:false,labels:['IA'],list:null,created:day(0)});save();toast('Salvo em Notas')},
   ai2doc:d=>{const m=S.ai.msgs[+d.i];const p=project(S.ai.ctx);const doc={id:'d'+uid(),title:`${S.ai.role}: ${p?p.title:'rascunho'}`,folder:'Estudos',projectId:p?.id||null,updated:day(0),content:m.t.split('\n').map(l=>`<p>${esc(l)||'<br>'}</p>`).join('')};S.docs.unshift(doc);S.ui.doc=doc.id;save();location.hash='documentos';toast('Documento criado com a resposta')},
