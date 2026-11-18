@@ -959,6 +959,61 @@ body.wgrabbing,body.wgrabbing *{cursor:grabbing!important}
 @keyframes viewFade{from{opacity:0}to{opacity:1}}
 .msg.pending{opacity:.6;animation:pulse 1.2s ease-in-out infinite}
 @keyframes pulse{50%{opacity:.35}}
+/* gaveta do projeto: estilo Ajustes da Apple */
+.pd{width:min(500px,100%)}
+.pd-h{border-bottom:0;padding:14px 18px 6px}
+.pd-kicker{font-size:13px;color:var(--muted);font-weight:500}
+.pd-chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);margin-right:4px}
+.pd-b{padding:4px 22px 28px;gap:26px}
+.pd-title{font-size:26px!important;font-weight:700;letter-spacing:-.02em;border:0!important;padding:0!important;background:transparent!important;width:100%}
+.pd-meta{font-size:13px;color:var(--muted);margin-top:4px}
+.pd-stepper{position:relative;display:grid;grid-template-columns:repeat(var(--n),1fr);padding-top:2px}
+.pd-track{position:absolute;left:calc(100%/var(--n)/2);right:calc(100%/var(--n)/2);top:9px;height:2px;border-radius:2px;background:color-mix(in srgb,var(--ink) 10%,transparent)}
+.pd-track i{position:absolute;inset:0 auto 0 0;width:calc(100% * var(--i) / (var(--n) - 1));background:var(--ink);border-radius:2px;transition:width .35s var(--ease,ease)}
+.pd-step{position:relative;border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:8px;padding:0;cursor:pointer;color:var(--muted)}
+.pd-dot{width:10px;height:10px;margin-top:5px;border-radius:50%;background:var(--surface);box-shadow:0 0 0 2px color-mix(in srgb,var(--ink) 18%,transparent);transition:all .25s}
+.pd-step.past .pd-dot{background:var(--ink);box-shadow:none}
+.pd-step.cur .pd-dot{width:14px;height:14px;margin-top:3px;background:var(--accent);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 20%,transparent)}
+.pd-sl{font-size:11.5px;font-weight:500;white-space:nowrap}
+.pd-step.past .pd-sl{color:var(--ink)}
+.pd-step.cur .pd-sl{color:var(--ink);font-weight:700}
+.pd-step:hover .pd-sl{color:var(--ink)}
+.pd-gh{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--ink);margin:0 4px 8px}
+.pd-gh .sp{flex:1}
+.pd-pct{font-size:12px;color:var(--muted);font-weight:500}
+.pd-link{border:0;background:none;color:var(--accent);font-size:13px;font-weight:500;cursor:pointer;padding:0}
+.pd-link:hover{opacity:.75}
+.pd-group{background:color-mix(in srgb,var(--ink) 4%,var(--surface));border-radius:14px;overflow:hidden}
+.pd-row{display:flex;align-items:center;gap:12px;min-height:46px;padding:0 14px;position:relative;color:var(--ink);text-decoration:none;font-size:14px}
+.pd-row+.pd-row:before{content:"";position:absolute;top:0;left:14px;right:0;height:1px;background:color-mix(in srgb,var(--ink) 8%,transparent)}
+.pd-lab{flex:0 0 96px;color:var(--ink);font-weight:500}
+.pd-in{flex:1;min-width:0;border:0;background:transparent;font:inherit;font-size:14px;color:var(--muted);text-align:right;padding:12px 0;outline:none;-webkit-appearance:none;appearance:none}
+.pd-in:focus{color:var(--ink)}
+select.pd-in{cursor:pointer;text-align-last:right;padding-right:16px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath d='M2 4l3 3 3-3' fill='none' stroke='%2386868b' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E") right center no-repeat}
+input[type=date].pd-in::-webkit-calendar-picker-indicator{opacity:.35;cursor:pointer}
+.pd-val{flex:1;text-align:right;color:var(--muted)}
+.pd-ct{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pd-chk.done .pd-ct{color:var(--muted);text-decoration:line-through}
+.pd-chk .check{flex:0 0 auto}
+.pd-x{opacity:0;transition:opacity .15s}
+.pd-row:hover .pd-x,.pd-x:focus{opacity:.6}
+.pd-add .pd-plus{width:22px;display:flex;justify-content:center;color:var(--accent)}
+.pd-add .pd-in{color:var(--ink)}
+.pd-empty{color:var(--muted);font-size:13px}
+.pd-row svg{flex:0 0 auto}
+a.pd-row:hover{background:color-mix(in srgb,var(--ink) 3%,transparent)}
+.pd-actions{display:flex;flex-wrap:wrap;gap:8px;padding-top:4px}
+/* tela Hoje: arrastar ao vivo */
+.wgrid{grid-auto-flow:row!important;align-items:stretch!important}
+.wghost{position:fixed!important;left:0;top:0;z-index:90;pointer-events:none;margin:0;will-change:transform;transition:box-shadow .3s cubic-bezier(.32,.72,0,1)!important;box-shadow:0 2px 8px rgba(0,0,0,.06)!important}
+.wghost.up{box-shadow:0 28px 60px rgba(0,0,0,.16),0 6px 16px rgba(0,0,0,.06)!important}
+.w-lifted{opacity:1!important;background:color-mix(in srgb,var(--ink) 3%,transparent)!important;box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--ink) 10%,transparent)!important;border-color:transparent!important}
+.w-lifted>*{opacity:0!important;transition:opacity .2s}
+.wgrabbing,.wgrabbing *{cursor:grabbing!important}
+.w.resizing{box-shadow:0 0 0 1.5px color-mix(in srgb,var(--accent) 60%,transparent),0 12px 30px rgba(0,0,0,.08)!important;z-index:4}
+.w.resizing .wsize-badge{position:absolute;right:14px;bottom:14px;left:auto;transform:none;z-index:5}
+.wguides{inset:0!important;transition:opacity .25s}
+.drawer.pd{background:var(--surface)!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
 .exemplo{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:var(--tile);border-radius:16px;padding:14px 16px;margin-bottom:18px;font-size:14px}
 .exemplo>div{flex:1;min-width:240px}
 #boot{animation:none}
@@ -1368,7 +1423,7 @@ VIEWS.hoje=()=>{
 };
 function widgetHTML(it,edit,i=0){const W=WIDGETS[it.id];if(!W)return'';
   const head=(!W.bare||edit)?`<div class="card-h w-h"><span class="w-grip" title="Arraste para mover" aria-hidden="true">${ic('drag')}</span>${W.src?`<span class="ti brand" style="--c:${W.src[0]}"><b>${W.src[1]}</b></span>`:tile(WTILE[it.id]||it.id)}<h3>${W.t}</h3>${it.pin?`<span class="pinmark" title="Fixado no topo">${ic('pin')}</span>`:''}<div class="sp"></div>${edit?`<div class="w-tools"><button class="btn sm" data-act="wsize" data-id="${it.id}" title="Mudar tamanho">${SIZE_L[it.w]||'Tamanho'}</button><button class="iconbtn ${it.pin?'on':''}" data-act="wpin" data-id="${it.id}" title="${it.pin?'Desafixar':'Fixar no topo'}" aria-label="Fixar">${ic('pin')}</button><button class="iconbtn" data-act="wdel" data-id="${it.id}" title="Tirar da tela" aria-label="Tirar da tela">${ic('x')}</button></div>`:(W.head?W.head():'')}</div>`:'';
-  return `<section class="w ${W.bare?'bare':'card'} ${edit?'editing':''} ${it.w>=7?'big':''}" style="--span:${it.w};--i:${i}${it.h?`;min-height:${it.h*ROWH}px`:''};view-transition-name:w-${it.id}" data-w="${it.id}">${head}<div class="w-b">${W.f()}</div><span class="w-resize" title="Arraste para mudar o tamanho" aria-hidden="true"></span></section>`}
+  return `<section class="w ${W.bare?'bare':'card'} ${edit?'editing':''} ${it.w>=7?'big':''}" style="--span:${it.w};--i:${i}${it.h?`;min-height:${it.h*ROWH}px`:''}" data-w="${it.id}">${head}<div class="w-b">${W.f()}</div><span class="w-resize" title="Arraste para mudar o tamanho" aria-hidden="true"></span></section>`}
 
 function wNumeros(){
   const inMonth=d=>{const x=parse(d);return x.getMonth()===T0.getMonth()&&x.getFullYear()===T0.getFullYear()};
@@ -1450,28 +1505,37 @@ function kcard(p){const d=diff(p.due);const sev=p.stage==='Entregue'?'ok':d<0?'b
 function openProject(id){
   const p=project(id);if(!p)return;const si=STAGES.indexOf(p.stage);
   const docs=S.docs.filter(d=>d.projectId===id);const c=client(p.clientId);
-  layer(`<div class="overlay right" data-act="closelayer"><aside class="drawer" role="dialog" aria-label="Projeto">
-    <div class="drawer-h"><span class="pill">${p.type}</span>${p.drive?`<span class="gbadge"><span class="gmark" style="--c:#1D7F46">D</span>Pasta no Drive</span>`:''}<div style="flex:1"></div><button class="iconbtn" data-act="delproj" data-id="${p.id}" title="Apagar projeto" aria-label="Apagar projeto">${ic('trash')}</button><button class="iconbtn" data-act="closelayer" aria-label="Fechar">${ic('x')}</button></div>
-    <div class="drawer-b">
-      <input class="dtitle" data-pf="title" data-id="${p.id}" value="${esc(p.title)}" aria-label="Nome do projeto">
-      <div><div class="sub-h">Etapa</div><div class="stagebar">${STAGES.map((s,i)=>`<button class="${i<si?'past':i===si?'cur':''}" data-act="setstage" data-id="${p.id}" data-v="${s}" title="${s}">${s}</button>`).join('')}</div></div>
-      <div class="props">
-        <label for="pf-c">Cliente</label><select class="input" id="pf-c" data-pf="clientId" data-id="${p.id}">${S.clients.map(c=>`<option value="${c.id}" ${c.id===p.clientId?'selected':''}>${esc(c.company)}</option>`).join('')}</select>
-        <label for="pf-t">Tipo</label><select class="input" id="pf-t" data-pf="type" data-id="${p.id}">${TYPES.map(t=>`<option ${t===p.type?'selected':''}>${t}</option>`).join('')}</select>
-        <label for="pf-s">Início</label><input class="input" id="pf-s" type="date" data-pf="start" data-id="${p.id}" value="${p.start}">
-        <label for="pf-d">Prazo</label><input class="input" id="pf-d" type="date" data-pf="due" data-id="${p.id}" value="${p.due}">
-        <label for="pf-v">Valor</label><input class="input num" id="pf-v" type="number" data-pf="value" data-id="${p.id}" value="${p.value||0}">
-        <label for="pf-g">Etiquetas</label><input class="input" id="pf-g" data-pf="tags" data-id="${p.id}" value="${esc(p.tags.join(', '))}" placeholder="Separe por vírgula">
-        <label>Horas</label><div class="row"><strong class="num">${String(p.hours).replace('.',',')}h</strong><span class="small muted">${p.value&&p.hours?'· '+brl(p.value/p.hours)+' por hora':''}</span></div>
+  const done=p.checklist.filter(x=>x.done).length;
+  const row=(lab,ctrl,f)=>`<label class="pd-row" ${f?`for="${f}"`:''}><span class="pd-lab">${lab}</span>${ctrl}</label>`;
+  layer(`<div class="overlay right" data-act="closelayer"><aside class="drawer pd" role="dialog" aria-label="Projeto">
+    <div class="drawer-h pd-h"><span class="pd-kicker">${esc(c?c.company:'Sem cliente')}</span><div style="flex:1"></div>${p.drive?`<span class="pd-chip"><span class="gmark" style="--c:#1D7F46">D</span>Drive</span>`:''}<button class="iconbtn" data-act="delproj" data-id="${p.id}" title="Apagar projeto" aria-label="Apagar projeto">${ic('trash')}</button><button class="iconbtn" data-act="closelayer" aria-label="Fechar">${ic('x')}</button></div>
+    <div class="drawer-b pd-b">
+      <div><input class="dtitle pd-title" data-pf="title" data-id="${p.id}" value="${esc(p.title)}" aria-label="Nome do projeto">
+        <div class="pd-meta">${esc(p.type)} · prazo ${p.due?new Date(p.due+'T12:00').toLocaleDateString('pt-BR',{day:'numeric',month:'short'}):'sem data'} · ${done}/${p.checklist.length} feitos</div></div>
+      <div class="pd-stepper" style="--n:${STAGES.length};--i:${si}">
+        <div class="pd-track"><i></i></div>
+        ${STAGES.map((st,i)=>`<button class="pd-step ${i<si?'past':i===si?'cur':''}" data-act="setstage" data-id="${p.id}" data-v="${st}"><span class="pd-dot"></span><span class="pd-sl">${st}</span></button>`).join('')}
       </div>
-      <div><div class="sub-h">Checklist <span class="pill">${progress(p)}%</span></div>
-        <div class="list">${p.checklist.map(it=>`<div class="li ${it.done?'done':''}"><button class="check ${it.done?'on':''}" data-act="togglecheck" data-id="${p.id}" data-c="${it.id}" aria-label="Marcar item">${it.done?ic('check'):''}</button><div class="grow"><div class="t" style="font-weight:500">${esc(it.t)}</div></div><button class="iconbtn" data-act="delcheck" data-id="${p.id}" data-c="${it.id}" aria-label="Apagar item">${ic('x')}</button></div>`).join('')}</div>
-        <form class="addline" data-form="addcheck" data-id="${p.id}"><input class="input" name="t" placeholder="Novo item do checklist" aria-label="Novo item"><button class="btn" type="submit">${ic('plus')}</button></form></div>
-      <div><div class="sub-h">Arquivos no Google Drive<span class="sp"></span><button class="btn sm" data-act="attachdrive" data-id="${p.id}">${ic('plus')}Anexar do Drive</button></div>
-        ${p.files.map(f=>`<div class="file"><span class="ftype" style="background:${FTYPE[f.k]||'#6C6C68'}">${f.k}</span><span style="flex:1">${esc(f.n)}</span><span class="small muted">Drive</span></div>`).join('')||'<div class="empty">Nenhum arquivo ainda.</div>'}</div>
-      <div><div class="sub-h">Documentos<span class="sp"></span><button class="btn sm" data-act="projdoc" data-id="${p.id}">${ic('plus')}Briefing a partir do modelo</button></div>
-        ${docs.map(d=>`<a class="file" href="#documentos" data-act="opendoc" data-id="${d.id}" style="text-decoration:none"><span class="ftype" style="background:#2F6FDE">doc</span><span style="flex:1">${esc(d.title)}</span>${d.gdoc?'<span class="small muted">Google Docs</span>':''}</a>`).join('')||'<div class="empty">Nenhum documento ligado a este projeto.</div>'}</div>
-      <div class="row" style="flex-wrap:wrap">${waBtn(c,`Oi, ${c?.name.split(' ')[0]}! Atualização do projeto ${p.title}: estamos na etapa de ${p.stage}.`)}<button class="btn" data-act="startfocus" data-id="${p.id}">${ic('play')}Contar horas neste projeto</button><button class="btn" data-act="new" data-k="task" data-proj="${p.id}">${ic('check')}Nova tarefa</button></div>
+      <section><div class="pd-gh">Detalhes</div><div class="pd-group">
+        ${row('Cliente',`<select class="pd-in" id="pf-c" data-pf="clientId" data-id="${p.id}">${S.clients.map(x=>`<option value="${x.id}" ${x.id===p.clientId?'selected':''}>${esc(x.company)}</option>`).join('')}</select>`,'pf-c')}
+        ${row('Tipo',`<select class="pd-in" id="pf-t" data-pf="type" data-id="${p.id}">${TYPES.map(t=>`<option ${t===p.type?'selected':''}>${t}</option>`).join('')}</select>`,'pf-t')}
+        ${row('Início',`<input class="pd-in" id="pf-s" type="date" data-pf="start" data-id="${p.id}" value="${p.start}">`,'pf-s')}
+        ${row('Prazo',`<input class="pd-in" id="pf-d" type="date" data-pf="due" data-id="${p.id}" value="${p.due}">`,'pf-d')}
+        ${row('Valor',`<input class="pd-in num" id="pf-v" type="number" data-pf="value" data-id="${p.id}" value="${p.value||''}" placeholder="R$ 0">`,'pf-v')}
+        ${row('Etiquetas',`<input class="pd-in" id="pf-g" data-pf="tags" data-id="${p.id}" value="${esc(p.tags.join(', '))}" placeholder="Separe por vírgula">`,'pf-g')}
+        <div class="pd-row"><span class="pd-lab">Horas</span><span class="pd-val num">${String(p.hours).replace('.',',')}h${p.value&&p.hours?' · '+brl(p.value/p.hours)+'/h':''}</span></div>
+      </div></section>
+      <section><div class="pd-gh">Checklist<span class="sp"></span><span class="pd-pct">${progress(p)}%</span></div><div class="pd-group">
+        ${p.checklist.map(it=>`<div class="pd-row pd-chk ${it.done?'done':''}"><button class="check ${it.done?'on':''}" data-act="togglecheck" data-id="${p.id}" data-c="${it.id}" aria-label="Marcar item">${it.done?ic('check'):''}</button><span class="pd-ct">${esc(it.t)}</span><button class="iconbtn pd-x" data-act="delcheck" data-id="${p.id}" data-c="${it.id}" aria-label="Apagar item">${ic('x')}</button></div>`).join('')}
+        <form class="pd-row pd-add" data-form="addcheck" data-id="${p.id}"><span class="pd-plus">${ic('plus')}</span><input class="pd-in" name="t" placeholder="Adicionar item" aria-label="Novo item" style="text-align:left"></form>
+      </div></section>
+      <section><div class="pd-gh">Arquivos<span class="sp"></span><button class="pd-link" data-act="attachdrive" data-id="${p.id}">Anexar do Drive</button></div><div class="pd-group">
+        ${p.files.map(f=>`<div class="pd-row"><span class="ftype" style="background:${FTYPE[f.k]||'#6C6C68'}">${f.k}</span><span class="pd-ct">${esc(f.n)}</span></div>`).join('')||'<div class="pd-row pd-empty">Nenhum arquivo ainda</div>'}
+      </div></section>
+      <section><div class="pd-gh">Documentos<span class="sp"></span><button class="pd-link" data-act="projdoc" data-id="${p.id}">Novo briefing</button></div><div class="pd-group">
+        ${docs.map(d=>`<a class="pd-row" href="#documentos" data-act="opendoc" data-id="${d.id}"><span class="ftype" style="background:#2F6FDE">doc</span><span class="pd-ct">${esc(d.title)}</span>${ic('right')}</a>`).join('')||'<div class="pd-row pd-empty">Nenhum documento ligado</div>'}
+      </div></section>
+      <div class="pd-actions">${waBtn(c,`Oi, ${c?.name.split(' ')[0]}! Atualização do projeto ${p.title}: estamos na etapa de ${p.stage}.`)}<button class="btn" data-act="startfocus" data-id="${p.id}">${ic('play')}Contar horas</button><button class="btn" data-act="new" data-k="task" data-proj="${p.id}">${ic('check')}Nova tarefa</button></div>
     </div></aside></div>`);
 }
 
@@ -2088,46 +2152,59 @@ const GUIDE=()=>S.ui.guide?`<div class="guide"><div class="guide-h"><strong>Come
 const reduceMotion=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
 function vt(fn){if(document.startViewTransition&&!reduceMotion())return document.startViewTransition(fn);fn()}
 let wd=null;
+const EASE='cubic-bezier(.32,.72,0,1)';
+function wItems(g){return [...g.querySelectorAll(':scope>.w[data-w]')]}
+/* FLIP: mede antes, muda, e anima cada bloco do lugar antigo para o novo */
+function flip(grid,mutate,dur=420){const els=wItems(grid);const A=new Map(els.map(e=>[e,e.getBoundingClientRect()]));mutate();
+  els.forEach(e=>e.getAnimations().forEach(x=>x.cancel()));
+  els.forEach(e=>{const a=A.get(e),b=e.getBoundingClientRect();const dx=a.left-b.left,dy=a.top-b.top;if(Math.abs(dx)<1&&Math.abs(dy)<1)return;
+    if(reduceMotion())return;e.animate([{transform:`translate(${dx}px,${dy}px)`},{transform:'none'}],{duration:dur,easing:EASE})})}
+function wSaveOrder(grid){const ord=wItems(grid).map(e=>e.dataset.w);S.ui.layout.sort((x,y)=>ord.indexOf(x.id)-ord.indexOf(y.id));save()}
 document.addEventListener('pointerdown',e=>{
   if(e.button!==0||window.innerWidth<760)return;
   const rh=e.target.closest('.w-resize');const w=e.target.closest('.wgrid>.w[data-w]');if(!w)return;
   if(rh){e.preventDefault();const grid=w.parentElement,gr=grid.getBoundingClientRect(),gap=parseFloat(getComputedStyle(grid).columnGap)||18;
-    const prevMin=w.style.minHeight;w.style.minHeight='';const natural=w.getBoundingClientRect().height;w.style.minHeight=prevMin;const wr=w.getBoundingClientRect();
-    const g=document.createElement('div');g.className='wguides';g.innerHTML=Array.from({length:12},()=>'<i></i>').join('');grid.appendChild(g);
-    const pv=document.createElement('div');pv.className='wpreview';pv.style.left=(wr.left-gr.left)+'px';pv.style.top=(wr.top-gr.top)+'px';pv.style.width=wr.width+'px';pv.style.height=wr.height+'px';grid.appendChild(pv);
-    wd={mode:'resize',w,grid,gr,gap,colW:(gr.width-11*gap)/12,wr,natural,guides:g,pv,span:null,rows:undefined};w.classList.add('resizing');document.body.classList.add('wbusy');return}
+    const prevMin=w.style.minHeight;w.style.minHeight='';const natural=w.getBoundingClientRect().height;w.style.minHeight=prevMin;
+    const g=document.createElement('div');g.className='wguides';g.innerHTML=Array.from({length:12},()=>'<i></i>').join('');grid.prepend(g);
+    const it=S.ui.layout.find(x=>x.id===w.dataset.w);const badge=document.createElement('div');badge.className='wsize-badge';w.appendChild(badge);
+    wd={mode:'resize',w,grid,gap,colW:(gr.width-11*gap)/12,natural,guides:g,badge,it,span:it.w,rows:it.h||null};w.classList.add('resizing');document.body.classList.add('wbusy');wBadge();return}
   if(e.target.closest('button,a,input,textarea,select,label,[contenteditable],.chip,.ytplayer,.poster,.li,.mail,.note,.check,iframe'))return;
   if(!e.target.closest('.w-h')&&!w.classList.contains('bare'))return;
   wd={mode:'pending',w,x0:e.clientX,y0:e.clientY};
 });
+function wBadge(){const d=wd;d.badge.textContent=`${SIZE_NAME(d.span)} · ${d.span} de 12${d.rows?' · altura '+d.rows:''}`}
+function wGhostLoop(){const d=wd;if(!d||d.mode!=='move')return;d.cx+=(d.tx-d.cx)*.38;d.cy+=(d.ty-d.cy)*.38;
+  const vx=d.tx-d.cx;d.gh.style.transform=`translate3d(${d.cx}px,${d.cy}px,0) scale(1.03) rotate(${Math.max(-2,Math.min(2,vx*.04))}deg)`;d.raf=requestAnimationFrame(wGhostLoop)}
 document.addEventListener('pointermove',e=>{
   if(!wd)return;
-  if(wd.mode==='pending'){if(Math.hypot(e.clientX-wd.x0,e.clientY-wd.y0)<6)return;
-    const r=wd.w.getBoundingClientRect();const gh=wd.w.cloneNode(true);gh.className+=' wghost';gh.style.width=r.width+'px';gh.style.height=r.height+'px';gh.style.left=r.left+'px';gh.style.top=r.top+'px';gh.style.viewTransitionName='none';document.body.appendChild(gh);
-    const bar=document.createElement('div');bar.className='wdrop';bar.hidden=true;wd.w.parentElement.appendChild(bar);
-    wd={mode:'move',w:wd.w,gh,bar,dx:e.clientX-r.left,dy:e.clientY-r.top,target:null,before:true};wd.w.classList.add('w-lifted');document.body.classList.add('wbusy','wgrabbing');requestAnimationFrame(()=>gh.classList.add('up'))}
-  if(wd.mode==='move'){e.preventDefault();wd.gh.style.transform=`translate(${e.clientX-wd.dx-parseFloat(wd.gh.style.left)}px,${e.clientY-wd.dy-parseFloat(wd.gh.style.top)}px) scale(1.02)`;
-    const el=document.elementsFromPoint(e.clientX,e.clientY).find(x=>x.matches?.('.wgrid>.w[data-w]')&&x!==wd.w);
-    if(el){const grid=el.parentElement,gr=grid.getBoundingClientRect(),r=el.getBoundingClientRect();const before=e.clientX<r.left+r.width/2;wd.target=el;wd.before=before;
-      const x=(before?r.left-9:r.right+9)-gr.left;wd.bar.hidden=false;wd.bar.style.transform=`translate(${x-2}px,${r.top-gr.top}px)`;wd.bar.style.height=r.height+'px'}}
-  if(wd.mode==='resize'){e.preventDefault();const {wr,gap,colW,natural,gr,pv}=wd;
-    const span=Math.max(3,Math.min(12,Math.round((e.clientX-wr.left+gap)/(colW+gap))));
-    const rows=Math.max(1,Math.min(7,Math.round((e.clientY-wr.top)/ROWH)));const auto=rows*ROWH<=natural+10;
-    wd.span=span;wd.rows=auto?null:rows;
-    pv.style.width=(span*colW+(span-1)*gap)+'px';pv.style.height=(auto?natural:rows*ROWH)+'px';
-    let b=pv.querySelector('.wsize-badge');if(!b){b=document.createElement('div');b.className='wsize-badge';pv.appendChild(b)}b.textContent=`${SIZE_NAME(span)} · ${span} de 12 colunas${auto?'':' · altura '+rows}`}
+  if(wd.mode==='pending'){if(Math.hypot(e.clientX-wd.x0,e.clientY-wd.y0)<5)return;
+    const w=wd.w,r=w.getBoundingClientRect();const gh=w.cloneNode(true);gh.querySelectorAll('iframe').forEach(f=>f.remove());gh.classList.add('wghost');
+    Object.assign(gh.style,{width:r.width+'px',height:r.height+'px',left:'0px',top:'0px',viewTransitionName:'none'});document.body.appendChild(gh);
+    wd={mode:'move',w,grid:w.parentElement,gh,dx:wd.x0-r.left,dy:wd.y0-r.top,cx:r.left,cy:r.top,tx:r.left,ty:r.top,lock:0};
+    w.classList.add('w-lifted');document.body.classList.add('wbusy','wgrabbing');requestAnimationFrame(()=>gh.classList.add('up'));wGhostLoop()}
+  if(wd.mode==='move'){e.preventDefault();const d=wd;d.tx=e.clientX-d.dx;d.ty=e.clientY-d.dy;
+    if(performance.now()<d.lock)return;
+    const el=document.elementsFromPoint(e.clientX,e.clientY).find(x=>x.matches?.('.wgrid>.w[data-w]'));
+    if(!el||el===d.w)return;const r=el.getBoundingClientRect();
+    const after=e.clientX>r.left+r.width/2;
+    const ref=after?el.nextElementSibling:el;if(ref===d.w||ref===d.w.nextElementSibling&&!after&&el===ref)return;
+    if((after&&el.nextElementSibling===d.w)||(!after&&el.previousElementSibling===d.w))return;
+    flip(d.grid,()=>d.grid.insertBefore(d.w,ref));d.lock=performance.now()+260}
+  if(wd.mode==='resize'){e.preventDefault();const d=wd,wr=d.w.getBoundingClientRect();
+    const span=Math.max(3,Math.min(12,Math.round((e.clientX-wr.left+d.gap)/(d.colW+d.gap))));
+    const rows=Math.max(1,Math.min(7,Math.round((e.clientY-wr.top)/ROWH)));const nr=rows*ROWH<=d.natural+10?null:rows;
+    if(span!==d.span||nr!==d.rows){d.span=span;d.rows=nr;flip(d.grid,()=>{d.w.style.setProperty('--span',span);d.w.style.minHeight=nr?nr*ROWH+'px':'';d.w.classList.toggle('big',span>=7)},320);wBadge()}}
 });
 document.addEventListener('pointerup',e=>{
   if(!wd)return;const d=wd;wd=null;document.body.classList.remove('wbusy','wgrabbing');
-  if(d.mode==='move'){d.bar.remove();
-    const id=d.w.dataset.w;const L=S.ui.layout;const it=L.find(x=>x.id===id);
-    if(d.target){d.gh.style.viewTransitionName='w-'+id;d.w.style.viewTransitionName='none';
-      vt(()=>{d.gh.remove();const from=L.indexOf(it);L.splice(from,1);let to=L.findIndex(x=>x.id===d.target.dataset.w);if(!d.before)to++;L.splice(to,0,it);save();render()})}
-    else{d.gh.classList.remove('up');d.gh.style.transition='transform .45s var(--apple),box-shadow .45s';d.gh.style.transform='none';setTimeout(()=>{d.gh.remove();d.w.classList.remove('w-lifted')},450)}}
-  if(d.mode==='resize'){const it=S.ui.layout.find(x=>x.id===d.w.dataset.w);d.w.classList.remove('resizing');
-    if(it&&d.span){vt(()=>{d.guides.remove();d.pv.remove();it.w=d.span;it.h=d.rows;save();render()})}else{d.guides.remove();d.pv.remove()}}
+  if(d.mode==='move'){cancelAnimationFrame(d.raf);const r=d.w.getBoundingClientRect();
+    d.gh.classList.remove('up');d.gh.style.transition=`transform .42s ${EASE},box-shadow .42s ${EASE}`;d.gh.style.transform=`translate3d(${r.left}px,${r.top}px,0) scale(1) rotate(0deg)`;
+    setTimeout(()=>{d.w.classList.remove('w-lifted');d.gh.style.transition='opacity .18s';d.gh.style.opacity='0';setTimeout(()=>d.gh.remove(),180)},400);
+    wSaveOrder(d.grid)}
+  if(d.mode==='resize'){d.w.classList.remove('resizing');d.badge.remove();d.guides.style.transition='opacity .25s';d.guides.style.opacity='0';setTimeout(()=>d.guides.remove(),250);
+    d.it.w=d.span;d.it.h=d.rows;save()}
 });
-document.addEventListener('pointercancel',()=>{if(!wd)return;['gh','bar','guides','pv'].forEach(k=>wd[k]?.remove?.());wd.w?.classList.remove('w-lifted','resizing');wd=null;document.body.classList.remove('wbusy','wgrabbing')});
+document.addEventListener('pointercancel',()=>{if(!wd)return;cancelAnimationFrame(wd.raf);['gh','guides','badge'].forEach(k=>wd[k]?.remove?.());wd.w?.classList.remove('w-lifted','resizing');wd=null;document.body.classList.remove('wbusy','wgrabbing')});
 
 /* ============ Versão no ar ============ */
 if(S.session&&S.ui.firstSave){delete S.ui.firstSave;save()}
