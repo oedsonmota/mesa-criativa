@@ -1014,6 +1014,8 @@ a.pd-row:hover{background:color-mix(in srgb,var(--ink) 3%,transparent)}
 .w.resizing .wsize-badge{position:absolute;right:14px;bottom:14px;left:auto;transform:none;z-index:5}
 .wguides{inset:0!important;transition:opacity .25s}
 .drawer.pd{background:var(--surface)!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+.gpick{width:min(560px,94vw)}.gpick-list{margin-top:12px;max-height:52vh;overflow:auto;border-radius:12px;background:color-mix(in srgb,var(--ink) 4%,var(--surface))}
+.gfile{width:100%;border:0;background:none;text-align:left;cursor:pointer;font:inherit}.gfile:hover{background:color-mix(in srgb,var(--ink) 4%,transparent)}
 .exemplo{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:var(--tile);border-radius:16px;padding:14px 16px;margin-bottom:18px;font-size:14px}
 .exemplo>div{flex:1;min-width:240px}
 #boot{animation:none}
@@ -1146,7 +1148,7 @@ const STAGES=['Briefing','Imersão','Conceito','Criação','Ajustes','Entregue']
 const FUNIL=['Lead','Conversa','Proposta enviada','Fechado','Perdido'];
 const TYPES=['Marca','Site','Social media','Embalagem','Editorial','Outro'];
 const NOTE_COLORS=['branco','amarelo','verde','azul','rosa','laranja','cinza'];
-const FTYPE={pdf:'#C2271B',fig:'#8A4DFF',doc:'#2F6FDE',sheet:'#1D7F46',zip:'#6C6C68',img:'#E08A00',ai:'#E86A00'};
+const FTYPE={pdf:'#C2271B',fig:'#8A4DFF',doc:'#2F6FDE',sheet:'#1D7F46',zip:'#6C6C68',img:'#E08A00',ai:'#E86A00',slides:'#E8A400',pasta:'#5F6368',vid:'#C2271B',arq:'#6C6C68'};
 function relDay(s){const d=diff(s);if(d===0)return'hoje';if(d===1)return'amanhã';if(d===-1)return'ontem';if(d<0)return`${-d} dias atrás`;if(d<7)return`em ${d} dias`;return br(s)}
 
 /* ============ Dados de exemplo ============ */
@@ -1440,7 +1442,7 @@ function wTarefas(){const today=day(0);const tasks=S.tasks.filter(t=>diff(t.date
   return `<div class="list">${tasks.map(taskRow).join('')||'<div class="empty">Nada pendente. Aproveite para adiantar um projeto.</div>'}</div><form class="addline" data-form="quicktask"><input class="input" name="title" placeholder="Adicionar tarefa para hoje" aria-label="Nova tarefa"><button class="btn" type="submit" aria-label="Adicionar">${ic('plus')}</button></form>`}
 function wAgenda(){if(!S.integrations.gcal)return connectPrompt('gcal','Conecte o Google Agenda para ver seus compromissos aqui.');
   const evs=S.events.filter(e=>e.date===day(0)).sort((a,b)=>a.time.localeCompare(b.time));
-  return evs.map(e=>`<div class="ev"><div class="h">${e.time}</div><div style="flex:1"><div class="t">${esc(e.title)}</div><div class="small muted">até ${e.end||''}${e.meet?' · Google Meet':''}</div></div>${e.meet?`<button class="btn sm" data-act="meet" data-v="${esc(e.title)}">Entrar</button>`:''}</div>`).join('')||'<div class="empty">Dia livre de reuniões.</div>'}
+  return evs.map(e=>`<div class="ev"><div class="h">${e.time}</div><div style="flex:1"><div class="t">${esc(e.title)}</div><div class="small muted">até ${e.end||''}${e.meet?' · Google Meet':''}</div></div>${e.meet&&e.link?`<a class="btn sm" href="${esc(e.link)}" target="_blank" rel="noopener">Entrar</a>`:e.meet?`<button class="btn sm" data-act="meet" data-v="${esc(e.title)}">Entrar</button>`:''}</div>`).join('')+(gOn()&&!gReady()?`<button class="pd-link" data-act="gsync" style="margin-top:8px">Atualizar com o Google Agenda</button>`:'')||'<div class="empty">Dia livre de reuniões.</div>'}
 function wPrazos(){const prazos=S.projects.filter(p=>p.stage!=='Entregue').sort((a,b)=>a.due.localeCompare(b.due)).slice(0,5);
   return `<div class="list">${prazos.map(p=>{const d=diff(p.due);const sev=d<0?'bad':d<=3?'warn':'ok';return `<div class="li" data-act="openproj" data-id="${p.id}" style="cursor:pointer"><span class="stripe ${sev}"></span><div class="grow"><div class="t">${esc(p.title)}</div><div class="s">${esc(cname(p.clientId))} · ${p.stage} · ${progress(p)}% do checklist</div></div><span class="pill ${sev}">${d<0?`atrasado ${-d}d`:relDay(p.due)}</span></div>`}).join('')}</div>`}
 function wSlack(){const ch=S.slack.channels.find(c=>c.id===S.slack.cur)||S.slack.channels[0];
@@ -1530,7 +1532,7 @@ function openProject(id){
         <form class="pd-row pd-add" data-form="addcheck" data-id="${p.id}"><span class="pd-plus">${ic('plus')}</span><input class="pd-in" name="t" placeholder="Adicionar item" aria-label="Novo item" style="text-align:left"></form>
       </div></section>
       <section><div class="pd-gh">Arquivos<span class="sp"></span><button class="pd-link" data-act="attachdrive" data-id="${p.id}">Anexar do Drive</button></div><div class="pd-group">
-        ${p.files.map(f=>`<div class="pd-row"><span class="ftype" style="background:${FTYPE[f.k]||'#6C6C68'}">${f.k}</span><span class="pd-ct">${esc(f.n)}</span></div>`).join('')||'<div class="pd-row pd-empty">Nenhum arquivo ainda</div>'}
+        ${p.files.map(f=>f.url?`<a class="pd-row" href="${esc(f.url)}" target="_blank" rel="noopener"><span class="ftype" style="background:${FTYPE[f.k]||'#6C6C68'}">${f.k}</span><span class="pd-ct">${esc(f.n)}</span>${ic('right')}</a>`:`<div class="pd-row"><span class="ftype" style="background:${FTYPE[f.k]||'#6C6C68'}">${f.k}</span><span class="pd-ct">${esc(f.n)}</span></div>`).join('')||'<div class="pd-row pd-empty">Nenhum arquivo ainda</div>'}
       </div></section>
       <section><div class="pd-gh">Documentos<span class="sp"></span><button class="pd-link" data-act="projdoc" data-id="${p.id}">Novo briefing</button></div><div class="pd-group">
         ${docs.map(d=>`<a class="pd-row" href="#documentos" data-act="opendoc" data-id="${d.id}"><span class="ftype" style="background:#2F6FDE">doc</span><span class="pd-ct">${esc(d.title)}</span>${ic('right')}</a>`).join('')||'<div class="pd-row pd-empty">Nenhum documento ligado</div>'}
@@ -1539,6 +1541,47 @@ function openProject(id){
     </div></aside></div>`);
 }
 
+
+/* ============ Google de verdade (Agenda e Drive) ============ */
+const GCID='373865012044-50d284tghfiss122ui29dumff1l2221u.apps.googleusercontent.com';
+const GSCOPES='openid email https://www.googleapis.com/auth/calendar.events https://www.googleapis.com/auth/drive.readonly';
+const GKEYS=['gcal','drive','docs','meet'],GSOON=['gmail','sheets','gtasks','contacts'];
+let gTok=null;try{gTok=JSON.parse(sessionStorage.getItem('mesa-gtok')||'null')}catch(e){}
+const gOn=()=>!!(S.google&&S.google.on);
+const gReady=()=>!!(gTok&&gTok.exp>Date.now()+60000);
+function gLoad(){return new Promise((res,rej)=>{if(window.google&&google.accounts&&google.accounts.oauth2)return res();const sc=document.createElement('script');sc.src='https://accounts.google.com/gsi/client';sc.onload=()=>res();sc.onerror=()=>rej(new Error('não consegui carregar o login do Google'));document.head.appendChild(sc)})}
+async function gAuth(prompt){await gLoad();return new Promise((res,rej)=>{const c=google.accounts.oauth2.initTokenClient({client_id:GCID,scope:GSCOPES,hint:S.google&&S.google.email||undefined,
+  callback:r=>{if(r.error)return rej(new Error(r.error_description||r.error));gTok={t:r.access_token,exp:Date.now()+(+r.expires_in-30)*1000};try{sessionStorage.setItem('mesa-gtok',JSON.stringify(gTok))}catch(e){}res()},
+  error_callback:e=>rej(new Error(e.type==='popup_closed'?'janela fechada':e.type||'cancelado'))});c.requestAccessToken({prompt})})}
+async function gFetch(url,opt={},retry=true){if(!gReady())await gAuth('');
+  const r=await fetch(url,{...opt,headers:{Authorization:'Bearer '+gTok.t,'Content-Type':'application/json',...(opt.headers||{})}});
+  if(r.status===401&&retry){gTok=null;await gAuth('');return gFetch(url,opt,false)}
+  const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error&&j.error.message||('erro '+r.status));return j}
+async function gConnect(){try{await gAuth('consent');const u=await gFetch('https://www.googleapis.com/oauth2/v3/userinfo');S.google={on:true,email:u.email};GKEYS.forEach(k=>S.integrations[k]=true);save();render();toast('Google conectado: '+u.email);await gSync(true)}
+  catch(e){toast('Não conectou o Google: '+e.message)}}
+function gDisconnect(){try{if(gTok&&window.google)google.accounts.oauth2.revoke(gTok.t,()=>{})}catch(e){}gTok=null;try{sessionStorage.removeItem('mesa-gtok')}catch(e){}S.google=null;S.events=S.events.filter(e=>!e.g);save();render();toast('Google desconectado')}
+const hm=d=>d.toTimeString().slice(0,5);
+async function gSync(loud){if(!gOn())return;try{const a=new Date(T0);a.setDate(a.getDate()-14);const b=new Date(T0);b.setDate(b.getDate()+90);
+  const j=await gFetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events?singleEvents=true&orderBy=startTime&maxResults=500&timeMin=${a.toISOString()}&timeMax=${b.toISOString()}`);
+  const evs=(j.items||[]).filter(e=>e.status!=='cancelled'&&e.start).map(e=>{const all=!e.start.dateTime;const st=all?null:new Date(e.start.dateTime),en=e.end&&e.end.dateTime?new Date(e.end.dateTime):null;
+    return {id:'g'+e.id,g:true,title:e.summary||'(sem título)',date:all?e.start.date:fmt(st),time:all?'Dia todo':hm(st),end:en?hm(en):'',meet:!!e.hangoutLink,link:e.hangoutLink||e.htmlLink}});
+  S.events=S.events.filter(e=>!e.g).concat(evs);S.google.synced=Date.now();save();if(['hoje','agenda','integracoes'].includes(route))render();if(loud)toast(`${evs.length} compromissos trazidos da sua agenda`)}
+  catch(e){toast('Não atualizei a agenda: '+e.message)}}
+async function gAddEvent(title,date,time,end,meet){try{const tz=Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const body={summary:title,start:{dateTime:`${date}T${time}:00`,timeZone:tz},end:{dateTime:`${date}T${end}:00`,timeZone:tz}};
+  if(meet)body.conferenceData={createRequest:{requestId:'mesa'+uid(),conferenceSolutionKey:{type:'hangoutsMeet'}}};
+  await gFetch('https://www.googleapis.com/calendar/v3/calendars/primary/events?conferenceDataVersion=1',{method:'POST',body:JSON.stringify(body)});toast('Salvo no seu Google Agenda');await gSync()}
+  catch(e){toast('Não salvei no Google: '+e.message)}}
+const GMIME=m=>/pdf/.test(m)?'pdf':/image/.test(m)?'img':/document/.test(m)?'doc':/spreadsheet/.test(m)?'sheet':/presentation/.test(m)?'slides':/folder/.test(m)?'pasta':/zip|compressed/.test(m)?'zip':/video/.test(m)?'vid':/illustrator|postscript/.test(m)?'ai':'arq';
+function gDrivePicker(pid){layer(`<div class="overlay" data-act="closelayer"><div class="modal gpick"><div class="modal-h"><h3>Anexar do Google Drive</h3><button class="iconbtn" data-act="closelayer" aria-label="Fechar">${ic('x')}</button></div>
+  <div class="modal-b"><input class="input" id="gq" placeholder="Buscar no seu Drive" autocomplete="off"><div id="glist" class="gpick-list"><div class="empty">Carregando seus arquivos…</div></div></div></div></div>`);
+  let t=null;const load=async q=>{const L=$('#glist');if(!L)return;try{const qq="trashed=false"+(q?` and name contains '${q.replace(/['\\]/g,'')}'`:'');
+    const j=await gFetch(`https://www.googleapis.com/drive/v3/files?pageSize=30&orderBy=${q?'':'modifiedTime desc'}&fields=files(id,name,mimeType,webViewLink,modifiedTime)&q=${encodeURIComponent(qq)}`);
+    if(!$('#glist'))return;L.innerHTML=(j.files||[]).map(f=>{const k=GMIME(f.mimeType);return `<button class="pd-row gfile" data-act="gpick" data-id="${pid}" data-n="${esc(f.name)}" data-k="${k}" data-u="${esc(f.webViewLink||'')}"><span class="ftype" style="background:${FTYPE[k]||'#6C6C68'}">${k}</span><span class="pd-ct">${esc(f.name)}</span><span class="small muted">${new Date(f.modifiedTime).toLocaleDateString('pt-BR',{day:'numeric',month:'short'})}</span></button>`}).join('')||'<div class="empty">Nada encontrado.</div>'}
+    catch(e){L.innerHTML=`<div class="empty">Não consegui abrir o Drive: ${esc(e.message)}</div>`}};
+  load('');setTimeout(()=>{const i=$('#gq');if(i){i.focus();i.addEventListener('input',()=>{clearTimeout(t);t=setTimeout(()=>load(i.value.trim()),300)})}},50)}
+
+setTimeout(()=>{if(gOn()&&gReady())gSync()},900);
 /* ---- Agenda ---- */
 VIEWS.agenda=()=>{
   const m=new Date(T0.getFullYear(),T0.getMonth()+S.ui.month,1);
@@ -1736,9 +1779,9 @@ const IMPORTS=[
   {k:'csv',n:'Planilha',c:'#6C6C68',l:'CSV',d:'Importe clientes ou lançamentos financeiros de uma planilha que você já usa.'},
 ];
 VIEWS.integracoes=()=>{
-  const card=(x,imp)=>{const on=!imp&&S.integrations[x.k];return `<div class="intc ${on?'on':''}"><div class="int-top"><div class="logo" style="--c:${x.c}">${x.l}</div><h4>${x.n}</h4><div style="flex:1"></div>${imp?'':`<span class="pill ${on?'ok':''}">${on?'<span class="dot"></span>conectado':'desconectado'}</span>`}</div><p>${x.d}</p><div class="int-foot"><span class="small muted">${on?'Última sincronização agora':imp?'Importação única':''}</span>${imp?`<button class="btn sm" data-act="import" data-k="${x.k}">Importar</button>`:`<button class="btn sm ${on?'':'primary'}" data-act="toggleint" data-k="${x.k}">${on?'Desconectar':'Conectar'}</button>`}</div></div>`};
+  const card=(x,imp)=>{const on=!imp&&(GKEYS.includes(x.k)?gOn():GSOON.includes(x.k)?false:S.integrations[x.k]);const soon=!imp&&GSOON.includes(x.k);return `<div class="intc ${on?'on':''}"><div class="int-top"><div class="logo" style="--c:${x.c}">${x.l}</div><h4>${x.n}</h4><div style="flex:1"></div>${imp?'':`<span class="pill ${on?'ok':''}">${on?'<span class="dot"></span>conectado':soon?'em breve':'desconectado'}</span>`}</div><p>${x.d}</p><div class="int-foot"><span class="small muted">${on&&GKEYS.includes(x.k)?esc(S.google.email):on?'Última sincronização agora':imp?'Importação única':''}</span>${imp?`<button class="btn sm" data-act="import" data-k="${x.k}">Importar</button>`:`<button class="btn sm ${on?'':'primary'}" data-act="toggleint" data-k="${x.k}" ${soon?'disabled':''}>${on?'Desconectar':'Conectar'}</button>`}</div></div>`};
   return `<div class="howto"><div><b>1</b><strong>Clique em Conectar</strong><span>Em qualquer serviço desta tela, ou direto no widget da tela Hoje.</span></div><div><b>2</b><strong>Entre e escolha o que liberar</strong><span>Abre a tela de login do próprio serviço. Você marca as permissões.</span></div><div><b>3</b><strong>Pronto, já aparece</strong><span>Os dados entram nos widgets, nas janelas de apps e no assistente.</span></div></div>
-  <div class="banner"><div><h3>Uma conexão com o Google liga tudo</h3><p>Ao conectar a sua conta Google, a Mesa Criativa pede permissão separada para cada serviço. Você escolhe o que liberar e pode desligar quando quiser. No protótipo as conexões são simuladas.</p></div><div class="sp"></div><button class="btn accent" data-act="connectall">Conectar todos os serviços Google</button></div>
+  <div class="banner"><div><h3>Uma conexão com o Google liga tudo</h3><p>Ao conectar a sua conta Google, a Mesa Criativa pede permissão separada para cada serviço. Você escolhe o que liberar e pode desligar quando quiser. Agenda e Drive funcionam de verdade. Gmail, Sheets, Tasks e Contatos chegam nas próximas versões.</p></div><div class="sp"></div>${gOn()?`<button class="btn" data-act="gsync">Atualizar agora</button><button class="btn ghost" data-act="gdisc">Desconectar ${esc(S.google.email)}</button>`:'<button class="btn accent" data-act="connectall">Conectar minha conta Google</button>'}</div>
   <div class="sec-t">Google</div><div class="int-grid">${INTS.map(x=>card(x)).join('')}</div>
   <div class="sec-t">Trazer o que você já tem</div><div class="int-grid">${IMPORTS.map(x=>card(x,true)).join('')}</div>
   <div class="sec-t">Música e vídeo</div><div class="int-grid">
@@ -2232,7 +2275,7 @@ const clientOpts=sel=>S.clients.map(c=>`<option value="${c.id}" ${c.id===sel?'se
 
 const NEW={
   task(ds){modal('Nova tarefa',fld('m-t','O que precisa ser feito','<input class="input" id="m-t" name="title" required autofocus>')+`<div class="two">${fld('m-d','Data',`<input class="input" type="date" id="m-d" name="date" value="${ds.date||day(0)}">`)}${fld('m-p','Projeto',`<select class="input" id="m-p" name="projectId">${projOpts(ds.proj)}</select>`)}</div><label class="cbx"><input type="checkbox" name="gcal" ${S.integrations.gcal?'checked':''}>Adicionar ao Google Agenda</label>`,'Criar tarefa',o=>{if(!o.title.trim())return false;S.tasks.push({id:uid(),title:o.title.trim(),date:o.date||day(0),projectId:o.projectId||null,done:false,gcal:o.gcal});toast(o.gcal?'Tarefa criada e enviada ao Google Agenda':'Tarefa criada')})},
-  event(ds){modal('Novo compromisso',fld('m-t','Título','<input class="input" id="m-t" name="title" required autofocus placeholder="Ex.: Call de briefing com cliente">')+`<div class="two">${fld('m-d','Data',`<input class="input" type="date" id="m-d" name="date" value="${ds.date||day(0)}">`)}${fld('m-h','Horário','<input class="input" type="time" id="m-h" name="time" value="10:00">')}</div><label class="cbx"><input type="checkbox" name="meet" checked>Criar link do Google Meet</label><label class="cbx"><input type="checkbox" name="gcal" checked>Salvar no Google Agenda</label>`,'Criar compromisso',o=>{if(!o.title.trim())return false;const[h,m]=o.time.split(':').map(Number);const end=`${String(h+1).padStart(2,'0')}:${String(m).padStart(2,'0')}`;S.events.push({id:uid(),title:o.title.trim(),date:o.date,time:o.time,end,meet:o.meet});toast(o.meet?'Compromisso criado com link do Meet':'Compromisso criado')})},
+  event(ds){modal('Novo compromisso',fld('m-t','Título','<input class="input" id="m-t" name="title" required autofocus placeholder="Ex.: Call de briefing com cliente">')+`<div class="two">${fld('m-d','Data',`<input class="input" type="date" id="m-d" name="date" value="${ds.date||day(0)}">`)}${fld('m-h','Horário','<input class="input" type="time" id="m-h" name="time" value="10:00">')}</div><label class="cbx"><input type="checkbox" name="meet" checked>Criar link do Google Meet</label><label class="cbx"><input type="checkbox" name="gcal" checked>Salvar no Google Agenda</label>`,'Criar compromisso',o=>{if(!o.title.trim())return false;const[h,m]=o.time.split(':').map(Number);const end=`${String(h+1).padStart(2,'0')}:${String(m).padStart(2,'0')}`;if(gOn()&&o.gcal)gAddEvent(o.title.trim(),o.date,o.time,end,!!o.meet);else S.events.push({id:uid(),title:o.title.trim(),date:o.date,time:o.time,end,meet:o.meet});toast(o.meet?'Compromisso criado com link do Meet':'Compromisso criado')})},
   project(ds){modal('Novo projeto',fld('m-t','Nome do projeto','<input class="input" id="m-t" name="title" required autofocus placeholder="Ex.: Identidade visual">')+`<div class="two">${fld('m-c','Cliente',`<select class="input" id="m-c" name="clientId">${clientOpts()}</select>`)}${fld('m-y','Tipo',`<select class="input" id="m-y" name="type">${TYPES.map(t=>`<option>${t}</option>`).join('')}</select>`)}</div><div class="two">${fld('m-d','Prazo de entrega',`<input class="input" type="date" id="m-d" name="due" value="${day(30)}">`)}${fld('m-v','Valor (R$)','<input class="input" type="number" id="m-v" name="value" placeholder="0">')}</div><label class="cbx"><input type="checkbox" name="drive" ${S.integrations.drive?'checked':''}>Criar pasta no Google Drive com subpastas padrão</label><label class="cbx"><input type="checkbox" name="brief" checked>Criar documento de briefing a partir do modelo</label><input type="hidden" name="stage" value="${ds.stage||'Briefing'}">`,'Criar projeto',o=>{if(!o.title.trim())return false;const id='p'+uid();
     const lists={Marca:['Reunião de briefing','Pesquisa','Moodboard','Rotas de logo','Apresentação','Manual e arquivos finais'],Site:['Mapa do site','Wireframes','Layout','Desenvolvimento','Publicação'],'Social media':['Calendário do mês','Criação dos posts','Aprovação','Agendamento'],Embalagem:['Briefing','Medidas e faca','Criação','Prova de cor','Arquivo para gráfica'],Editorial:['Grid','Diagramação','Revisão','Fechamento'],Outro:['Briefing','Criação','Entrega']};
     S.projects.push({id,title:o.title.trim(),clientId:o.clientId,type:o.type,stage:o.stage,start:day(0),due:o.due,value:+o.value||0,tags:[o.type],checklist:lists[o.type].map(t=>({id:uid(),t,done:false})),files:o.drive?[{n:'Briefing',k:'doc'}]:[],hours:0,drive:o.drive});
@@ -2297,7 +2340,7 @@ const A={
   delcheck:d=>{const p=project(d.id);p.checklist=p.checklist.filter(x=>x.id!==d.c);save();render();openProject(d.id)},
   delproj:d=>{const p=project(d.id);layer(`<div class="overlay" data-act="closelayer"><div class="modal"><div class="modal-h"><h3>Apagar "${esc(p.title)}"?</h3></div><div class="modal-b"><p class="muted" style="margin:0">O projeto sai do quadro. A pasta no Google Drive continua lá.</p></div><div class="modal-f"><button class="btn" data-act="closelayer">Cancelar</button><button class="btn accent" data-act="confirmdelproj" data-id="${p.id}">Apagar projeto</button></div></div></div>`)},
   confirmdelproj:d=>{S.projects=S.projects.filter(p=>p.id!==d.id);closeLayer();save();render();toast('Projeto apagado')},
-  attachdrive:d=>{const p=project(d.id);const opts=[['Fotos_referencia.zip','zip'],['Logo_final.ai','ai'],['Apresentacao_v1.pdf','pdf'],['Layout_home.fig','fig'],['Orcamento.sheet','sheet'],['Mockups.png','img']];
+  attachdrive:d=>{if(gOn()){gDrivePicker(d.id);return}const p=project(d.id);const opts=[['Fotos_referencia.zip','zip'],['Logo_final.ai','ai'],['Apresentacao_v1.pdf','pdf'],['Layout_home.fig','fig'],['Orcamento.sheet','sheet'],['Mockups.png','img']];
     layer(`<div class="overlay" data-act="closelayer"><div class="modal"><div class="modal-h"><h3>Escolher no Google Drive</h3><button class="iconbtn" data-act="closelayer" aria-label="Fechar">${ic('x')}</button></div><div class="modal-b"><p class="small muted" style="margin-top:0">Pasta: Mesa Criativa / ${esc(cname(p.clientId))} / ${esc(p.title)}</p>${opts.map(([n,k])=>`<button class="file" style="width:100%;background:none;text-align:left" data-act="pickfile" data-id="${p.id}" data-n="${n}" data-k="${k}"><span class="ftype" style="background:${FTYPE[k]}">${k}</span><span style="flex:1">${n}</span>${ic('plus')}</button>`).join('')}</div><div class="modal-f"></div></div></div>`)},
   pickfile:d=>{const p=project(d.id);p.files.push({n:d.n,k:d.k});save();render();openProject(d.id);toast('Arquivo anexado do Drive')},
   projdoc:d=>{const p=project(d.id);const doc={id:'d'+uid(),title:`Briefing: ${cname(p.clientId)}`,folder:'Briefings',projectId:p.id,updated:day(0),gdoc:S.integrations.docs,content:TPL.briefing.replace('{{cliente}}',esc(cname(p.clientId)))};S.docs.unshift(doc);S.ui.doc=doc.id;save();closeLayer();location.hash='documentos';render();toast('Briefing criado a partir do modelo')},
@@ -2321,8 +2364,11 @@ const A={
   reftag:d=>{S.ui.refTag=d.v;save();render()},
   delref:d=>{S.refs=S.refs.filter(r=>r.id!==d.id);save();render()},
   copycolor:d=>{navigator.clipboard?.writeText(d.v).then(()=>toast(`${d.v} copiado`),()=>toast(d.v))},
-  toggleint:d=>{const x0=[...INTS,...OTHER].find(i=>i.k===d.k);if(!S.integrations[d.k]&&CONSENT[d.k]){const c=CONSENT[d.k];consent(c[0],c.slice(1),()=>{S.integrations[d.k]=true;save();render();toast(`${x0.n} conectado`)});return}S.integrations[d.k]=!S.integrations[d.k];save();render();const x=[...INTS,...OTHER].find(i=>i.k===d.k);toast(`${x.n} ${S.integrations[d.k]?'conectado':'desconectado'}`)},
-  connectall:()=>{INTS.forEach(i=>S.integrations[i.k]=true);save();render();toast('Todos os serviços Google conectados')},
+  gsync:()=>gSync(true),
+  gdisc:()=>gDisconnect(),
+  gpick:d=>{const p=project(d.id);p.files.push({n:d.n,k:d.k,url:d.u});save();closeLayer();setTimeout(()=>openProject(d.id),320);toast('Arquivo anexado do Drive')},
+  toggleint:d=>{if(GKEYS.includes(d.k)){if(gOn())gDisconnect();else gConnect();return}if(GSOON.includes(d.k)){toast('Chega numa próxima versão');return}const x0=[...INTS,...OTHER].find(i=>i.k===d.k);if(!S.integrations[d.k]&&CONSENT[d.k]){const c=CONSENT[d.k];consent(c[0],c.slice(1),()=>{S.integrations[d.k]=true;save();render();toast(`${x0.n} conectado`)});return}S.integrations[d.k]=!S.integrations[d.k];save();render();const x=[...INTS,...OTHER].find(i=>i.k===d.k);toast(`${x.n} ${S.integrations[d.k]?'conectado':'desconectado'}`)},
+  connectall:()=>{gConnect();return;INTS.forEach(i=>S.integrations[i.k]=true);save();render();toast('Todos os serviços Google conectados')},
   import:d=>{
     if(d.k==='trello'){const id='p'+uid();S.projects.push({id,title:'Campanha de verão',clientId:'c4',type:'Social media',stage:'Conceito',start:day(-3),due:day(18),value:3200,tags:['Importado'],checklist:[{id:uid(),t:'Roteiro dos reels',done:true},{id:uid(),t:'Fotos de produto',done:false}],files:[],hours:0});toast('1 quadro do Trello importado como projeto')}
     else if(d.k==='notion'){S.docs.unshift({id:'d'+uid(),title:'Wiki do estúdio (Notion)',folder:'Processos',updated:day(0),content:'<h2>Wiki do estúdio</h2><p>Página importada do Notion com títulos, listas e tabelas preservados.</p><ul><li>Como nomear arquivos</li><li>Padrão de pastas</li></ul>'});toast('1 página do Notion importada')}
