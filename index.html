@@ -1198,12 +1198,16 @@ a.pd-row:hover{background:color-mix(in srgb,var(--ink) 3%,transparent)}
 .idea-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
 .idea{display:flex;flex-direction:column;gap:8px;align-items:flex-start;padding:18px}.idea h3{margin:0;font-size:16px}.idea p{margin:0;color:var(--muted);font-size:14px;line-height:1.45;flex:1}
 .idea.on{box-shadow:inset 0 0 0 2px var(--accent)}.idea-tag{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--accent)}
-/* compromissos com fundo claro e texto escuro, como no Google Agenda atual */
-.gc-ev{background:color-mix(in srgb,var(--ec) 38%,#fff)!important;color:#1F1F1F!important;box-shadow:0 0 0 1px var(--surface)!important}
-.gc-ev b{font-weight:600}.gc-ev span{opacity:.8}
-.gc-ev.new{background:color-mix(in srgb,#039BE5 38%,#fff)!important}
-.gc-chip{background:color-mix(in srgb,var(--ec) 38%,#fff)!important;color:#1F1F1F!important}
+/* compromissos na cor original do Google, com texto escuro */
+.gc-ev{background:var(--ec)!important;color:#1F1F1F!important;box-shadow:0 0 0 1px var(--surface)!important}
+.gc-ev b{font-weight:600}.gc-ev span{opacity:.85}
+.gc-ev.new{background:#039BE5!important}
+.gc-chip{background:var(--ec)!important;color:#1F1F1F!important}
 .cal .it.ev{color:#1F1F1F}
+/* menu da esquerda: ícones cinza, laranja ao passar o mouse e na tela aberta */
+.nav .ti{background:#8E8E93!important;box-shadow:none!important;transition:background .2s ease,transform .2s ease}
+.nav a:hover .ti,.nav a.on .ti{background:#F43217!important}
+.nav a:hover .ti{transform:scale(1.04)}
 .exemplo{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:var(--tile);border-radius:16px;padding:14px 16px;margin-bottom:18px;font-size:14px}
 .exemplo>div{flex:1;min-width:240px}
 #boot{animation:none}
@@ -1777,7 +1781,7 @@ setTimeout(()=>{let nw=null,er=null;try{nw=sessionStorage.getItem('mesa-gnew');e
 /* ============ Agenda estilo Google: Dia, Semana, Mês ============ */
 const HH=48,DOWS=['DOM.','SEG.','TER.','QUA.','QUI.','SEX.','SÁB.'];
 const GCOL={'':'#039BE5','1':'#7986CB','2':'#33B679','3':'#8E24AA','4':'#E67C73','5':'#F6BF26','6':'#F4511E','7':'#039BE5','8':'#616161','9':'#3F51B5','10':'#0B8043','11':'#D50000'};
-const evCol=e=>e.g?GCOL[e.c||'']||'#039BE5':'#8E24AA';
+const evCol=e=>e.g?GCOL[e.c||'']||'#039BE5':'#7986CB';
 const calShow=k=>!(S.ui.calHide||{})[k];
 const t2m=t=>{const[h,m]=(t||'0:0').split(':').map(Number);return h*60+(m||0)};
 const m2t=m=>{m=Math.max(0,Math.min(1439,m));return `${String(Math.floor(m/60)).padStart(2,'0')}:${String(m%60).padStart(2,'0')}`};
@@ -1798,7 +1802,7 @@ VIEWS.agenda=()=>{
   const allday=d=>{const s=fmt(d);return [
     ...S.events.filter(e=>e.date===s&&!timed(e)&&calShow(e.g?'g':'m')).map(e=>`<div class="gc-chip" style="--ec:${evCol(e)}" data-act="evopen" data-id="${e.id}">${esc(e.title)}</div>`),
     ...(calShow('p')?S.projects.filter(p=>p.due===s&&p.stage!=='Entregue').map(p=>`<div class="gc-chip" style="--ec:#F4511E" data-act="openproj" data-id="${p.id}">Prazo · ${esc(p.title)}</div>`):[]),
-    ...(calShow('t')?S.tasks.filter(t=>t.date===s).map(t=>`<div class="gc-chip ${t.done?'dn':''}" style="--ec:#616161">${esc(t.title)}</div>`):[])].join('')};
+    ...(calShow('t')?S.tasks.filter(t=>t.date===s).map(t=>`<div class="gc-chip ${t.done?'dn':''}" style="--ec:#BDBDBD">${esc(t.title)}</div>`):[])].join('')};
   const col=d=>{const s=fmt(d);const evs=lanes(S.events.filter(e=>e.date===s&&timed(e)&&calShow(e.g?'g':'m')));
     return `<div class="gc-col ${s===fmt(now)?'today':''}" data-d="${s}">${evs.map(x=>{const e=x.e;const w=100/x.n;const h=Math.max(22,(x.f-x.s)/60*HH-2);
       return `<div class="gc-ev ${h<40?'short':''}" data-ev="${e.id}" style="--ec:${evCol(e)};top:${x.s/60*HH}px;height:${h}px;left:calc(${x.lane*w}% + 2px);width:calc(${w}% - 6px)"><b>${esc(e.title)}</b><span>${e.time}${e.end?' – '+e.end:''}</span><i class="gc-rs"></i></div>`}).join('')}
@@ -1807,7 +1811,7 @@ VIEWS.agenda=()=>{
   const mm=(()=>{const base=new Date(a.getFullYear(),a.getMonth()+(S.ui.miniOff||0),1);const st=new Date(base);st.setDate(1-base.getDay());const sel=new Set(days.map(fmt));
     return `<div class="gm"><div class="gm-h"><b>${base.toLocaleDateString('pt-BR',{month:'long',year:'numeric'}).replace(/^./,c=>c.toUpperCase())}</b><span><button data-act="mininav" data-v="-1" aria-label="Mês anterior">${ic('left')}</button><button data-act="mininav" data-v="1" aria-label="Próximo mês">${ic('right')}</button></span></div>
     <div class="gm-g">${['D','S','T','Q','Q','S','S'].map(x=>`<i>${x}</i>`).join('')}${[...Array(42)].map((_,i)=>{const d=new Date(st);d.setDate(st.getDate()+i);const f=fmt(d);return `<button data-act="calday" data-d="${f}" class="${d.getMonth()!==base.getMonth()?'out':''} ${f===fmt(now)?'today':''} ${sel.has(f)?'sel':''}">${d.getDate()}</button>`}).join('')}</div></div>`})();
-  const cals=[['g',gOn()?esc(S.google.email):'Google Agenda','#039BE5'],['m','Compromissos da Mesa','#8E24AA'],['p','Prazos dos projetos','#F4511E'],['t','Tarefas','#616161']];
+  const cals=[['g',gOn()?esc(S.google.email):'Google Agenda','#039BE5'],['m','Compromissos da Mesa','#7986CB'],['p','Prazos dos projetos','#F4511E'],['t','Tarefas','#9E9E9E']];
   const side=`<aside class="gc-side"><button class="gc-create" data-act="new" data-k="event"><svg viewBox="0 0 36 36" width="28" height="28"><path fill="#34A853" d="M16 16v14h4V20z"/><path fill="#4285F4" d="M30 16H20l-4 4h14z"/><path fill="#FBBC05" d="M6 16v4h10l4-4z"/><path fill="#EA4335" d="M20 16V6h-4v14z"/></svg>Criar</button>${mm}
     <div class="gc-cals"><div class="gc-cals-h">Minhas agendas</div>${cals.map(([k,n,c])=>`<label class="gc-cal"><input type="checkbox" data-act="calvis" data-k="${k}" ${calShow(k)?'checked':''} style="--ec:${c}"><span>${n}</span></label>`).join('')}${gOn()?'':'<button class="pd-link" data-act="toggleint" data-k="gcal" style="margin-top:8px">Conectar Google Agenda</button>'}</div></aside>`;
   return `<div class="gc-wrap">${side}<div class="gc-mainc"><div class="toolbar gc-bar"><div class="row"><button class="gc-today" data-act="calnav" data-v="0">Hoje</button><button class="iconbtn" data-act="calnav" data-v="-1" aria-label="Anterior">${ic('left')}</button><button class="iconbtn" data-act="calnav" data-v="1" aria-label="Próximo">${ic('right')}</button><h2 class="gc-title">${T}</h2></div>
