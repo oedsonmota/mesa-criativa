@@ -1211,6 +1211,8 @@ a.pd-row:hover{background:color-mix(in srgb,var(--ink) 3%,transparent)}
 .gc-ev{border-radius:4px!important;padding:2px 6px!important;font-size:12px!important;line-height:1.25!important}
 .gc-ev.tiny{padding:0 6px!important;font-size:11px!important;align-items:center}
 .gc-ev.short{gap:6px}
+.gc-ev.tiny{padding:0 6px!important;font-size:11px!important;line-height:14px!important;flex-direction:row;gap:6px;white-space:nowrap}
+.gc-ev.tiny span{font-size:11px}
 .exemplo{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:var(--tile);border-radius:16px;padding:14px 16px;margin-bottom:18px;font-size:14px}
 .exemplo>div{flex:1;min-width:240px}
 #boot{animation:none}
@@ -1782,7 +1784,7 @@ setTimeout(()=>{let nw=null,er=null;try{nw=sessionStorage.getItem('mesa-gnew');e
   if(gOn()&&gReady())gSync()},900);
 
 /* ============ Agenda estilo Google: Dia, Semana, Mês ============ */
-const HH=54,DOWS=['DOM.','SEG.','TER.','QUA.','QUI.','SEX.','SÁB.'];
+const HH=64,DOWS=['DOM.','SEG.','TER.','QUA.','QUI.','SEX.','SÁB.'];
 const GCOL={'':'#039BE5','1':'#7986CB','2':'#33B679','3':'#8E24AA','4':'#E67C73','5':'#F6BF26','6':'#F4511E','7':'#039BE5','8':'#616161','9':'#3F51B5','10':'#0B8043','11':'#D50000'};
 const evCol=e=>e.g?GCOL[e.c||'']||'#039BE5':'#7986CB';
 const calShow=k=>!(S.ui.calHide||{})[k];
@@ -1810,7 +1812,7 @@ VIEWS.agenda=()=>{
     ...(calShow('p')?S.projects.filter(p=>p.due===s&&p.stage!=='Entregue').map(p=>`<div class="gc-chip" style="--ec:#F4511E" data-act="openproj" data-id="${p.id}">Prazo · ${esc(p.title)}</div>`):[]),
     ...(calShow('t')?S.tasks.filter(t=>t.date===s).map(t=>`<div class="gc-chip ${t.done?'dn':''}" style="--ec:#BDBDBD">${esc(t.title)}</div>`):[])].join('')};
   const col=d=>{const s=fmt(d);const evs=lanes(S.events.filter(e=>e.date===s&&timed(e)&&calShow(e.g?'g':'m')));
-    return `<div class="gc-col ${s===fmt(now)?'today':''}" data-d="${s}">${evs.map(x=>{const e=x.e;const w=100/x.n;const h=Math.max(18,(x.f-x.s)/60*HH-1);const last=x.lane+x.span>=x.n;
+    return `<div class="gc-col ${s===fmt(now)?'today':''}" data-d="${s}">${evs.map(x=>{const e=x.e;const w=100/x.n;const h=Math.max(10,(x.f-x.s)/60*HH-2);const last=x.lane+x.span>=x.n;
       return `<div class="gc-ev ${h<40?'short':''} ${h<26?'tiny':''}" data-ev="${e.id}" style="--ec:${evCol(e)};top:${x.s/60*HH}px;height:${h}px;left:calc(${x.lane*w}% + ${x.lane?1:0}px);width:calc(${w*x.span}% - ${last?10:2}px)"><b>${esc(e.title)}</b><span>${e.time}${e.end?' – '+e.end:''}</span><i class="gc-rs"></i></div>`}).join('')}
       ${s===fmt(now)?`<div class="gc-now" style="top:${nowM/60*HH}px"></div>`:''}</div>`};
   const T=title.charAt(0).toUpperCase()+title.slice(1);
