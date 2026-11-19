@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <script>/* volta do login do Google: guarda o acesso e limpa o endereço antes de tudo */
-(function(){var h=location.hash;if(h.indexOf('access_token=')<0&&h.indexOf('error=')<0)return;var p=new URLSearchParams(h.slice(1));
+(function(){var h=location.hash;if(/^#token=/.test(h)){try{sessionStorage.setItem('mesa-trtok',h.slice(7))}catch(e){}history.replaceState(null,'',location.pathname+location.search+'#projetos');return}if(h.indexOf('access_token=')<0&&h.indexOf('error=')<0)return;var p=new URLSearchParams(h.slice(1));
 try{if(p.get('access_token')){sessionStorage.setItem('mesa-gtok',JSON.stringify({t:p.get('access_token'),exp:Date.now()+((+p.get('expires_in')||3600)-30)*1000}));sessionStorage.setItem('mesa-gnew','1')}else sessionStorage.setItem('mesa-gerr',p.get('error')||'erro')}catch(e){}
 history.replaceState(null,'',location.pathname+location.search+'#'+(p.get('state')||'integracoes'))})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -1141,6 +1141,29 @@ a.pd-row:hover{background:color-mix(in srgb,var(--ink) 3%,transparent)}
 .gc-now{background:#EA4335}.gc-now:before{background:#EA4335}
 @media(max-width:980px){.gc-wrap{grid-template-columns:1fr}.gc-side{display:none}}
 .gc-ev.short b{flex:0 1 auto;min-width:24px}.gc-ev.short span{flex:0 100 auto;min-width:0;overflow:hidden;text-overflow:ellipsis}
+/* Trello */
+.tr-top{display:flex;align-items:center;margin:14px 0 10px}.tr-top h3{margin:0;font-size:17px}
+.tr-boards{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px;margin-top:6px}
+.tr-btile{height:104px;border:0;border-radius:12px;cursor:pointer;position:relative;overflow:hidden;text-align:left;padding:12px 14px;display:flex;align-items:flex-start;box-shadow:0 1px 2px rgba(0,0,0,.15);transition:transform .2s}
+.tr-btile:before{content:"";position:absolute;inset:0;background:linear-gradient(rgba(0,0,0,.25),rgba(0,0,0,.05))}.tr-btile:hover{transform:translateY(-2px)}
+.tr-btile span{position:relative;color:#fff;font-weight:700;font-size:15px;text-shadow:0 1px 3px rgba(0,0,0,.4)}
+.tr-btile.sk,.tr-list.sk{background:color-mix(in srgb,var(--ink) 8%,transparent);animation:pulse 1.2s infinite}
+.tr-board{margin-top:14px;border-radius:16px;overflow:hidden;min-height:calc(100vh - 210px);display:flex;flex-direction:column}
+.tr-bh{display:flex;align-items:center;gap:10px;padding:12px 16px;background:rgba(0,0,0,.28);backdrop-filter:blur(8px);color:#fff}.tr-bh h3{margin:0;font-size:18px;font-weight:700}
+.tr-back{display:inline-flex;align-items:center;gap:6px;border:0;background:rgba(255,255,255,.2);color:#fff;font:inherit;font-size:13px;font-weight:500;padding:6px 12px;border-radius:8px;cursor:pointer;text-decoration:none}.tr-back:hover{background:rgba(255,255,255,.3)}.tr-back svg{width:14px;height:14px}
+.tr-cols{display:flex;gap:12px;padding:14px;overflow-x:auto;align-items:flex-start;flex:1}
+.tr-list{flex:0 0 272px;background:#F1F2F4;border-radius:12px;padding:8px;display:flex;flex-direction:column;gap:8px;max-height:calc(100vh - 290px);color:#172B4D}
+.tr-list.sk{height:220px}
+.tr-lh{display:flex;justify-content:space-between;font-size:14px;font-weight:600;padding:6px 8px 2px}.tr-lh span{color:#626F86;font-weight:500;font-size:12px}
+.tr-cards{display:flex;flex-direction:column;gap:8px;overflow-y:auto;min-height:8px;padding:2px}
+.tr-card{background:#fff;border-radius:8px;padding:8px 12px;font-size:14px;box-shadow:0 1px 1px rgba(9,30,66,.25);cursor:pointer;display:flex;flex-direction:column;gap:6px;line-height:1.3}
+.tr-card:hover{box-shadow:0 0 0 2px #388BFF}.tr-card.dragging{opacity:.35}
+.tr-labels{display:flex;gap:4px;flex-wrap:wrap}.tr-labels i{width:40px;height:8px;border-radius:4px}
+.tr-badges{display:flex;gap:10px;font-size:12px;color:#626F86}.tr-badges span{display:inline-flex;align-items:center;gap:3px}.tr-badges svg{width:12px;height:12px}.tr-badges .ok{background:#1F845A;color:#fff;border-radius:3px;padding:0 4px}
+.tr-ph{height:38px;border-radius:8px;background:rgba(9,30,66,.1)}
+.tr-add input,.tr-newlist input{width:100%;border:0;background:transparent;font:inherit;font-size:14px;padding:8px;border-radius:8px;color:#44546F;outline:none}
+.tr-add input:focus,.tr-newlist input:focus{background:#fff;box-shadow:inset 0 0 0 2px #388BFF;color:#172B4D}
+.tr-newlist{background:rgba(255,255,255,.3);backdrop-filter:blur(6px)}.tr-newlist input{color:#fff}.tr-newlist input::placeholder{color:#fff}
 .exemplo{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:var(--tile);border-radius:16px;padding:14px 16px;margin-bottom:18px;font-size:14px}
 .exemplo>div{flex:1;min-width:240px}
 #boot{animation:none}
@@ -2825,6 +2848,50 @@ A.keepimport=()=>{layer(`<div class="overlay" data-act="closelayer"><div class="
   const i=$('#keepIn'),z=$('#keepDrop');i.addEventListener('change',()=>keepImport(i.files));z.addEventListener('dragover',e=>{e.preventDefault();z.classList.add('on')});z.addEventListener('dragleave',()=>z.classList.remove('on'));z.addEventListener('drop',e=>{e.preventDefault();keepImport(e.dataTransfer.files)})};
 const notasBase=VIEWS.notas;
 VIEWS.notas=()=>notasBase().replace('</div>',`</div>${S.ui.notesTab==='notas'?`<div class="keepbar"><span class="small muted">Suas notas do Google Keep podem vir para cá.</span><button class="btn sm" data-act="keepimport">${ic('upload')}Importar do Google Keep</button></div>`:''}`);
+
+/* ============ Trello dentro de Projetos ============ */
+const TRKEY='e1c25624a355f762f424b9f4a98e4cef';
+const trOn=()=>!!(S.trello&&S.trello.token);
+let TR={boards:null,lists:null,bid:null,err:''};
+async function trF(path,opt={}){const u=`https://api.trello.com/1${path}${path.includes('?')?'&':'?'}key=${TRKEY}&token=${S.trello.token}`;const r=await fetch(u,{method:opt.method||'GET'});
+  if(r.status===401){S.trello=null;save();render();throw new Error('acesso ao Trello expirou, conecte de novo')}const t=await r.text();if(!r.ok)throw new Error(t||('erro '+r.status));try{return JSON.parse(t)}catch(e){return t}}
+function trConnect(){if(location.hostname!=='oedsonmota.github.io'){toast('O Trello só conecta na Mesa no ar. Abrindo o site…');setTimeout(()=>window.open('https://oedsonmota.github.io/mesa-criativa/#projetos','_blank','noopener'),700);return}
+  const q=new URLSearchParams({expiration:'never',name:'Mesa Criativa',scope:'read,write',response_type:'token',key:TRKEY,callback_method:'fragment',return_url:GREDIR});toast('Abrindo o Trello…');setTimeout(()=>location.href='https://trello.com/1/authorize?'+q,600)}
+async function trBoards(){try{TR.boards=await trF('/members/me/boards?filter=open&fields=name,prefs,url,dateLastActivity');TR.boards.sort((a,b)=>(b.dateLastActivity||'').localeCompare(a.dateLastActivity||''))}catch(e){TR.err=e.message}if(route==='projetos')render()}
+async function trLoad(bid){TR.bid=bid;TR.lists=null;render();try{TR.lists=await trF(`/boards/${bid}/lists?filter=open&cards=open&card_fields=name,desc,idList,pos,labels,due,dueComplete,badges,url,closed&fields=name,pos`)}catch(e){TR.err=e.message}if(route==='projetos')render()}
+const TRCOL={green:'#4BCE97',yellow:'#F5CD47',orange:'#FEA362',red:'#F87168',purple:'#9F8FEF',blue:'#579DFF',sky:'#6CC3E0',lime:'#94C748',pink:'#E774BB',black:'#8590A2'};
+const trBg=b=>{const p=b&&b.prefs||{};const img=p.backgroundImageScaled&&p.backgroundImageScaled.length?(p.backgroundImageScaled[Math.min(2,p.backgroundImageScaled.length-1)]||{}).url:null;return img?`background:url('${img}') center/cover`:`background:${p.backgroundColor||'#0079BF'}`};
+function trelloView(){
+  if(!trOn())return `<div class="card" style="max-width:600px;margin-top:14px"><div class="row" style="gap:14px;align-items:flex-start"><span class="logo" style="--c:#0C66E4;width:44px;height:44px;border-radius:12px">T</span><div><h3 style="margin:0 0 6px">Trazer o seu Trello para cá</h3><p class="muted small" style="margin:0 0 14px">Seus quadros abrem aqui dentro, com listas e cartões. Dá para arrastar cartões, criar, editar e arquivar, e tudo salva no Trello.</p><button class="btn primary" data-act="trconnect">Conectar Trello</button></div></div></div>`;
+  if(TR.err)return `<div class="empty" style="margin-top:14px">Não consegui abrir o Trello: ${esc(TR.err)}. <button class="pd-link" data-act="trretry">Tentar de novo</button></div>`;
+  if(!TR.bid){if(!TR.boards){trBoards();return `<div class="tr-boards">${[...Array(6)].map(()=>'<div class="tr-btile sk"></div>').join('')}</div>`}
+    return `<div class="tr-top"><h3>Seus quadros</h3><div class="sp"></div><button class="btn ghost sm" data-act="troff">Desconectar Trello</button></div><div class="tr-boards">${TR.boards.map(b=>`<button class="tr-btile" style="${trBg(b)}" data-act="trboard" data-id="${b.id}"><span>${esc(b.name)}</span></button>`).join('')||'<div class="empty">Nenhum quadro aberto.</div>'}</div>`}
+  const b=(TR.boards||[]).find(x=>x.id===TR.bid)||{name:'Quadro'};
+  const lists=TR.lists;
+  return `<div class="tr-board" style="${trBg(b)}"><div class="tr-bh"><button class="tr-back" data-act="trback">${ic('left')}Quadros</button><h3>${esc(b.name)}</h3><div class="sp"></div>${b.url?`<a class="tr-back" href="${esc(b.url)}" target="_blank" rel="noopener">${ic('out')}Abrir no Trello</a>`:''}</div>
+   <div class="tr-cols">${!lists?[...Array(4)].map(()=>'<div class="tr-list sk"></div>').join(''):lists.map(l=>`<div class="tr-list" data-list="${l.id}"><div class="tr-lh">${esc(l.name)}<span>${l.cards.length}</span></div><div class="tr-cards" data-list="${l.id}">${l.cards.sort((a,c)=>a.pos-c.pos).map(c=>`<div class="tr-card" draggable="true" data-card="${c.id}" data-act="trcard" data-id="${c.id}">${c.labels&&c.labels.length?`<div class="tr-labels">${c.labels.map(x=>`<i style="background:${TRCOL[(x.color||'').replace(/_.*/,'')]||'#8590A2'}" title="${esc(x.name||'')}"></i>`).join('')}</div>`:''}<div>${esc(c.name)}</div>${c.due||c.desc||c.badges&&c.badges.checkItems?`<div class="tr-badges">${c.due?`<span class="${c.dueComplete?'ok':''}">${ic('clock')}${new Date(c.due).toLocaleDateString('pt-BR',{day:'numeric',month:'short'})}</span>`:''}${c.desc?`<span>${ic('list')}</span>`:''}${c.badges&&c.badges.checkItems?`<span>${ic('check')}${c.badges.checkItemsChecked}/${c.badges.checkItems}</span>`:''}</div>`:''}</div>`).join('')}</div>
+     <form class="tr-add" data-trform="tradd" data-list="${l.id}"><input name="n" placeholder="+ Adicionar um cartão" autocomplete="off"></form></div>`).join('')+`<form class="tr-list tr-newlist" data-trform="trlist"><input name="n" placeholder="+ Adicionar outra lista" autocomplete="off"></form>`}</div></div>`}
+function trFind(id){for(const l of TR.lists||[]){const c=l.cards.find(x=>x.id===id);if(c)return [c,l]}return []}
+async function trDo(fn,ok){try{await fn();if(ok)toast(ok)}catch(e){toast('Trello: '+e.message)}trLoad(TR.bid)}
+const projBase=VIEWS.projetos,projBaseAfter=AFTER.projetos;
+VIEWS.projetos=()=>{const t=S.ui.projSrc==='t';const seg=`<div class="gc-seg src-seg"><button class="${t?'':'on'}" data-act="projsrc" data-v="m">Na Mesa</button><button class="${t?'on':''}" data-act="projsrc" data-v="t">Trello</button></div>`;return seg+(t?trelloView():projBase())};
+AFTER.projetos=()=>{if(S.ui.projSrc!=='t'){if(projBaseAfter)projBaseAfter();return}
+  $$('.tr-add,.tr-newlist').forEach(f=>f.addEventListener('submit',e=>{e.preventDefault();const n=f.n.value.trim();if(!n)return;
+    if(f.dataset.trform==="tradd")trDo(()=>trF(`/cards?idList=${f.dataset.list}&pos=bottom&name=${encodeURIComponent(n)}`,{method:'POST'}));else trDo(()=>trF(`/lists?idBoard=${TR.bid}&pos=bottom&name=${encodeURIComponent(n)}`,{method:'POST'}))}));
+  let dragId=null;$$('.tr-card').forEach(c=>{c.addEventListener('dragstart',e=>{dragId=c.dataset.card;e.dataTransfer.effectAllowed='move';setTimeout(()=>c.classList.add('dragging'),0)});c.addEventListener('dragend',()=>{c.classList.remove('dragging');$$('.tr-ph').forEach(x=>x.remove())})});
+  $$('.tr-cards').forEach(z=>{z.addEventListener('dragover',e=>{if(!dragId)return;e.preventDefault();const after=[...z.querySelectorAll('.tr-card:not(.dragging)')].find(c=>{const r=c.getBoundingClientRect();return e.clientY<r.top+r.height/2});let ph=$('.tr-ph');if(!ph){ph=document.createElement('div');ph.className='tr-ph'}z.insertBefore(ph,after||null)});
+    z.addEventListener('drop',e=>{e.preventDefault();if(!dragId)return;const ph=$('.tr-ph');const lid=z.dataset.list;const sib=[...z.children];const i=sib.indexOf(ph);const prev=sib.slice(0,i).reverse().find(x=>x.dataset&&x.dataset.card&&x.dataset.card!==dragId),next=sib.slice(i+1).find(x=>x.dataset&&x.dataset.card&&x.dataset.card!==dragId);
+      const P=id=>{const [c]=trFind(id);return c?c.pos:0};let pos=prev&&next?(P(prev.dataset.card)+P(next.dataset.card))/2:prev?'bottom':next?P(next.dataset.card)/2:'top';
+      const [c,l]=trFind(dragId);if(c){l.cards=l.cards.filter(x=>x!==c);const L=TR.lists.find(x=>x.id===lid);c.idList=lid;c.pos=typeof pos==='number'?pos:pos==='top'?-1:1e12;L.cards.push(c);render()}
+      const id=dragId;dragId=null;trDo(()=>trF(`/cards/${id}?idList=${lid}&pos=${pos}`,{method:'PUT'}))})})};
+Object.assign(A,{projsrc:d=>{S.ui.projSrc=d.v;save();render()},trconnect:()=>trConnect(),trretry:()=>{TR.err='';TR.boards=null;if(TR.bid)trLoad(TR.bid);else render()},
+  troff:()=>{S.trello=null;TR={boards:null,lists:null,bid:null,err:''};save();render();toast('Trello desconectado')},
+  trboard:d=>trLoad(d.id),trback:()=>{TR.bid=null;TR.lists=null;render()},
+  trcard:(d,el,e)=>{if(el.classList.contains('dragging'))return;const [c]=trFind(d.id);if(!c)return;
+    modal('Cartão do Trello',fld('m-t','Título',`<input class="input" id="m-t" name="name" value="${esc(c.name)}">`)+fld('m-d','Descrição',`<textarea class="input" id="m-d" name="desc" rows="6">${esc(c.desc||'')}</textarea>`)+`<div class="two">${fld('m-due','Entrega',`<input class="input" type="date" id="m-due" name="due" value="${c.due?c.due.slice(0,10):''}">`)}<label class="cbx" style="align-self:end"><input type="checkbox" name="done" ${c.dueComplete?'checked':''}>Concluído</label></div><div class="row" style="gap:8px"><a class="btn sm" href="${esc(c.url)}" target="_blank" rel="noopener">${ic('out')}Abrir no Trello</a><button type="button" class="btn sm ghost" data-act="trarch" data-id="${c.id}" style="color:#C2271B">Arquivar cartão</button></div>`,'Salvar',o=>{
+      const q=new URLSearchParams({name:o.name.trim()||c.name,desc:o.desc,due:o.due?o.due+'T12:00:00.000Z':'null',dueComplete:o.done?'true':'false'});Object.assign(c,{name:o.name.trim()||c.name,desc:o.desc,due:o.due?o.due+'T12:00:00.000Z':null,dueComplete:!!o.done});trDo(()=>trF(`/cards/${c.id}?${q}`,{method:'PUT'}),'Salvo no Trello')})},
+  trarch:d=>{closeLayer();trDo(()=>trF(`/cards/${d.id}?closed=true`,{method:'PUT'}),'Cartão arquivado')}});
+setTimeout(()=>{let t=null;try{t=sessionStorage.getItem('mesa-trtok');sessionStorage.removeItem('mesa-trtok')}catch(e){}if(t){S.trello={token:t};S.ui.projSrc='t';save();TR.boards=null;render();toast('Trello conectado')}},950);
 
 render();
 </script>
