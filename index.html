@@ -1553,7 +1553,7 @@ const GKEYS=['gcal','drive','docs','meet'],GSOON=['gmail','sheets','gtasks','con
 let gTok=null;try{gTok=JSON.parse(sessionStorage.getItem('mesa-gtok')||'null')}catch(e){}
 const gOn=()=>!!(S.google&&S.google.on);
 const gReady=()=>!!(gTok&&gTok.exp>Date.now()+60000);
-const GREDIR=location.origin+location.pathname;
+const GREDIR=location.hostname==='oedsonmota.github.io'?'https://oedsonmota.github.io/mesa-criativa/':location.origin+location.pathname;
 function gAuth(prompt){const q={client_id:GCID,redirect_uri:GREDIR,response_type:'token',scope:GSCOPES,include_granted_scopes:'true',state:route||'hoje'};if(prompt)q.prompt=prompt;if(S.google&&S.google.email)q.login_hint=S.google.email;
   toast('Abrindo o Google…');setTimeout(()=>{location.href='https://accounts.google.com/o/oauth2/v2/auth?'+new URLSearchParams(q)},800);return new Promise(()=>{})}
 async function gFetch(url,opt={},retry=true){if(!gReady())await gAuth('');
