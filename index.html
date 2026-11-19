@@ -2213,7 +2213,7 @@ function renderDock(){
 }
 
 /* ---- Assistentes IA ---- */
-const PROVIDERS=[['claude','Claude','Anthropic','#C96442','C'],['chatgpt','ChatGPT','OpenAI','#0A0A0A','G'],['gemini','Gemini','Google','#4F6BED','Ge']];
+const PROVIDERS=[['claude','Claude','Anthropic','#C96442','C'],['chatgpt','ChatGPT','OpenAI','#0A0A0A','G'],['gemini','Gemini','Google','#4F6BED','Ge'],['grok','Grok','xAI','#111111','X']];
 const ROLES={
   'Diretor de arte':['Me dá três direções visuais para este projeto','Critique a rota de logo que escolhi','Monte um roteiro de moodboard'],
   'Designer de marca':['Sugira um conceito de marca a partir do briefing','Liste as aplicações essenciais do manual','Como apresentar a rota final ao cliente'],
@@ -2260,11 +2260,22 @@ async function askClaude(){const key=aiKey('claude');let msgs=[];S.ai.msgs.filte
   const system=`Você é o assistente da Mesa Criativa, a ferramenta onde um profissional criativo organiza o trabalho. Responda em português do Brasil, direto e concreto, com frases curtas e linguagem de gente, sem floreio e sem frases de efeito. Seu papel agora: ${S.ai.role}. Quem pergunta: ${S.user.name}, ${S.ui.prof||'designer'}.\n\nContexto do projeto aberto:\n${aiContext()}`;
   const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'content-type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-5-5',max_tokens:1500,system,messages:msgs})});
   const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error&&j.error.message||('erro '+r.status));return (j.content||[]).map(c=>c.text||'').join('').trim()}
+
+function aiHistory(){let msgs=[];S.ai.msgs.filter(m=>!m.tool&&!m.pending&&!m.sys).slice(-14).forEach(m=>{const role=m.me?'user':'assistant';if(msgs.length&&msgs[msgs.length-1].role===role)msgs[msgs.length-1].content+='\n\n'+m.t;else msgs.push({role,content:m.t})});while(msgs.length&&msgs[0].role!=='user')msgs.shift();return msgs}
+function aiSystem(){return `Você é o assistente da Mesa Criativa, a ferramenta onde um profissional criativo organiza o trabalho. Responda em português do Brasil, direto e concreto, com frases curtas e linguagem de gente, sem floreio e sem frases de efeito. Seu papel agora: ${S.ai.role}. Quem pergunta: ${S.user.name}, ${S.ui.prof||'designer'}.\n\nContexto do projeto aberto:\n${aiContext()}`}
+async function oaiCompat(url,key,model){const r=await fetch(url,{method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+key},body:JSON.stringify({model,messages:[{role:'system',content:aiSystem()},...aiHistory()]})});
+  const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error&&(j.error.message||j.error)||('erro '+r.status));return ((j.choices||[])[0]||{}).message?.content?.trim()||''}
+async function grokModel(key){let m=null;try{m=localStorage.getItem('mesa-grok-model')}catch(e){}if(m)return m;
+  try{const r=await fetch('https://api.x.ai/v1/models',{headers:{authorization:'Bearer '+key}});const j=await r.json();const ids=(j.data||[]).map(x=>x.id).filter(id=>/^grok-\d/.test(id)&&!/image|vision|imagine|mini|fast/.test(id)).sort((a,b)=>b.localeCompare(a,undefined,{numeric:true}));m=ids[0]}catch(e){}
+  m=m||'grok-3';try{localStorage.setItem('mesa-grok-model',m)}catch(e){}return m}
+async function askGrok(){const k=aiKey('grok');return oaiCompat('https://api.x.ai/v1/chat/completions',k,await grokModel(k))}
+async function askOpenAI(){return oaiCompat('https://api.openai.com/v1/chat/completions',aiKey('chatgpt'),'gpt-4o-mini')}
+async function askGemini(){const k=aiKey('gemini');const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(k)}`,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({systemInstruction:{parts:[{text:aiSystem()}]},contents:aiHistory().map(m=>({role:m.role==='assistant'?'model':'user',parts:[{text:m.content}]}))})});
+  const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error&&j.error.message||('erro '+r.status));return (j.candidates?.[0]?.content?.parts||[]).map(p=>p.text||'').join('').trim()}
 function aiAsk(q){const prov=PROVIDERS.find(x=>x[0]===S.ai.provider);
   if(!aiKey(S.ai.provider)){S.ai.msgs.push({me:true,t:q});S.ai.msgs.push({sys:true,who:prov[1],t:`Para eu responder de verdade, conecte a sua conta do ${prov[1]}: clique em ${prov[1]} na lista ao lado e cole a sua chave.`});return}
-  if(S.ai.provider!=='claude'){S.ai.msgs.push({me:true,t:q});S.ai.msgs.push({sys:true,who:prov[1],t:`${prov[1]} chega na próxima versão. Por enquanto, use o Claude.`});return}
-  S.ai.msgs.push({me:true,t:q});const pend={who:`Claude · ${S.ai.role}`,t:'Pensando…',pending:true};S.ai.msgs.push(pend);
-  askClaude().then(t=>{pend.t=t||'Sem resposta.';delete pend.pending}).catch(e=>{pend.t=`Não consegui responder: ${e.message}. Confira a chave em IA e se há crédito na sua conta da Anthropic.`;pend.sys=true;delete pend.pending}).finally(()=>{save();if(route==='assistentes')render()});}
+  S.ai.msgs.push({me:true,t:q});const pend={who:`${prov[1]} · ${S.ai.role}`,t:'Pensando…',pending:true};S.ai.msgs.push(pend);
+  ({claude:askClaude,grok:askGrok,chatgpt:askOpenAI,gemini:askGemini}[S.ai.provider]||askClaude)().then(t=>{pend.t=t||'Sem resposta.';delete pend.pending}).catch(e=>{pend.t=`Não consegui responder: ${e.message}. Confira a chave em IA e se há crédito na conta.`;pend.sys=true;delete pend.pending}).finally(()=>{save();if(route==='assistentes')render()});}
 function aiAskOld(q){const prov=PROVIDERS.find(x=>x[0]===S.ai.provider);S.ai.msgs.push({me:true,t:q});const tool=detectTool(q);
   if(tool&&tool.off)S.ai.msgs.push({who:prov[1],t:`Para fazer isso eu preciso do conector ${tool.off}. Ligue em Integrações, na parte de conectores do assistente.`});
   else if(tool)S.ai.msgs.push({who:`${prov[1]} · usando o conector ${tool.app}`,t:'Preparei isso para você. Confere e aprova:',tool});
@@ -2441,7 +2452,7 @@ function consent(brand,perms,onOk,extra=''){
   <div class="modal-f"><button class="btn" data-act="closelayer">Cancelar</button><button class="btn primary" id="okConsent">Permitir</button></div></div></div>`);
   $('#okConsent').addEventListener('click',()=>{closeLayer();onOk()});
 }
-function keyModal(k){const P={claude:['Claude','console.anthropic.com','sk-ant-...'],chatgpt:['ChatGPT','platform.openai.com','sk-...'],gemini:['Gemini','aistudio.google.com','AIza...']}[k];
+function keyModal(k){const P={claude:['Claude','console.anthropic.com','sk-ant-...'],chatgpt:['ChatGPT','platform.openai.com','sk-...'],gemini:['Gemini','aistudio.google.com','AIza...'],grok:['Grok','console.x.ai','xai-...']}[k];
   modal(`Conectar ${P[0]}`,`<ol class="steps"><li>Entre em <strong>${P[1]}</strong> com a sua conta.</li><li>Crie uma chave de API e copie.</li><li>Cole aqui embaixo. Ela fica guardada só neste navegador.</li></ol>${fld('m-k','Chave de API',`<input class="input" id="m-k" name="key" placeholder="${P[2]}" autocomplete="off">`)}<p class="small muted">A chave é cobrada pelo uso direto no ${P[0]}, separada da assinatura Pro ou Plus.</p>`,'Conectar',o=>{if(!o.key.trim())return false;try{localStorage.setItem('mesa-key-'+k,o.key.trim())}catch(e){}S.ai.keys[k]=true;S.ai.provider=k;toast(`${P[0]} conectado`)})}
 
 /* ============ Kit de marca por cliente ============ */
@@ -3087,12 +3098,12 @@ A.evopen=(d,el)=>{const E=S.events.find(x=>x.id===d.id);if(E)evPop(E,el)};
 /* ============ IA: conectar sem rodeio ============ */
 S.ai.provider=S.ai.provider||'claude';
 const aiBase=VIEWS.assistentes;
-VIEWS.assistentes=()=>{if(aiKey('claude'))return aiBase();
+VIEWS.assistentes=()=>{if(PROVIDERS.some(p=>aiKey(p[0])))return aiBase();
   return `<div class="card ai-setup"><div class="row" style="gap:14px;align-items:flex-start">${tile('assistentes','lg')}<div style="flex:1"><h3 style="margin:0 0 4px">Ligue o Claude na Mesa</h3><p class="muted small" style="margin:0 0 14px">A sua assinatura do Claude não serve para outros apps. Para a IA funcionar aqui, ela precisa de uma chave da API, que é cobrada por uso (poucos dólares por mês no uso normal).</p>
    <ol class="steps"><li>Abra <a href="https://platform.claude.com/settings/keys" target="_blank" rel="noopener"><strong>platform.claude.com</strong></a>. Você já está logado lá.</li><li>Clique em <strong>Criar chave</strong>, dê o nome "Mesa" e copie. Ela começa com <code>sk-ant-</code>.</li><li>Cole aqui embaixo e clique em Conectar.</li></ol>
    <form class="row ai-keyform" style="gap:8px;margin-top:10px"><input class="input" name="k" placeholder="sk-ant-..." autocomplete="off" spellcheck="false" style="flex:1"><button class="btn primary">Conectar</button></form>
-   <p class="small muted" style="margin:10px 0 0">A chave fica guardada só neste navegador. Se aparecer erro de crédito, coloque uns 5 dólares em Billing no mesmo site.</p></div></div></div>`};
-AFTER.assistentes=(f=>()=>{const fm=$('.ai-keyform');if(fm){fm.addEventListener('submit',e=>{e.preventDefault();const k=fm.k.value.trim();if(!/^sk-ant-/.test(k)){toast('Essa chave não parece do Claude. Ela começa com sk-ant-');return}try{localStorage.setItem('mesa-key-claude',k)}catch(err){}S.ai.keys={...(S.ai.keys||{}),claude:true};S.ai.provider='claude';save();render();toast('Claude conectado. Pode perguntar.')});return}if(f)f()})(AFTER.assistentes);
+   <p class="small muted" style="margin:10px 0 0">A chave fica guardada só neste navegador. Se aparecer erro de crédito, coloque uns 5 dólares em Billing no mesmo site.</p><p class="small muted" style="margin:6px 0 0">Prefere o Grok? Cole uma chave da xAI (começa com <code>xai-</code>), criada em <a href="https://console.x.ai" target="_blank" rel="noopener">console.x.ai</a>, que ele conecta no lugar.</p></div></div></div>`};
+AFTER.assistentes=(f=>()=>{const fm=$('.ai-keyform');if(fm){fm.addEventListener('submit',e=>{e.preventDefault();const k=fm.k.value.trim();const pv=/^sk-ant-/.test(k)?'claude':/^xai-/.test(k)?'grok':null;if(!pv){toast('Essa chave não parece do Claude (sk-ant-) nem do Grok (xai-)');return}try{localStorage.setItem('mesa-key-'+pv,k)}catch(err){}S.ai.keys={...(S.ai.keys||{}),[pv]:true};S.ai.provider=pv;save();render();toast((S.ai.provider==='grok'?'Grok':'Claude')+' conectado. Pode perguntar.')});return}if(f)f()})(AFTER.assistentes);
 /* ============ Melhorias pensadas para o Edson ============ */
 const IDEAS=[
  ['Repasse dos freelas no automático','Quando você marcar que a Elohim pagou, a Mesa já lembra de pagar o Robert e o Rafael. Quando a Infinity pagar, lembra da Isabella. Tudo puxando do seu financeiro.','Financeiro'],
