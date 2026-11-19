@@ -1164,6 +1164,40 @@ a.pd-row:hover{background:color-mix(in srgb,var(--ink) 3%,transparent)}
 .tr-add input,.tr-newlist input{width:100%;border:0;background:transparent;font:inherit;font-size:14px;padding:8px;border-radius:8px;color:#44546F;outline:none}
 .tr-add input:focus,.tr-newlist input:focus{background:#fff;box-shadow:inset 0 0 0 2px #388BFF;color:#172B4D}
 .tr-newlist{background:rgba(255,255,255,.3);backdrop-filter:blur(6px)}.tr-newlist input{color:#fff}.tr-newlist input::placeholder{color:#fff}
+.tr-boards.mini{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:0}.tr-boards.mini .tr-btile{height:72px;padding:10px 12px}.tr-boards.mini .tr-btile span{font-size:13.5px}
+.mp-h{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin:16px 2px 6px}
+.mp-list{display:flex;flex-direction:column}
+.mp-row{display:flex;align-items:center;gap:10px;border:0;background:none;font:inherit;text-align:left;padding:9px 6px;border-radius:8px;cursor:pointer;color:var(--ink);text-decoration:none;min-width:0}
+.mp-row:hover{background:color-mix(in srgb,var(--ink) 5%,transparent)}.mp-row b{font-weight:500;font-size:14px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mp-due{font-size:12px;font-weight:600;padding:2px 8px;border-radius:999px;background:color-mix(in srgb,var(--ink) 7%,transparent)}.mp-due.soon{background:#FFF4D6;color:#8A5A00}.mp-due.late{background:#FDE2E0;color:#C5221F}
+#dock{display:none!important}
+.fin-stats{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:14px}.fin-stats .card{padding:14px 16px;display:flex;flex-direction:column;gap:4px}
+.fin-stats span,.fin-mini span{font-size:12.5px;color:var(--muted)}.fin-stats b{font-size:22px;font-weight:600;letter-spacing:-.01em}.pos{color:#188038}.neg{color:#C5221F}
+.fin-cols{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}
+.fr-list{display:flex;flex-direction:column}.fr{display:flex;align-items:center;gap:12px;padding:10px 4px;border-top:1px solid var(--line)}.fr:first-child{border-top:0}
+.fr-t{flex:1;min-width:0;display:flex;flex-direction:column}.fr-t b{font-weight:500;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.fr-t span{font-size:12px;color:var(--muted)}
+.fr.ok .fr-t b{color:var(--muted)}.fr-e{font-size:11px;font-weight:600;color:var(--muted);background:color-mix(in srgb,var(--ink) 6%,transparent);padding:2px 7px;border-radius:6px}
+.fr-v{font-variant-numeric:tabular-nums;font-weight:600;font-size:14px;white-space:nowrap}.fr-v.receita{color:#188038}.fr.ok .fr-v{opacity:.55}
+.fin-mini{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:6px}.fin-mini div{display:flex;flex-direction:column;gap:2px;padding:10px 12px;border-radius:12px;background:color-mix(in srgb,var(--ink) 4%,transparent)}.fin-mini b{font-size:20px;font-weight:600}
+@media(max-width:900px){.fin-stats{grid-template-columns:repeat(2,1fr)}.fin-cols{grid-template-columns:1fr}}
+.dv-tools{display:flex;align-items:center;gap:8px}.dv-sort{border:1px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-size:13px;padding:7px 10px;border-radius:10px}
+.dv-tools .gc-seg button{padding:6px 10px;display:grid;place-items:center}.dv-tools .gc-seg svg{width:16px;height:16px}
+.dv-note{font-size:13px;color:var(--muted);background:color-mix(in srgb,var(--ink) 4%,transparent);padding:10px 14px;border-radius:10px;margin-bottom:10px}
+.dv-table{display:flex;flex-direction:column}.dv-tr{display:grid;grid-template-columns:minmax(0,1fr) 170px 130px 40px;align-items:center;gap:10px;border-bottom:1px solid var(--line);padding:0 6px;min-height:46px;position:relative}
+.dv-th{font-size:12.5px;font-weight:600;color:var(--muted);min-height:38px}.dv-tr:not(.dv-th):hover{background:color-mix(in srgb,var(--ink) 4%,transparent)}
+.dv-tr>span{font-size:13px;color:var(--muted)}.dv-cell-n{border:0;background:none;font:inherit;font-size:14px;font-weight:500;display:flex;align-items:center;gap:12px;cursor:pointer;text-align:left;min-width:0;color:var(--ink);padding:10px 0}
+.dv-cell-n span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.dv-cell-n svg{width:18px;height:18px;color:#5F6368;flex:0 0 auto}.dv-star{font-style:normal;color:#F9AB00}
+.dv-tr .dv-more{position:static;transform:none;opacity:0;background:none;box-shadow:none}.dv-tr:hover .dv-more{opacity:1}.dv-tr.dropon{background:color-mix(in srgb,#2F6FDE 12%,transparent)}
+.gc-pop{position:fixed;z-index:300;width:min(420px,92vw);background:var(--surface);border-radius:16px;box-shadow:0 24px 38px 3px rgba(0,0,0,.14),0 9px 46px 8px rgba(0,0,0,.12),0 11px 15px -7px rgba(0,0,0,.2);padding:8px 8px 18px;animation:fadein .15s}
+.gp-bar{display:flex;justify-content:flex-end;gap:2px}.gp-bar button,.gp-bar a{border:0;background:none;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;cursor:pointer;color:var(--muted)}.gp-bar button:hover,.gp-bar a:hover{background:color-mix(in srgb,var(--ink) 7%,transparent)}.gp-bar svg{width:18px;height:18px}
+.gp-main{display:flex;gap:16px;padding:4px 18px 0}.gp-main i{width:14px;height:14px;border-radius:4px;margin-top:8px;flex:0 0 auto}.gp-main h4{margin:0;font-size:21px;font-weight:400;line-height:1.3}.gp-main p{margin:4px 0 0;font-size:14px;color:var(--muted)}
+.gp-meet{display:inline-flex;align-items:center;gap:8px;margin:16px 0 0 48px;background:#1A73E8;color:#fff;text-decoration:none;font-size:14px;font-weight:500;padding:9px 16px;border-radius:999px}.gp-meet svg{width:14px;height:14px}
+.gp-quick{padding:0 18px;display:flex;flex-direction:column;gap:10px}.gp-quick input[name=t]{border:0;border-bottom:2px solid #1A73E8;background:none;font:inherit;font-size:21px;padding:6px 0;outline:none;color:var(--ink)}.gp-quick p{margin:0;font-size:14px;color:var(--muted)}
+.gp-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:6px}
+.ai-setup{max-width:760px}.ai-setup code{background:color-mix(in srgb,var(--ink) 7%,transparent);padding:1px 5px;border-radius:5px}
+.idea-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.idea{display:flex;flex-direction:column;gap:8px;align-items:flex-start;padding:18px}.idea h3{margin:0;font-size:16px}.idea p{margin:0;color:var(--muted);font-size:14px;line-height:1.45;flex:1}
+.idea.on{box-shadow:inset 0 0 0 2px var(--accent)}.idea-tag{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--accent)}
 .exemplo{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:var(--tile);border-radius:16px;padding:14px 16px;margin-bottom:18px;font-size:14px}
 .exemplo>div{flex:1;min-width:240px}
 #boot{animation:none}
@@ -1491,7 +1525,7 @@ function login(acc){S.session={email:acc.email};S.user={name:acc.name,email:acc.
 const NAV=[
   ['hoje','Hoje','home',''],['projetos','Projetos','board',''],['agenda','Agenda','cal',''],['documentos','Documentos','doc',''],['drive','Drive','folder',''],['notas','Notas e ideias','note',''],['assistentes','IA','spark',''],
   ['clientes','Clientes','users','Negócio'],['financeiro','Financeiro','money','Negócio'],
-  ['apps','Apps','grid','Mais'],['integracoes','Integrações','plug','Mais'],['personalizar','Personalizar','brush','Mais']];
+  ['apps','Apps','grid','Mais'],['integracoes','Integrações','plug','Mais'],['personalizar','Personalizar','brush','Mais'],['ideias','Melhorias','brain','Mais']];
 const FIXED=['hoje','personalizar','integracoes'];
 let route=location.hash.slice(1)||'hoje';
 window.addEventListener('hashchange',()=>{route=location.hash.slice(1)||'hoje';render();$('#side').classList.remove('open')});
@@ -1572,7 +1606,7 @@ VIEWS.hoje=()=>{
   <div class="wgrid">${lay.map((it,i)=>widgetHTML(it,edit,i)).join('')}</div>`;
 };
 function widgetHTML(it,edit,i=0){const W=WIDGETS[it.id];if(!W)return'';
-  const head=(!W.bare||edit)?`<div class="card-h w-h"><span class="w-grip" title="Arraste para mover" aria-hidden="true">${ic('drag')}</span>${W.src?`<span class="ti brand" style="--c:${W.src[0]}"><b>${W.src[1]}</b></span>`:tile(WTILE[it.id]||it.id)}<h3>${W.t}</h3>${it.pin?`<span class="pinmark" title="Fixado no topo">${ic('pin')}</span>`:''}<div class="sp"></div>${edit?`<div class="w-tools"><button class="btn sm" data-act="wsize" data-id="${it.id}" title="Mudar tamanho">${SIZE_L[it.w]||'Tamanho'}</button><button class="iconbtn ${it.pin?'on':''}" data-act="wpin" data-id="${it.id}" title="${it.pin?'Desafixar':'Fixar no topo'}" aria-label="Fixar">${ic('pin')}</button><button class="iconbtn" data-act="wdel" data-id="${it.id}" title="Tirar da tela" aria-label="Tirar da tela">${ic('x')}</button></div>`:(W.head?W.head():'')}</div>`:'';
+  const head=(!W.bare||edit)?`<div class="card-h w-h"><span class="w-grip" title="Arraste para mover" aria-hidden="true">${ic('drag')}</span>${tile(WTILE[it.id]||it.id)}<h3>${W.t}</h3>${it.pin?`<span class="pinmark" title="Fixado no topo">${ic('pin')}</span>`:''}<div class="sp"></div>${edit?`<div class="w-tools"><button class="btn sm" data-act="wsize" data-id="${it.id}" title="Mudar tamanho">${SIZE_L[it.w]||'Tamanho'}</button><button class="iconbtn ${it.pin?'on':''}" data-act="wpin" data-id="${it.id}" title="${it.pin?'Desafixar':'Fixar no topo'}" aria-label="Fixar">${ic('pin')}</button><button class="iconbtn" data-act="wdel" data-id="${it.id}" title="Tirar da tela" aria-label="Tirar da tela">${ic('x')}</button></div>`:(W.head?W.head():'')}</div>`:'';
   return `<section class="w ${W.bare?'bare':'card'} ${edit?'editing':''} ${it.w>=7?'big':''}" style="--span:${it.w};--i:${i}${it.h?`;min-height:${it.h*ROWH}px`:''}" data-w="${it.id}">${head}<div class="w-b">${W.f()}</div><span class="w-resize" title="Arraste para mudar o tamanho" aria-hidden="true"></span></section>`}
 
 function wNumeros(){
@@ -1761,7 +1795,7 @@ VIEWS.agenda=()=>{
     ...(calShow('t')?S.tasks.filter(t=>t.date===s).map(t=>`<div class="gc-chip ${t.done?'dn':''}" style="--ec:#616161">${esc(t.title)}</div>`):[])].join('')};
   const col=d=>{const s=fmt(d);const evs=lanes(S.events.filter(e=>e.date===s&&timed(e)&&calShow(e.g?'g':'m')));
     return `<div class="gc-col ${s===fmt(now)?'today':''}" data-d="${s}">${evs.map(x=>{const e=x.e;const w=100/x.n;const h=Math.max(22,(x.f-x.s)/60*HH-2);
-      return `<div class="gc-ev ${h<40?'short':''}" data-ev="${e.id}" style="--ec:${evCol(e)};top:${x.s/60*HH}px;height:${h}px;left:calc(${x.lane*w}% + 2px);width:calc(${w}% - 6px)"><b>${esc(e.title)}</b><span>${e.time}${e.end?' – '+e.end:''}</span>${e.link&&e.meet?`<a class="gc-meet" href="${esc(e.link)}" target="_blank" rel="noopener" title="Entrar no Meet">Meet</a>`:''}<i class="gc-rs"></i></div>`}).join('')}
+      return `<div class="gc-ev ${h<40?'short':''}" data-ev="${e.id}" style="--ec:${evCol(e)};top:${x.s/60*HH}px;height:${h}px;left:calc(${x.lane*w}% + 2px);width:calc(${w}% - 6px)"><b>${esc(e.title)}</b><span>${e.time}${e.end?' – '+e.end:''}</span><i class="gc-rs"></i></div>`}).join('')}
       ${s===fmt(now)?`<div class="gc-now" style="top:${nowM/60*HH}px"></div>`:''}</div>`};
   const T=title.charAt(0).toUpperCase()+title.slice(1);
   const mm=(()=>{const base=new Date(a.getFullYear(),a.getMonth()+(S.ui.miniOff||0),1);const st=new Date(base);st.setDate(1-base.getDay());const sel=new Set(days.map(fmt));
@@ -1797,7 +1831,7 @@ async function gPatchEvent(e){if(!gOn())return;try{const tz=Intl.DateTimeFormat(
 async function gDeleteEvent(id){try{const r=await fetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events/${encodeURIComponent(id.slice(1))}`,{method:'DELETE',headers:{Authorization:'Bearer '+(gTok&&gTok.t)}});if(!r.ok&&r.status!==410)throw new Error('erro '+r.status);toast('Apagado do Google Agenda')}catch(err){toast('Não apaguei no Google: '+err.message);gSync()}}
 /* arrastar, esticar e criar na grade */
 let gd=null;
-document.addEventListener('pointerdown',e=>{if(route!=='agenda'||e.button!==0)return;if(e.target.closest('a,.gc-meet'))return;
+document.addEventListener('pointerdown',e=>{if(route!=='agenda'||e.button!==0)return;if(e.target.closest('a,.gc-meet,.gc-pop'))return;if($('.gc-pop')&&!e.target.closest('.gc-ev')){return}
   const ev=e.target.closest('.gc-ev'),colEl=e.target.closest('.gc-col');if(!colEl)return;e.preventDefault();
   const r=colEl.getBoundingClientRect();const minAt=y=>Math.round(((y-r.top)/HH*60)/15)*15;
   if(ev){const E=S.events.find(x=>x.id===ev.dataset.ev);if(!E)return;gd={mode:e.target.closest('.gc-rs')?'resize':'move',el:ev,E,x0:e.clientX,y0:e.clientY,s0:t2m(E.time),f0:E.end?t2m(E.end):t2m(E.time)+60,col:colEl,moved:false}}
@@ -1813,8 +1847,8 @@ document.addEventListener('pointermove',e=>{if(!gd)return;
   const over=document.elementsFromPoint(e.clientX,e.clientY).find(x=>x.classList&&x.classList.contains('gc-col'));if(over&&over!==gd.el.parentElement){over.appendChild(gd.el);gd.el.style.left='2px';gd.el.style.width='calc(100% - 6px)'}
   gd.nd=(over||gd.el.parentElement).dataset.d;gd.el.style.top=s/60*HH+'px';gd.el.querySelector('span').textContent=`${m2t(s)} – ${m2t(s+dur)}`});
 document.addEventListener('pointerup',()=>{if(!gd)return;const d=gd;gd=null;document.body.classList.remove('wgrabbing');
-  if(d.mode==='create'){d.el.remove();evModal({date:d.col.dataset.d,time:m2t(d.s),end:m2t(d.f)},true);setTimeout(()=>{const t=$('#m-t');t&&t.focus()},60);return}
-  if(!d.moved){evModal(d.E,false);return}
+  if(d.mode==='create'){quickPop(d.col.dataset.d,d.s,d.f,d.el);return}
+  if(!d.moved){evPop(d.E,d.el);return}
   if(d.mode==='resize'&&d.nf!=null){d.E.end=m2t(d.nf);evSave(d.E);return}
   if(d.mode==='move'&&d.ns!=null){const dur=d.f0-d.s0;d.E.time=m2t(d.ns);d.E.end=m2t(d.ns+dur);if(d.nd)d.E.date=d.nd;evSave(d.E)}});
 
@@ -1827,16 +1861,18 @@ function driveQuery(){const d=S.ui.drive||(S.ui.drive={tab:'meu',path:[{id:'root
   if(d.q)return {q:`trashed=false and name contains '${d.q.replace(/['\\]/g,'')}'`,o:'modifiedTime desc'};
   if(d.tab==='recentes')return {q:"trashed=false and mimeType != 'application/vnd.google-apps.folder'",o:'viewedByMeTime desc'};
   if(d.tab==='compart')return {q:'sharedWithMe=true and trashed=false',o:'modifiedTime desc'};
+  const ob=S.ui.dvSort==='nome'?'folder,name':'folder,modifiedTime desc';
+  if(d.tab==='lixeira')return {q:'trashed=true',o:'modifiedTime desc'};
   if(d.tab==='gdocs')return {q:"mimeType='application/vnd.google-apps.document' and trashed=false",o:'modifiedTime desc'};
-  if(d.tab==='estrela')return {q:'starred=true and trashed=false',o:'folder,name'};
-  return {q:`'${f}' in parents and trashed=false`,o:'folder,name'}}
+  if(d.tab==='estrela')return {q:'starred=true and trashed=false',o:ob};
+  return {q:`'${f}' in parents and trashed=false`,o:ob}}
 async function driveLoad(){const Q=driveQuery();const key=JSON.stringify(Q);if(DRV.key===key&&DRV.files)return;DRV={key,files:null,err:''};
   try{const j=await gFetch(`https://www.googleapis.com/drive/v3/files?pageSize=100&orderBy=${encodeURIComponent(Q.o)}&fields=files(id,name,mimeType,webViewLink,modifiedTime,thumbnailLink,iconLink,starred,parents)&includeItemsFromAllDrives=true&supportsAllDrives=true&q=${encodeURIComponent(Q.q)}`);if(DRV.key!==key)return;DRV.files=j.files||[]}
   catch(e){if(DRV.key===key)DRV.err=e.message}if(route==='drive')render()}
 VIEWS.drive=()=>{
   if(!gOn())return `<div class="card" style="max-width:560px">${connectPrompt('drive','Conecte a sua conta Google para navegar no seu Drive e abrir Docs, Planilhas e Apresentações aqui dentro.')}</div>`;
   const d=S.ui.drive||(S.ui.drive={tab:'meu',path:[{id:'root',n:'Meu Drive'}],q:''});
-  const tabs=[['meu','Meu Drive',ic('folder')],['recentes','Recentes',ic('clock')],['compart','Compartilhados comigo',ic('users')],['estrela','Com estrela',ic('pin')],['gdocs','Google Docs',ic('doc')]];
+  const tabs=[['meu','Meu Drive',ic('folder')],['recentes','Recentes',ic('clock')],['compart','Compartilhados comigo',ic('users')],['estrela','Com estrela',ic('pin')],['gdocs','Google Docs',ic('doc')],['lixeira','Lixeira',ic('trash')]];
   driveLoad();
   const files=DRV.files;const folders=files?files.filter(f=>/folder/.test(f.mimeType)):[];const docs=files?files.filter(f=>!/folder/.test(f.mimeType)):[];
   const card=f=>{const k=gKind(f.mimeType);const t=k?GAPP[k]:null;const ft=GMIME(f.mimeType);
@@ -1845,12 +1881,15 @@ VIEWS.drive=()=>{
    <aside class="dv-side"><div class="dv-new"><button class="btn primary" data-act="gnewmenu">${ic('plus')}Novo</button><div class="dv-newmenu" id="dvNew" hidden>${Object.entries(GAPP).map(([k,[path,n,c]])=>`<button data-act="gcreate" data-k="${k}"><i style="background:${c}"></i>${n.replace(/s$/,'').replace('Apresentaçõe','Apresentação')}</button>`).join('')}<hr><button data-act="dnewfolder">${ic('folder')}Nova pasta</button><button data-act="dupload">${ic('upload')}Enviar arquivo</button><input type="file" id="dvUp" multiple hidden></div></div>
      ${tabs.map(([k,n,i])=>`<button class="dv-tab ${d.tab===k&&!d.q?'on':''}" data-act="dtab" data-v="${k}">${i}${n}</button>`).join('')}</aside>
    <section class="dv-main"><div class="dv-top"><div class="dv-crumbs">${d.q?`Resultados para “${esc(d.q)}”`:d.tab==='meu'?d.path.map((x,i)=>`<button data-act="dcrumb" data-i="${i}" data-drop="${x.id}">${esc(x.n)}</button>`).join(`<span>›</span>`):tabs.find(t=>t[0]===d.tab)[1]}</div>
-     <div class="dv-search">${ic('search')}<input id="dvq" placeholder="Pesquisar no Drive" value="${esc(d.q||'')}"></div></div>
+     <div class="dv-search">${ic('search')}<input id="dvq" placeholder="Pesquisar no Drive" value="${esc(d.q||'')}"></div>
+     <div class="dv-tools"><select class="dv-sort" aria-label="Ordenar"><option value="mod" ${S.ui.dvSort!=='nome'?'selected':''}>Modificado por último</option><option value="nome" ${S.ui.dvSort==='nome'?'selected':''}>Nome</option></select>
+     <div class="gc-seg"><button class="${S.ui.dvView==='lista'?'on':''}" data-act="dvview" data-v="lista" title="Lista" aria-label="Ver em lista">${ic('list')}</button><button class="${S.ui.dvView!=='lista'?'on':''}" data-act="dvview" data-v="grade" title="Galeria" aria-label="Ver em galeria">${ic('grid')}</button></div></div></div>
+     ${d.tab==='lixeira'?'<div class="dv-note">Itens na lixeira são apagados para sempre depois de 30 dias.</div>':''}
      ${DRV.err?`<div class="empty">Não consegui abrir o Drive: ${esc(DRV.err)}. <button class="pd-link" data-act="gsync">Tentar de novo</button></div>`:!files?`<div class="dv-grid">${[...Array(8)].map(()=>'<div class="dv-file sk"></div>').join('')}</div>`:
-      `${folders.length?`<div class="dv-h">Pastas</div><div class="dv-folders">${folders.map(f=>`<div class="dv-fwrap" draggable="true" data-fid="${f.id}" data-drop="${f.id}"><button class="dv-folder" data-act="dfolder" data-id="${f.id}" data-n="${esc(f.name)}">${ic('folder')}<span>${esc(f.name)}</span></button><button class="dv-more" data-act="dmenu" data-id="${f.id}" data-n="${esc(f.name)}" data-s="${f.starred?1:0}" aria-label="Mais ações">⋯</button></div>`).join('')}</div>`:''}
+      S.ui.dvView==='lista'?dvList(files):`${folders.length?`<div class="dv-h">Pastas</div><div class="dv-folders">${folders.map(f=>`<div class="dv-fwrap" draggable="true" data-fid="${f.id}" data-drop="${f.id}"><button class="dv-folder" data-act="dfolder" data-id="${f.id}" data-n="${esc(f.name)}">${ic('folder')}<span>${esc(f.name)}</span></button><button class="dv-more" data-act="dmenu" data-id="${f.id}" data-n="${esc(f.name)}" data-s="${f.starred?1:0}" aria-label="Mais ações">⋯</button></div>`).join('')}</div>`:''}
        ${docs.length?`<div class="dv-h">Arquivos</div><div class="dv-grid">${docs.map(card).join('')}</div>`:''}${!folders.length&&!docs.length?'<div class="empty">Nada por aqui.</div>':''}`}
    </section></div>`};
-AFTER.drive=()=>{const up=$('#dvUp');if(up)up.addEventListener('change',()=>{[...up.files].forEach(f=>dUpload(f))});
+AFTER.drive=()=>{const so=$('.dv-sort');if(so)so.addEventListener('change',()=>{S.ui.dvSort=so.value;DRV.key='';save();render()});const up=$('#dvUp');if(up)up.addEventListener('change',()=>{[...up.files].forEach(f=>dUpload(f))});
   let dragId=null;$$('.dv [draggable=true]').forEach(el=>{el.addEventListener('dragstart',e=>{dragId=el.dataset.fid;e.dataTransfer.effectAllowed='move';el.classList.add('dragging')});el.addEventListener('dragend',()=>{el.classList.remove('dragging');$$('.dropon').forEach(x=>x.classList.remove('dropon'))})});
   $$('.dv [data-drop]').forEach(t=>{t.addEventListener('dragover',e=>{if(dragId&&dragId!==t.dataset.drop){e.preventDefault();t.classList.add('dropon')}});t.addEventListener('dragleave',()=>t.classList.remove('dropon'));t.addEventListener('drop',e=>{e.preventDefault();t.classList.remove('dropon');if(dragId&&dragId!==t.dataset.drop)dMove(dragId,t.dataset.drop);dragId=null})});
   const main=$('.dv-main');if(main){main.addEventListener('dragover',e=>{if(!dragId&&e.dataTransfer.types.includes('Files')){e.preventDefault();main.classList.add('dropfile')}});main.addEventListener('dragleave',e=>{if(e.target===main)main.classList.remove('dropfile')});main.addEventListener('drop',e=>{if(dragId||!e.dataTransfer.files.length)return;e.preventDefault();main.classList.remove('dropfile');[...e.dataTransfer.files].forEach(f=>dUpload(f))})}
@@ -1865,8 +1904,13 @@ async function dUpload(file){toast('Enviando '+file.name+'…');if(!gReady()){aw
   const meta={name:file.name,parents:[dCur()]};const fd=new FormData();fd.append('metadata',new Blob([JSON.stringify(meta)],{type:'application/json'}));fd.append('file',file);
   dAct(async()=>{const r=await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&supportsAllDrives=true',{method:'POST',headers:{Authorization:'Bearer '+gTok.t},body:fd});if(!r.ok){const j=await r.json().catch(()=>({}));throw new Error(j.error&&j.error.message||'erro '+r.status)}},file.name+' enviado')}
 function dMenu(d,el){$$('.dv-pop').forEach(x=>x.remove());const r=el.getBoundingClientRect();const m=document.createElement('div');m.className='dv-pop';m.style.top=(r.bottom+4)+'px';m.style.left=Math.min(innerWidth-220,r.left-160)+'px';
-  m.innerHTML=`<button data-act="drename" data-id="${d.id}" data-n="${esc(d.n)}">Renomear</button><button data-act="dstar" data-id="${d.id}" data-s="${d.s}">${d.s==='1'?'Tirar estrela':'Marcar com estrela'}</button><button data-act="dtrash" data-id="${d.id}" data-n="${esc(d.n)}" class="danger">Mover para a lixeira</button>`;document.body.appendChild(m);
+  if(S.ui.drive&&S.ui.drive.tab==='lixeira')m.innerHTML=`<button data-act="drestore" data-id="${d.id}">Restaurar</button><button data-act="dkill" data-id="${d.id}" data-n="${esc(d.n)}" class="danger">Excluir para sempre</button>`;else m.innerHTML=`<button data-act="drename" data-id="${d.id}" data-n="${esc(d.n)}">Renomear</button><button data-act="dstar" data-id="${d.id}" data-s="${d.s}">${d.s==='1'?'Tirar estrela':'Marcar com estrela'}</button><button data-act="dtrash" data-id="${d.id}" data-n="${esc(d.n)}" class="danger">Mover para a lixeira</button>`;document.body.appendChild(m);
   setTimeout(()=>document.addEventListener('pointerdown',function f(e){if(!m.contains(e.target)){m.remove();document.removeEventListener('pointerdown',f)}}),0)}
+
+function dvList(files){if(!files.length)return '<div class="empty">Nada por aqui.</div>';
+  return `<div class="dv-table"><div class="dv-tr dv-th"><span>Nome</span><span>Modificado</span><span>Tipo</span><span></span></div>${files.map(f=>{const fo=/folder/.test(f.mimeType);const k=gKind(f.mimeType);
+    return `<div class="dv-tr dv-fwrap" draggable="true" data-fid="${f.id}" ${fo?`data-drop="${f.id}"`:''}><button class="dv-cell-n" ${fo?`data-act="dfolder" data-id="${f.id}" data-n="${esc(f.name)}"`:`data-act="gopen" data-id="${f.id}" data-n="${esc(f.name)}" data-m="${esc(f.mimeType)}" data-u="${esc(f.webViewLink||'')}"`}>${fo?ic('folder'):`<img src="${esc(f.iconLink||'')}" alt="" width="16" height="16" onerror="this.remove()">`}<span>${esc(f.name)}</span>${f.starred?'<i class="dv-star">★</i>':''}</button>
+      <span>${new Date(f.modifiedTime).toLocaleDateString('pt-BR',{day:'numeric',month:'short',year:'numeric'})}</span><span>${fo?'Pasta':k?GAPP[k][1]:GMIME(f.mimeType).toUpperCase()}</span><button class="dv-more" data-act="dmenu" data-id="${f.id}" data-n="${esc(f.name)}" data-s="${f.starred?1:0}" aria-label="Mais ações">⋯</button></div>`}).join('')}</div>`}
 function gFileUrl(id,mime){const k=gKind(mime);return k?`https://docs.google.com/${GAPP[k][0]}/d/${id}/edit`:`https://drive.google.com/file/d/${id}/preview`}
 function gOpenFile(f){const k=gKind(f.m);const url=f.id?gFileUrl(f.id,f.m):f.u;const ext=f.u||url;
   layer(`<div class="overlay" data-act="closelayer"><div class="modal gwin" role="dialog" aria-label="${esc(f.n)}"><div class="gwin-h"><span class="gwin-dot" style="--c:${k?GAPP[k][2]:'#6C6C68'}">${k?GAPP[k][1][0]:'D'}</span><strong>${esc(f.n)}</strong><div style="flex:1"></div><a class="btn sm" href="${esc(ext)}" target="_blank" rel="noopener">${ic('out')}Abrir no Google</a><button class="iconbtn" data-act="closelayer" aria-label="Fechar">${ic('x')}</button></div>
@@ -2665,6 +2709,10 @@ const A={
   dstar:d=>{$$('.dv-pop').forEach(x=>x.remove());dAct(()=>gFetch(`${DAPI}/${d.id}?supportsAllDrives=true`,{method:'PATCH',body:JSON.stringify({starred:d.s!=='1'})}),d.s==='1'?'Estrela removida':'Marcado com estrela')},
   dtrash:d=>{$$('.dv-pop').forEach(x=>x.remove());layer(`<div class="overlay" data-act="closelayer"><div class="modal"><div class="modal-h"><h3>Mover "${esc(d.n)}" para a lixeira?</h3></div><div class="modal-b"><p class="muted" style="margin:0">Fica 30 dias na lixeira do Google Drive, e dá para recuperar lá.</p></div><div class="modal-f"><button class="btn" data-act="closelayer">Cancelar</button><button class="btn accent" data-act="dtrashok" data-id="${d.id}">Mover para a lixeira</button></div></div></div>`)},
   dtrashok:d=>{closeLayer();dAct(()=>gFetch(`${DAPI}/${d.id}?supportsAllDrives=true`,{method:'PATCH',body:JSON.stringify({trashed:true})}),'Movido para a lixeira')},
+  dvview:d=>{S.ui.dvView=d.v;save();render()},
+  drestore:d=>{$$('.dv-pop').forEach(x=>x.remove());dAct(()=>gFetch(`${DAPI}/${d.id}?supportsAllDrives=true`,{method:'PATCH',body:JSON.stringify({trashed:false})}),'Restaurado')},
+  dkill:d=>{$$('.dv-pop').forEach(x=>x.remove());layer(`<div class="overlay" data-act="closelayer"><div class="modal"><div class="modal-h"><h3>Excluir "${esc(d.n)}" para sempre?</h3></div><div class="modal-b"><p class="muted" style="margin:0">Não dá para desfazer. O arquivo some do seu Google Drive.</p></div><div class="modal-f"><button class="btn" data-act="closelayer">Cancelar</button><button class="btn accent" data-act="dkillok" data-id="${d.id}">Excluir para sempre</button></div></div></div>`)},
+  dkillok:d=>{closeLayer();dAct(async()=>{const r=await fetch(`${DAPI}/${d.id}?supportsAllDrives=true`,{method:'DELETE',headers:{Authorization:'Bearer '+gTok.t}});if(!r.ok&&r.status!==204)throw new Error('erro '+r.status)},'Excluído para sempre')},
   dnewfolder:()=>{const m=$('#dvNew');if(m)m.hidden=true;modal('Nova pasta',fld('m-n','Nome',`<input class="input" id="m-n" name="n" placeholder="Pasta sem título" autofocus>`),'Criar',o=>{dAct(()=>gFetch(`${DAPI}?supportsAllDrives=true`,{method:'POST',body:JSON.stringify({name:o.n.trim()||'Pasta sem título',mimeType:'application/vnd.google-apps.folder',parents:[dCur()]})}),'Pasta criada')})},
   dupload:()=>{const m=$('#dvNew');if(m)m.hidden=true;$('#dvUp').click()},
   gnewmenu:()=>{const m=$('#dvNew');if(m)m.hidden=!m.hidden},
@@ -2787,7 +2835,7 @@ document.addEventListener('keydown',e=>{
 document.addEventListener('submit',e=>{
   const f=e.target;const kind=f.dataset.form;if(!kind)return;e.preventDefault();const o=Object.fromEntries(new FormData(f));
   if(kind==='aisend'){const q=(o.q||'').trim();if(!q)return;const prov=PROVIDERS.find(x=>x[0]===S.ai.provider);
-    if(!S.ai.keys[S.ai.provider]){toast(`Conecte o ${prov[1]} na lista ao lado`);return}
+    if(!aiKey(S.ai.provider)){toast(`Cole a sua chave do ${prov[1]} no quadro de cima`);return}
     aiAsk(q);}
   if(kind==='addapp'){if(!o.n.trim()||!o.u.trim()){toast('Preencha nome e link');return}let u=o.u.trim();if(!/^https?:\/\//.test(u))u='https://'+u;S.apps.push({id:uid(),n:o.n.trim(),u,c:'#6C6C68',l:o.n.trim().slice(0,2),cat:'Meus apps',pin:true});toast('App adicionado e fixado no topo')}
   if(kind==='splink'){const m=(o.u||'').match(/open\.spotify\.com\/(?:intl-[a-z]+\/)?(playlist|album|track|episode|show)\/([A-Za-z0-9]+)/);if(!m){toast('Cole um link do Spotify, tipo open.spotify.com/playlist/...');return}S.sp={type:m[1],id:m[2]};save();render();toast('Spotify aberto');return}
@@ -2892,6 +2940,132 @@ Object.assign(A,{projsrc:d=>{S.ui.projSrc=d.v;save();render()},trconnect:()=>trC
       const q=new URLSearchParams({name:o.name.trim()||c.name,desc:o.desc,due:o.due?o.due+'T12:00:00.000Z':'null',dueComplete:o.done?'true':'false'});Object.assign(c,{name:o.name.trim()||c.name,desc:o.desc,due:o.due?o.due+'T12:00:00.000Z':null,dueComplete:!!o.done});trDo(()=>trF(`/cards/${c.id}?${q}`,{method:'PUT'}),'Salvo no Trello')})},
   trarch:d=>{closeLayer();trDo(()=>trF(`/cards/${d.id}?closed=true`,{method:'PUT'}),'Cartão arquivado')}});
 setTimeout(()=>{let t=null;try{t=sessionStorage.getItem('mesa-trtok');sessionStorage.removeItem('mesa-trtok')}catch(e){}if(t){S.trello={token:t};S.ui.projSrc='t';save();TR.boards=null;render();toast('Trello conectado')}},950);
+
+/* ============ v18: cores das ferramentas, tela Hoje real, importações reais ============ */
+Object.assign(TILE,{
+  hoje:['home','#FF6A3D','#F43217'],
+  projetos:['board','#388BFF','#0C66E4'],
+  agenda:['cal','#4C8DF6','#1A73E8'],
+  documentos:['doc','#5B9BF8','#2A6FDB'],
+  drive:['folder','#4285F4','#0F9D58'],
+  notas:['note','#FDD663','#F9AB00'],
+  assistentes:['spark','#E08A6C','#C15F3C'],
+  clientes:['users','#B57BF2','#8430CE'],
+  financeiro:['money','#34A853','#188038'],
+  ideias:['brain','#FF8A65','#F4511E'],
+  apps:['grid','#A1A1A8','#8E8E93'],integracoes:['plug','#A1A1A8','#8E8E93'],personalizar:['brush','#A1A1A8','#8E8E93'],
+  meusprojetos:['board','#388BFF','#0C66E4'],drivew:['folder','#4285F4','#0F9D58'],agendaw:['cal','#4C8DF6','#1A73E8'],
+  slack:['chat','#7C3085','#4A154B'],whatsapp:['chat','#3ED36B','#1FA855'],emails:['mail','#EA4335','#C5221F'],musica:['play','#3BE477','#1DB954'],videos:['play','#FF4E45','#E62117'],
+  financeiro_w:['money','#34A853','#188038'],tarefas:['check','#4C8DF6','#1A73E8'],prazos:['clock','#FF8A65','#F4511E'],ia:['spark','#E08A6C','#C15F3C'],notas_w:['note','#FDD663','#F9AB00']});
+Object.assign(WTILE,{agenda:'agendaw',meusprojetos:'meusprojetos',drivew:'drivew',slack:'slack',whatsapp:'whatsapp',emails:'emails',musica:'musica',videos:'videos',financeiro:'financeiro_w'});
+/* Meus projetos: quadros e cartões do Trello + projetos da Mesa */
+let TRME={cards:null,boards:null,loading:false};
+async function trMeLoad(){if(TRME.loading||!trOn())return;TRME.loading=true;try{const [b,c]=await Promise.all([trF('/members/me/boards?filter=open&fields=name,prefs,url,dateLastActivity,starred'),trF('/members/me/cards?filter=visible&fields=name,due,dueComplete,idBoard,idList,url,dateLastActivity')]);
+  TRME.boards=b.sort((x,y)=>(y.starred?1:0)-(x.starred?1:0)||(y.dateLastActivity||'').localeCompare(x.dateLastActivity||''));TRME.cards=c.filter(x=>!x.dueComplete).sort((x,y)=>(x.due||'9').localeCompare(y.due||'9'))}catch(e){TRME.err=e.message}TRME.loading=false;if(route==='hoje')render()}
+function wMeusProjetos(){
+  const mesa=S.projects.filter(p=>p.stage!=='Entregue');
+  if(!trOn())return `${mesa.length?`<div class="mp-list">${mesa.map(p=>`<button class="mp-row" data-act="openproj" data-id="${p.id}"><b>${esc(p.title)}</b><span class="muted small">${esc(p.stage)}</span></button>`).join('')}</div>`:''}<div class="row" style="gap:12px;align-items:center;margin-top:${mesa.length?12:0}px"><p class="muted small" style="margin:0;flex:1">Conecte o Trello para ver aqui os quadros e os cartões em que você está.</p><button class="btn sm primary" data-act="trconnect">Conectar Trello</button></div>`;
+  if(!TRME.boards){trMeLoad();return '<div class="tr-boards mini">'+[...Array(4)].map(()=>'<div class="tr-btile sk"></div>').join('')+'</div>'}
+  const bname=id=>(TRME.boards.find(b=>b.id===id)||{}).name||'';
+  const cards=TRME.cards.slice(0,6);
+  return `<div class="tr-boards mini">${TRME.boards.slice(0,6).map(b=>`<button class="tr-btile" style="${trBg(b)}" data-act="trgo" data-id="${b.id}"><span>${esc(b.name)}</span></button>`).join('')}</div>
+   ${cards.length?`<div class="mp-h">Cartões com você</div><div class="mp-list">${cards.map(c=>{const d=c.due?diff(c.due.slice(0,10)):null;return `<a class="mp-row" href="${esc(c.url)}" data-act="trgo" data-id="${c.idBoard}"><b>${esc(c.name)}</b><span class="muted small">${esc(bname(c.idBoard))}</span>${c.due?`<span class="mp-due ${d<0?'late':d<=1?'soon':''}">${d<0?'atrasado':d===0?'hoje':d===1?'amanhã':new Date(c.due).toLocaleDateString('pt-BR',{day:'numeric',month:'short'})}</span>`:''}</a>`}).join('')}</div>`:''}`}
+A.trgo=(d,el,e)=>{if(e)e.preventDefault();S.ui.projSrc='t';location.hash='projetos';setTimeout(()=>trLoad(d.id),50)};
+/* Drive recentes */
+let DRREC=null;
+function wDrive(){if(!gOn())return connectPrompt('drive','Conecte o Google para ver aqui os arquivos que você mexeu por último.');
+  if(!DRREC){DRREC=[];gFetch("https://www.googleapis.com/drive/v3/files?pageSize=8&orderBy=viewedByMeTime%20desc&fields=files(id,name,mimeType,webViewLink,iconLink,modifiedTime)&q="+encodeURIComponent("trashed=false and mimeType != 'application/vnd.google-apps.folder'")).then(j=>{DRREC=j.files||[];if(route==='hoje')render()}).catch(()=>{})}
+  return DRREC.length?`<div class="mp-list">${DRREC.map(f=>`<button class="mp-row" data-act="gopen" data-id="${f.id}" data-n="${esc(f.name)}" data-m="${esc(f.mimeType)}" data-u="${esc(f.webViewLink||'')}"><img src="${esc(f.iconLink||'')}" alt="" width="16" height="16" onerror="this.remove()"><b>${esc(f.name)}</b><span class="muted small">${new Date(f.modifiedTime).toLocaleDateString('pt-BR',{day:'numeric',month:'short'})}</span></button>`).join('')}</div>`:'<div class="empty">Carregando…</div>'}
+Object.assign(WIDGETS,{
+  meusprojetos:{t:'Meus projetos',d:'Quadros do Trello e cartões com você',f:wMeusProjetos,head:()=>`<a class="btn ghost sm" href="#projetos">Abrir projetos</a>`},
+  drivew:{t:'Arquivos recentes',d:'O que você mexeu por último no Drive',f:wDrive,head:()=>`<a class="btn ghost sm" href="#drive">Abrir Drive</a>`}});
+delete WIDGETS.numeros;delete WIDGETS.propostas;delete WIDGETS.slack;delete WIDGETS.whatsapp;delete WIDGETS.emails;
+WIDGETS.financeiro={t:'Contas do mês',d:'O que falta pagar e receber, do seu financeiro',f:()=>wFinReal(),head:()=>`<a class="btn ghost sm" href="#financeiro">Abrir</a>`};
+if(!S.ui.v18){S.ui.v18=1;S.ui.guide=false;S.ui.layout=[{id:'meusprojetos',w:12,pin:true},{id:'agenda',w:7},{id:'drivew',w:5},{id:'financeiro',w:7},{id:'notas',w:5}];save()}
+S.ui.layout=S.ui.layout.filter(x=>WIDGETS[x.id]);
+/* Importar das Integrações: agora liga a conexão de verdade */
+A.import=d=>{if(d.k==='trello'){S.ui.projSrc='t';save();location.hash='projetos';if(!trOn())setTimeout(trConnect,200);return}
+  if(d.k==='keep'){location.hash='notas';setTimeout(()=>A.keepimport(),200);return}
+  if(d.k==='sheets'){location.hash='financeiro';return}
+  toast('Essa importação chega numa próxima versão')};
+
+/* ============ Financeiro real (o mesmo do financeiro.edsonmota.com) ============ */
+const FIN={m:{},load:{}};
+const ymOf=off=>{const d=new Date(T0.getFullYear(),T0.getMonth()+off,1);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`};
+const brl0=v=>'R$ '+Math.round(v).toLocaleString('pt-BR');
+async function finLoad(ym){if(!window.__SB__){FIN.m[ym]={none:'proto'};return}if(FIN.load[ym])return;FIN.load[ym]=1;
+  try{const {data,error}=await window.__SB__.from('fin_docs').select('data').eq('path','meses/'+ym).maybeSingle();if(error)throw error;FIN.m[ym]=data?data.data:{none:'mes'}}catch(e){FIN.m[ym]={none:'erro',err:e.message}}
+  FIN.load[ym]=0;if(['financeiro','hoje'].includes(route))render()}
+function finSum(d,ent){const it=(d.itens||[]).filter(x=>x.tipo!=='transf'&&(!ent||x.ent===ent));const s=(t,pg)=>it.filter(x=>x.tipo===t&&(pg?x.status==='pago':x.status!=='pago')).reduce((a,x)=>a+(+x.valor||0),0);
+  return {entrou:s('receita',1),saiu:s('despesa',1),receber:s('receita',0),pagar:s('despesa',0),it}}
+async function finToggle(ym,id){const d=FIN.m[ym];const x=(d.itens||[]).find(i=>i.id===id);if(!x)return;x.status=x.status==='pago'?'pendente':'pago';if(x.status==='pago')x.pagoEm=Date.now();else delete x.pagoEm;render();
+  try{const ses=(await window.__SB__.auth.getSession()).data.session;const uid=ses&&ses.user.id;if(!uid)throw new Error('sessão expirada, entre de novo');const {error}=await window.__SB__.from('fin_docs').upsert({user_id:uid,path:'meses/'+ym,data:d,updated_at:new Date().toISOString()});if(error)throw error;toast(x.status==='pago'?'Marcado como pago':'Voltou para pendente')}
+  catch(e){toast('Não salvei no financeiro: '+(e.message||e));FIN.load[ym]=0;delete FIN.m[ym];finLoad(ym)}}
+const finRow=(ym,x)=>`<div class="fr ${x.status==='pago'?'ok':''}"><button class="check ${x.status==='pago'?'on':''}" data-act="fintog" data-ym="${ym}" data-id="${esc(x.id)}" aria-label="Marcar como pago">${x.status==='pago'?ic('check'):''}</button><div class="fr-t"><b>${esc(x.desc)}</b><span>${esc(x.cat||'')}${x.dia?' · dia '+x.dia:''}${x.parc?' · '+esc(x.parc):''}</span></div><span class="fr-e">${x.ent||''}</span><span class="fr-v ${x.tipo}">${x.tipo==='receita'?'+':'−'} ${brl(+x.valor||0)}</span></div>`;
+function finEmpty(d){return d.none==='proto'?'<div class="empty">No site, aqui aparecem os números do seu financeiro.</div>':d.none==='mes'?`<div class="empty">Esse mês ainda não foi aberto no seu financeiro. <a href="https://financeiro.edsonmota.com" target="_blank" rel="noopener">Abrir o financeiro</a> para gerar as contas fixas.</div>`:`<div class="empty">Não consegui ler o financeiro: ${esc(d.err||'')}</div>`}
+function wFinReal(){const ym=ymOf(0);const d=FIN.m[ym];if(!d){finLoad(ym);return '<div class="empty">Carregando…</div>'}if(d.none)return finEmpty(d);
+  const {receber,pagar,it}=finSum(d);const pend=it.filter(x=>x.status!=='pago').sort((a,b)=>(a.dia||0)-(b.dia||0));
+  return `<div class="fin-mini"><div><span>Falta receber</span><b class="pos">${brl0(receber)}</b></div><div><span>Falta pagar</span><b class="neg">${brl0(pagar)}</b></div></div>${pend.length?`<div class="fr-list">${pend.slice(0,6).map(x=>finRow(ym,x)).join('')}</div>`:'<div class="empty" style="padding:14px 0 4px">Tudo pago e recebido este mês.</div>'}`}
+VIEWS.financeiro=()=>{const off=S.ui.finOff||0;const ym=ymOf(off);const d=FIN.m[ym];const ent=S.ui.finEnt||'';
+  const mname=new Date(T0.getFullYear(),T0.getMonth()+off,1).toLocaleDateString('pt-BR',{month:'long',year:'numeric'});
+  const bar=`<div class="toolbar"><div class="row"><button class="gc-today" data-act="finnav" data-v="0">Este mês</button><button class="iconbtn" data-act="finnav" data-v="-1" aria-label="Mês anterior">${ic('left')}</button><button class="iconbtn" data-act="finnav" data-v="1" aria-label="Próximo mês">${ic('right')}</button><h2 class="gc-title">${mname.charAt(0).toUpperCase()+mname.slice(1)}</h2></div><div class="sp"></div>
+    <div class="gc-seg">${[['','Tudo'],['PF','Pessoal'],['PJ','Empresa']].map(([k,l])=>`<button class="${ent===k?'on':''}" data-act="finent" data-v="${k}">${l}</button>`).join('')}</div><a class="btn" href="https://financeiro.edsonmota.com" target="_blank" rel="noopener">${ic('out')}Financeiro completo</a></div>`;
+  if(!d){finLoad(ym);return bar+'<div class="empty">Carregando o seu financeiro…</div>'}
+  if(d.none)return bar+finEmpty(d);
+  const {entrou,saiu,receber,pagar,it}=finSum(d,ent);
+  const col=t=>it.filter(x=>x.tipo===t).sort((a,b)=>(a.status==='pago')-(b.status==='pago')||(a.dia||0)-(b.dia||0));
+  return bar+`<div class="fin-stats"><div class="card"><span>Entrou</span><b class="pos">${brl0(entrou)}</b></div><div class="card"><span>Saiu</span><b class="neg">${brl0(saiu)}</b></div><div class="card"><span>Sobrou</span><b>${brl0(entrou-saiu)}</b></div><div class="card"><span>Falta receber</span><b class="pos">${brl0(receber)}</b></div><div class="card"><span>Falta pagar</span><b class="neg">${brl0(pagar)}</b></div></div>
+   <div class="fin-cols"><section class="card"><div class="card-h"><h3>Receitas</h3><span class="muted small">${col('receita').filter(x=>x.status==='pago').length} de ${col('receita').length} recebidas</span></div><div class="fr-list">${col('receita').map(x=>finRow(ym,x)).join('')||'<div class="empty">Nada lançado.</div>'}</div></section>
+   <section class="card"><div class="card-h"><h3>Despesas</h3><span class="muted small">${col('despesa').filter(x=>x.status==='pago').length} de ${col('despesa').length} pagas</span></div><div class="fr-list">${col('despesa').map(x=>finRow(ym,x)).join('')||'<div class="empty">Nada lançado.</div>'}</div></section></div>
+   <p class="small muted" style="margin-top:12px">Esses números vêm direto do seu financeiro. Marcar ou desmarcar aqui também muda lá.</p>`};
+Object.assign(A,{fintog:d=>finToggle(d.ym,d.id),finnav:d=>{S.ui.finOff=d.v==='0'?0:(S.ui.finOff||0)+ +d.v;save();render()},finent:d=>{S.ui.finEnt=d.v;save();render()}});
+SUBT.financeiro='Seu financeiro de verdade. Marque o que pagou ou recebeu, que muda lá também.';
+
+function gcPop(html,anchor){$$('.gc-pop').forEach(x=>x.remove());const r=anchor.getBoundingClientRect();const m=document.createElement('div');m.className='gc-pop';m.innerHTML=html;document.body.appendChild(m);
+  const w=m.offsetWidth,h=m.offsetHeight;let x=r.right+10;if(x+w>innerWidth-12)x=r.left-w-10;if(x<12)x=Math.min(innerWidth-w-12,r.left);let y=Math.min(innerHeight-h-12,Math.max(12,r.top));m.style.left=x+'px';m.style.top=y+'px';
+  setTimeout(()=>document.addEventListener('pointerdown',function f(e){if(!m.contains(e.target)&&!e.target.closest('.gc-pop')){m.remove();$$('.gc-ev.new').forEach(n=>n.remove());document.removeEventListener('pointerdown',f)}}),0);return m}
+function evPop(E,el){const dt=new Date(E.date+'T12:00').toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long'});
+  gcPop(`<div class="gp-bar"><button data-act="evedit" data-id="${E.id}" title="Editar" aria-label="Editar">${ic('brush')}</button><button data-act="evdel" data-id="${E.id}" title="Excluir" aria-label="Excluir">${ic('trash')}</button>${E.link?`<a href="${esc(E.link.includes('meet.google')?'https://calendar.google.com':E.link)}" target="_blank" rel="noopener" title="Abrir no Google Agenda" aria-label="Abrir no Google Agenda">${ic('out')}</a>`:''}<button data-act="gpclose" title="Fechar" aria-label="Fechar">${ic('x')}</button></div>
+   <div class="gp-main"><i style="background:${evCol(E)}"></i><div><h4>${esc(E.title)}</h4><p>${dt.charAt(0).toUpperCase()+dt.slice(1)}${timed(E)?` · ${E.time}${E.end?' – '+E.end:''}`:''}</p></div></div>
+   ${E.meet&&E.link?`<a class="gp-meet" href="${esc(E.link)}" target="_blank" rel="noopener">${ic('play')}Participar com o Google Meet</a>`:''}`,el)}
+function quickPop(date,s,f,el){const dt=new Date(date+'T12:00').toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long'});
+  const m=gcPop(`<div class="gp-bar"><button data-act="gpclose" title="Fechar" aria-label="Fechar">${ic('x')}</button></div><form class="gp-quick"><input name="t" placeholder="Adicionar título" autocomplete="off"><p>${dt.charAt(0).toUpperCase()+dt.slice(1)} · ${m2t(s)} – ${m2t(f)}</p>
+   <label class="cbx"><input type="checkbox" name="meet">Adicionar Google Meet</label><div class="gp-actions"><button type="button" class="btn ghost sm" data-act="gpmore">Mais opções</button><button class="btn primary sm" type="submit">Salvar</button></div></form>`,el);
+  const fm=m.querySelector('form');setTimeout(()=>fm.t.focus(),30);
+  m.querySelector('[data-act=gpmore]').addEventListener('click',()=>{m.remove();evModal({title:fm.t.value,date,time:m2t(s),end:m2t(f)},true)});
+  fm.addEventListener('submit',e=>{e.preventDefault();const t=fm.t.value.trim()||'(sem título)';m.remove();if(gOn())gAddEvent(t,date,m2t(s),m2t(f),fm.meet.checked);else{S.events.push({id:uid(),title:t,date,time:m2t(s),end:m2t(f),meet:fm.meet.checked});save();render()}})}
+Object.assign(A,{gpclose:()=>{$$('.gc-pop').forEach(x=>x.remove());$$('.gc-ev.new').forEach(n=>n.remove())},evedit:d=>{$$('.gc-pop').forEach(x=>x.remove());const E=S.events.find(x=>x.id===d.id);if(E)evModal(E,false)}});
+const evdelBase=A.evdel;A.evdel=d=>{$$('.gc-pop').forEach(x=>x.remove());evdelBase(d)};
+A.evopen=(d,el)=>{const E=S.events.find(x=>x.id===d.id);if(E)evPop(E,el)};
+
+/* ============ IA: conectar sem rodeio ============ */
+S.ai.provider=S.ai.provider||'claude';
+const aiBase=VIEWS.assistentes;
+VIEWS.assistentes=()=>{if(aiKey('claude'))return aiBase();
+  return `<div class="card ai-setup"><div class="row" style="gap:14px;align-items:flex-start">${tile('assistentes','lg')}<div style="flex:1"><h3 style="margin:0 0 4px">Ligue o Claude na Mesa</h3><p class="muted small" style="margin:0 0 14px">A sua assinatura do Claude não serve para outros apps. Para a IA funcionar aqui, ela precisa de uma chave da API, que é cobrada por uso (poucos dólares por mês no uso normal).</p>
+   <ol class="steps"><li>Abra <a href="https://platform.claude.com/settings/keys" target="_blank" rel="noopener"><strong>platform.claude.com</strong></a>. Você já está logado lá.</li><li>Clique em <strong>Criar chave</strong>, dê o nome "Mesa" e copie. Ela começa com <code>sk-ant-</code>.</li><li>Cole aqui embaixo e clique em Conectar.</li></ol>
+   <form class="row ai-keyform" style="gap:8px;margin-top:10px"><input class="input" name="k" placeholder="sk-ant-..." autocomplete="off" spellcheck="false" style="flex:1"><button class="btn primary">Conectar</button></form>
+   <p class="small muted" style="margin:10px 0 0">A chave fica guardada só neste navegador. Se aparecer erro de crédito, coloque uns 5 dólares em Billing no mesmo site.</p></div></div></div>`};
+AFTER.assistentes=(f=>()=>{const fm=$('.ai-keyform');if(fm){fm.addEventListener('submit',e=>{e.preventDefault();const k=fm.k.value.trim();if(!/^sk-ant-/.test(k)){toast('Essa chave não parece do Claude. Ela começa com sk-ant-');return}try{localStorage.setItem('mesa-key-claude',k)}catch(err){}S.ai.keys={...(S.ai.keys||{}),claude:true};S.ai.provider='claude';save();render();toast('Claude conectado. Pode perguntar.')});return}if(f)f()})(AFTER.assistentes);
+/* ============ Melhorias pensadas para o Edson ============ */
+const IDEAS=[
+ ['Repasse dos freelas no automático','Quando você marcar que a Elohim pagou, a Mesa já lembra de pagar o Robert e o Rafael. Quando a Infinity pagar, lembra da Isabella. Tudo puxando do seu financeiro.','Financeiro'],
+ ['Modo cliente','Um clique em GenioDesk, Elohim ou Infinity e a Mesa mostra só o quadro do Trello, a pasta do Drive, os e-mails e as reuniões daquele cliente. Bom para trocar de cabeça entre os trabalhos do dia.','Foco'],
+ ['Resumo da manhã','Às 8h, um parágrafo com as reuniões do dia, os cartões do Trello vencendo e as contas que vencem na semana. Dá para ler no celular antes de sentar.','IA'],
+ ['Pauta do @edsonmotabranding','Um quadro com as ideias de reels e carrosséis, passando por roteiro, gravado, editado e postado, ligado ao Trello e ao Drive onde ficam os vídeos.','Conteúdo'],
+ ['Painel da GenioDesk','Gasto, ROAS e criativos que estão rodando no Meta Ads, num bloco da tela Hoje, para você não abrir o Gerenciador toda hora.','GenioDesk'],
+ ['Quanto vale a sua hora por cliente','Você liga o cronômetro no cliente, e a Mesa cruza com o que ele paga no financeiro. Assim você vê qual trabalho paga melhor a sua hora.','Financeiro'],
+ ['Caixa de entrada única','Gmail, Slack e WhatsApp Business num lugar só, separados por cliente, com resposta ali dentro.','Comunicação'],
+ ['Captura rápida','Aperte ⌘K em qualquer tela, escreva e escolha: vira nota, cartão no Trello, evento na agenda ou conta no financeiro.','Foco'],
+ ['Kit de marca de cada cliente','Logo, cores e fontes de cada cliente puxados da pasta do Drive. Um clique copia o código da cor.','Clientes'],
+ ['Ligar com o Portal do Cliente','O projeto da Mesa vira a página que o cliente acompanha no portal, com as etapas e as entregas atualizadas sozinhas.','Clientes'],
+ ['Segundo cérebro com o Obsidian','As notas e os links que você salva no Obsidian aparecem aqui, e o que você anota na Mesa vai para lá.','Notas'],
+ ['Semana planejada na sexta','Toda sexta, a Mesa sugere a semana seguinte: o que entra em cada dia, a partir dos prazos do Trello e das reuniões marcadas.','IA']];
+VIEWS.ideias=()=>{const v=S.ui.ideaVotes||{};return `<p class="muted" style="max-width:720px;margin:0 0 16px">Ideias pensadas para o seu dia: GenioDesk, os freelas, a marca pessoal e o financeiro. Marque as que você quer, e eu começo pelas mais marcadas.</p>
+  <div class="idea-grid">${IDEAS.map(([t,d,c],i)=>`<article class="card idea ${v[i]?'on':''}"><span class="idea-tag">${c}</span><h3>${t}</h3><p>${d}</p><button class="btn ${v[i]?'primary':''} sm" data-act="ideavote" data-i="${i}">${v[i]?ic('check')+'Quero isso':'Quero isso'}</button></article>`).join('')}</div>`};
+SUBT.ideias='Próximas melhorias para a Mesa ficar ainda mais útil para você.';
+A.ideavote=d=>{S.ui.ideaVotes=S.ui.ideaVotes||{};S.ui.ideaVotes[d.i]=!S.ui.ideaVotes[d.i];save();render();
+  if(S.ui.ideaVotes[d.i]&&window.__SB__)window.__SB__.from('mesa_feedback').insert({email:S.user.email,nota:5,texto:'Quero: '+IDEAS[d.i][0],tela:'ideias'}).then(()=>{},()=>{})};
 
 render();
 </script>
