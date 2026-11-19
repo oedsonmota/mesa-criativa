@@ -1208,6 +1208,9 @@ a.pd-row:hover{background:color-mix(in srgb,var(--ink) 3%,transparent)}
 .nav .ti{background:#8E8E93!important;box-shadow:none!important;transition:background .2s ease,transform .2s ease}
 .nav a:hover .ti,.nav a.on .ti{background:#F43217!important}
 .nav a:hover .ti{transform:scale(1.04)}
+.gc-ev{border-radius:4px!important;padding:2px 6px!important;font-size:12px!important;line-height:1.25!important}
+.gc-ev.tiny{padding:0 6px!important;font-size:11px!important;align-items:center}
+.gc-ev.short{gap:6px}
 .exemplo{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:var(--tile);border-radius:16px;padding:14px 16px;margin-bottom:18px;font-size:14px}
 .exemplo>div{flex:1;min-width:240px}
 #boot{animation:none}
@@ -1779,7 +1782,7 @@ setTimeout(()=>{let nw=null,er=null;try{nw=sessionStorage.getItem('mesa-gnew');e
   if(gOn()&&gReady())gSync()},900);
 
 /* ============ Agenda estilo Google: Dia, Semana, Mês ============ */
-const HH=48,DOWS=['DOM.','SEG.','TER.','QUA.','QUI.','SEX.','SÁB.'];
+const HH=54,DOWS=['DOM.','SEG.','TER.','QUA.','QUI.','SEX.','SÁB.'];
 const GCOL={'':'#039BE5','1':'#7986CB','2':'#33B679','3':'#8E24AA','4':'#E67C73','5':'#F6BF26','6':'#F4511E','7':'#039BE5','8':'#616161','9':'#3F51B5','10':'#0B8043','11':'#D50000'};
 const evCol=e=>e.g?GCOL[e.c||'']||'#039BE5':'#7986CB';
 const calShow=k=>!(S.ui.calHide||{})[k];
@@ -1788,9 +1791,12 @@ const m2t=m=>{m=Math.max(0,Math.min(1439,m));return `${String(Math.floor(m/60)).
 const timed=e=>/^\d\d:\d\d$/.test(e.time);
 function calAnchor(){const d=new Date(T0);d.setDate(d.getDate()+(S.ui.calOff||0));return d}
 function calDays(){const mode=S.ui.calMode||'semana';const a=calAnchor();if(mode==='dia')return [a];const st=new Date(a);st.setDate(a.getDate()-((a.getDay()+6)%7));return [...Array(7)].map((_,i)=>{const d=new Date(st);d.setDate(st.getDate()+i);return d})}
-function lanes(evs){evs=evs.map(e=>({e,s:t2m(e.time),f:Math.max(t2m(e.time)+20,e.end?t2m(e.end):t2m(e.time)+60)})).sort((a,b)=>a.s-b.s||b.f-a.f);
-  let cl=[],end=-1,out=[];const flush=()=>{const L=[];cl.forEach(x=>{let i=L.findIndex(l=>l<=x.s);if(i<0){i=L.length;L.push(0)}L[i]=x.f;x.lane=i});cl.forEach(x=>{x.n=L.length;out.push(x)});cl=[]};
-  evs.forEach(x=>{if(x.s>=end&&cl.length)flush();cl.push(x);end=Math.max(end,x.f)});if(cl.length)flush();return out}
+function lanes(evs){
+  const L=evs.map(e=>{const st=t2m(e.time);let en=e.end?t2m(e.end):st+60;if(en<=st)en=st+30;return {e,s:st,f:en}}).sort((a,b)=>a.s-b.s||b.f-a.f);
+  const out=[];let cl=[],end=-1;
+  const flush=()=>{const cols=[];cl.forEach(x=>{let i=cols.findIndex(c=>c[c.length-1].f<=x.s);if(i<0){i=cols.length;cols.push([])}cols[i].push(x);x.lane=i});
+    const n=cols.length;cl.forEach(x=>{let sp=1;for(let j=x.lane+1;j<n;j++){if(cols[j].some(y=>y.s<x.f&&y.f>x.s))break;sp++}x.n=n;x.span=sp;out.push(x)});cl=[]};
+  L.forEach(x=>{if(cl.length&&x.s>=end)flush();cl.push(x);end=Math.max(end,x.f)});if(cl.length)flush();return out}
 VIEWS.agenda=()=>{
   const mode=S.ui.calMode||'semana';
   const seg=`<div class="seg gc-seg">${[['dia','Dia'],['semana','Semana'],['mes','Mês']].map(([k,l])=>`<button class="${mode===k?'on':''}" data-act="calmode" data-v="${k}">${l}</button>`).join('')}</div>`;
@@ -1804,8 +1810,8 @@ VIEWS.agenda=()=>{
     ...(calShow('p')?S.projects.filter(p=>p.due===s&&p.stage!=='Entregue').map(p=>`<div class="gc-chip" style="--ec:#F4511E" data-act="openproj" data-id="${p.id}">Prazo · ${esc(p.title)}</div>`):[]),
     ...(calShow('t')?S.tasks.filter(t=>t.date===s).map(t=>`<div class="gc-chip ${t.done?'dn':''}" style="--ec:#BDBDBD">${esc(t.title)}</div>`):[])].join('')};
   const col=d=>{const s=fmt(d);const evs=lanes(S.events.filter(e=>e.date===s&&timed(e)&&calShow(e.g?'g':'m')));
-    return `<div class="gc-col ${s===fmt(now)?'today':''}" data-d="${s}">${evs.map(x=>{const e=x.e;const w=100/x.n;const h=Math.max(22,(x.f-x.s)/60*HH-2);
-      return `<div class="gc-ev ${h<40?'short':''}" data-ev="${e.id}" style="--ec:${evCol(e)};top:${x.s/60*HH}px;height:${h}px;left:calc(${x.lane*w}% + 2px);width:calc(${w}% - 6px)"><b>${esc(e.title)}</b><span>${e.time}${e.end?' – '+e.end:''}</span><i class="gc-rs"></i></div>`}).join('')}
+    return `<div class="gc-col ${s===fmt(now)?'today':''}" data-d="${s}">${evs.map(x=>{const e=x.e;const w=100/x.n;const h=Math.max(18,(x.f-x.s)/60*HH-1);const last=x.lane+x.span>=x.n;
+      return `<div class="gc-ev ${h<40?'short':''} ${h<26?'tiny':''}" data-ev="${e.id}" style="--ec:${evCol(e)};top:${x.s/60*HH}px;height:${h}px;left:calc(${x.lane*w}% + ${x.lane?1:0}px);width:calc(${w*x.span}% - ${last?10:2}px)"><b>${esc(e.title)}</b><span>${e.time}${e.end?' – '+e.end:''}</span><i class="gc-rs"></i></div>`}).join('')}
       ${s===fmt(now)?`<div class="gc-now" style="top:${nowM/60*HH}px"></div>`:''}</div>`};
   const T=title.charAt(0).toUpperCase()+title.slice(1);
   const mm=(()=>{const base=new Date(a.getFullYear(),a.getMonth()+(S.ui.miniOff||0),1);const st=new Date(base);st.setDate(1-base.getDay());const sel=new Set(days.map(fmt));
