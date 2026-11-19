@@ -1235,6 +1235,32 @@ a.pd-row:hover{background:color-mix(in srgb,var(--ink) 3%,transparent)}
 .gm-att span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.gm-att i{font-style:normal;color:var(--muted);font-size:12px}.gm-att svg{width:14px;height:14px;transform:rotate(180deg)}.gm-att:hover{border-color:#1A73E8}
 .acct-chips{display:flex;gap:6px;align-items:center}.acct-chip{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:4px 12px 4px 4px;font:inherit;font-size:13px;cursor:pointer;color:var(--ink)}
 .acct-chip .gacc-av{width:26px;height:26px;font-size:12px!important}.acct-chip i{font-style:normal;color:var(--muted)}.acct-chip.on{border-color:#1A73E8;background:color-mix(in srgb,#1A73E8 8%,var(--surface))}.acct-chip.add{padding:6px;width:36px;height:36px;justify-content:center}.acct-chip.add svg{width:16px;height:16px}
+/* ============ Login novo ============ */
+#auth{background:#FBFBFD!important;background-image:radial-gradient(circle,rgba(0,0,0,.09) 1px,transparent 1.2px)!important;background-size:22px 22px!important;grid-template-columns:1.25fr 1fr!important}
+#auth .auth-side{background:none!important;color:#1D1D1F!important;padding:44px 56px!important;display:flex;flex-direction:column;gap:28px;justify-content:flex-start!important;overflow:hidden}
+#auth .wordmark{font-weight:800;letter-spacing:-.02em;font-size:18px;color:#1D1D1F}#auth .wordmark b{color:#F43217}
+#auth .auth-hero h1{font-size:clamp(38px,4.6vw,64px)!important;line-height:1.02!important;letter-spacing:-.045em!important;color:#1D1D1F!important;max-width:13ch;margin:24px 0 0}
+#auth .auth-hero p{color:#6E6E73!important;font-size:18px!important;max-width:40ch;margin:18px 0 0!important;line-height:1.45}
+.auth-stage{position:relative;flex:1;min-height:330px;margin-top:10px}
+.as-card{position:absolute;background:#fff;border-radius:18px;padding:14px 16px;box-shadow:0 1px 2px rgba(0,0,0,.06),0 18px 40px -12px rgba(0,0,0,.18);display:flex;flex-direction:column;gap:8px;animation:asfloat 7s ease-in-out infinite}
+.as-h{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;color:#1D1D1F}.as-h i{width:10px;height:10px;border-radius:3px}
+.as-agenda{left:0;top:0;width:250px}.as-board{left:270px;top:24px;width:270px;animation-delay:-2s}.as-mail{left:40px;top:262px;width:260px;animation-delay:-4s}.as-fin{left:330px;top:212px;width:230px;animation-delay:-1s}
+.as-ev{background:var(--c);border-radius:6px;padding:6px 9px;display:flex;flex-direction:column;color:#1F1F1F}.as-ev b{font-size:12px;font-weight:600}.as-ev span{font-size:11px;opacity:.8}
+.as-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.as-cols div{background:#F1F2F4;border-radius:8px;padding:6px;display:flex;flex-direction:column;gap:5px;min-height:92px}.as-cols em{font-style:normal;font-size:10.5px;font-weight:700;color:#44546F}
+.as-cols span{display:block;height:20px;border-radius:5px;background:#fff;box-shadow:0 1px 1px rgba(9,30,66,.2)}.as-cols span.s{height:14px}.as-cols span.l{height:34px}
+.as-row{display:flex;flex-direction:column;border-top:1px solid #EEE;padding-top:6px}.as-row b{font-size:12px}.as-row span{font-size:11.5px;color:#6E6E73}
+.as-fin-n{display:grid;grid-template-columns:1fr 1fr;gap:8px}.as-fin-n div{display:flex;flex-direction:column;background:#F5F5F7;border-radius:10px;padding:8px}.as-fin-n span{font-size:10.5px;color:#6E6E73}.as-fin-n b{font-size:15px;color:#188038}.as-fin-n b.neg{color:#C5221F}
+@keyframes asfloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@media(prefers-reduced-motion:reduce){.as-card{animation:none}}
+#auth .auth-main{padding:40px!important;display:flex;align-items:center;justify-content:center}
+#auth .auth-card{background:#fff!important;border-radius:24px!important;padding:36px 34px!important;box-shadow:0 1px 2px rgba(0,0,0,.05),0 30px 60px -20px rgba(0,0,0,.22)!important;border:0!important;max-width:420px}
+#auth .auth-card h2{font-size:26px!important;letter-spacing:-.02em;color:#1D1D1F}#auth .auth-card .sub{color:#6E6E73;font-size:14.5px;line-height:1.45}
+#auth .auth-card .input{background:#F5F5F7;border:1px solid transparent;border-radius:12px;padding:13px 14px;font-size:15px;color:#1D1D1F}#auth .auth-card .input:focus{background:#fff;border-color:#F43217;box-shadow:0 0 0 4px rgba(244,50,23,.12)}
+#auth .auth-card label{font-size:13px;font-weight:600;color:#1D1D1F}
+#auth .auth-card .btn.primary.block{background:#F43217;color:#fff;border:0!important;border-radius:12px;padding:14px;font-size:15px;font-weight:600;margin-top:6px;box-shadow:0 8px 20px -8px rgba(244,50,23,.55)}
+#auth .auth-card .btn.primary.block:hover{filter:brightness(1.05)}
+#auth .auth-card .fine{color:#86868B;font-size:12.5px;text-align:center;margin-top:18px}
+@media(max-width:900px){#auth{grid-template-columns:1fr!important}.auth-stage{display:none}#auth .auth-side{padding:28px 24px 0!important}}
 .exemplo{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:var(--tile);border-radius:16px;padding:14px 16px;margin-bottom:18px;font-size:14px}
 .exemplo>div{flex:1;min-width:240px}
 #boot{animation:none}
@@ -1507,15 +1533,20 @@ function renderAuth(){
   $('#auth').innerHTML=`
   <section class="auth-side">
     <div class="wordmark">Mesa Criativa<b>.</b></div>
-    <div>
-      <h1>Seu estúdio inteiro numa mesa só.</h1>
-      <p>Projetos, clientes, documentos, notas, agenda e dinheiro no mesmo lugar, conectados ao seu Google. Feito para quem vive de design.</p>
-      <div class="replaces"><span>Trello</span><span>Notion</span><span>Google Keep</span><span>Docs soltos</span><span>Planilha do financeiro</span><span>Pasta de referências</span></div>
+    <div class="auth-hero">
+      <h1>Seu dia de trabalho numa mesa só.</h1>
+      <p>Agenda, e-mail, Trello, Drive, notas, IA e o seu financeiro no mesmo lugar. Sem pular de aba em aba.</p>
     </div>
-    <div class="auth-feats">
-      <div><strong>Projetos por etapa</strong>Do briefing à entrega, com prazo, checklist e arquivos do Drive em cada card.</div>
-      <div><strong>Google de verdade</strong>Agenda, Drive, Docs, Gmail e Meet sincronizados nos dois sentidos.</div>
-      <div><strong>Dinheiro sob controle</strong>Parcelas, mensalidades e despesas fixas, com o mês fechado sem planilha.</div>
+    <div class="auth-stage" aria-hidden="true">
+      <div class="as-card as-agenda"><div class="as-h"><i style="background:#1A73E8"></i>Hoje</div>
+        <div class="as-ev" style="--c:#039BE5"><b>Alinhamento de campanha</b><span>10:00 – 10:45</span></div>
+        <div class="as-ev" style="--c:#33B679"><b>Entrega das peças</b><span>14:30 – 15:00</span></div>
+        <div class="as-ev" style="--c:#F6BF26"><b>Gravar reel</b><span>16:00 – 17:00</span></div></div>
+      <div class="as-card as-board"><div class="as-h"><i style="background:#0C66E4"></i>Projetos</div>
+        <div class="as-cols"><div><em>A fazer</em><span></span><span class="s"></span></div><div><em>Fazendo</em><span class="l"></span></div><div><em>Feito</em><span class="s"></span><span></span></div></div></div>
+      <div class="as-card as-mail"><div class="as-h"><i style="background:#EA4335"></i>E-mail</div>
+        <div class="as-row"><b>Cliente</b><span>Aprovado, pode seguir</span></div><div class="as-row"><b>Fornecedor</b><span>Orçamento em anexo</span></div></div>
+      <div class="as-card as-fin"><div class="as-h"><i style="background:#188038"></i>Contas do mês</div><div class="as-fin-n"><div><span>Falta receber</span><b>R$ 3.800</b></div><div><span>Falta pagar</span><b class="neg">R$ 1.240</b></div></div></div>
     </div>
   </section>
   <section class="auth-main">
