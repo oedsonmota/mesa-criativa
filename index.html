@@ -1108,6 +1108,39 @@ a.pd-row:hover{background:color-mix(in srgb,var(--ink) 3%,transparent)}
 .keepdrop{display:flex;flex-direction:column;align-items:center;gap:6px;padding:26px;border:2px dashed var(--line);border-radius:14px;cursor:pointer;text-align:center;transition:all .2s}
 .keepdrop.on,.keepdrop:hover{border-color:#F2A600;background:color-mix(in srgb,#F2A600 6%,transparent)}.keepdrop svg{width:22px;height:22px;color:#F2A600}
 .dv-fwrap>.dv-file{width:100%;height:100%}
+/* Agenda mais Google */
+.gc-wrap{display:grid;grid-template-columns:248px 1fr;gap:16px;align-items:start}
+.gc-side{display:flex;flex-direction:column;gap:18px;position:sticky;top:8px}
+.gc-create{align-self:flex-start;display:inline-flex;align-items:center;gap:12px;border:0;background:var(--surface);color:var(--ink);font:inherit;font-size:14px;font-weight:500;padding:10px 24px 10px 14px;border-radius:16px;box-shadow:0 1px 3px rgba(60,64,67,.3),0 4px 8px 3px rgba(60,64,67,.15);cursor:pointer;transition:box-shadow .2s}
+.gc-create:hover{box-shadow:0 1px 3px rgba(60,64,67,.3),0 8px 12px 6px rgba(60,64,67,.15)}
+.gm-h{display:flex;align-items:center;justify-content:space-between;font-size:14px;padding:0 4px 6px}.gm-h b{font-weight:500}
+.gm-h button{border:0;background:none;width:28px;height:28px;border-radius:50%;cursor:pointer;color:var(--ink);display:inline-grid;place-items:center}.gm-h button:hover{background:color-mix(in srgb,var(--ink) 8%,transparent)}.gm-h svg{width:16px;height:16px}
+.gm-g{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;row-gap:2px}
+.gm-g i{font-style:normal;font-size:10.5px;font-weight:500;color:var(--muted);padding:4px 0}
+.gm-g button{border:0;background:none;font:inherit;font-size:11px;width:26px;height:26px;margin:auto;border-radius:50%;cursor:pointer;color:var(--ink)}
+.gm-g button:hover{background:color-mix(in srgb,var(--ink) 8%,transparent)}.gm-g button.out{color:var(--muted)}
+.gm-g button.sel{background:color-mix(in srgb,#1A73E8 16%,transparent);color:#1967D2}.gm-g button.today{background:#1A73E8;color:#fff}
+.gc-cals-h{font-size:14px;font-weight:500;margin:0 4px 6px}
+.gc-cal{display:flex;align-items:center;gap:12px;font-size:13.5px;padding:5px 4px;border-radius:6px;cursor:pointer;min-width:0}.gc-cal span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gc-cal:hover{background:color-mix(in srgb,var(--ink) 5%,transparent)}
+.gc-cal input{appearance:none;-webkit-appearance:none;width:18px;height:18px;border-radius:3px;border:2px solid var(--ec);margin:0;flex:0 0 auto;cursor:pointer;display:grid;place-items:center}
+.gc-cal input:checked{background:var(--ec)}.gc-cal input:checked:after{content:"";width:5px;height:9px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.gc-mainc{min-width:0}
+.gc-today{border:1px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-size:14px;font-weight:500;padding:7px 18px;border-radius:999px;cursor:pointer;margin-right:4px}.gc-today:hover{background:color-mix(in srgb,var(--ink) 5%,var(--surface))}
+.gc-title{font-size:22px!important;font-weight:400!important}
+.gcal{border-radius:16px;height:calc(100vh - 175px)}
+.gc-dh span{font-size:11px;font-weight:500;letter-spacing:.04em}
+.gc-dh b{font-size:26px;font-weight:400}
+.gc-dh.today span{color:#1A73E8}.gc-dh.today b{background:#1A73E8;color:#fff}
+.gc-col.today{background:transparent}
+.gc-chip{background:var(--ec);color:#fff;font-weight:500;border-radius:4px;padding:2px 8px}
+.gc-chip.dn{text-decoration:line-through;opacity:.55}
+.gc-ev{background:var(--ec);color:#fff;border-radius:5px;padding:3px 7px;font-size:12px;box-shadow:0 0 0 1px var(--surface)}
+.gc-ev b{font-weight:500}
+.gc-ev.new{background:#039BE5;opacity:.8}
+.gc-now{background:#EA4335}.gc-now:before{background:#EA4335}
+@media(max-width:980px){.gc-wrap{grid-template-columns:1fr}.gc-side{display:none}}
+.gc-ev.short b{flex:0 1 auto;min-width:24px}.gc-ev.short span{flex:0 100 auto;min-width:0;overflow:hidden;text-overflow:ellipsis}
 .exemplo{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:var(--tile);border-radius:16px;padding:14px 16px;margin-bottom:18px;font-size:14px}
 .exemplo>div{flex:1;min-width:240px}
 #boot{animation:none}
@@ -1656,7 +1689,7 @@ const hm=d=>d.toTimeString().slice(0,5);
 async function gSync(loud){if(!gOn())return;try{const a=new Date(T0);a.setDate(a.getDate()-14);const b=new Date(T0);b.setDate(b.getDate()+90);
   const j=await gFetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events?singleEvents=true&orderBy=startTime&maxResults=500&timeMin=${a.toISOString()}&timeMax=${b.toISOString()}`);
   const evs=(j.items||[]).filter(e=>e.status!=='cancelled'&&e.start).map(e=>{const all=!e.start.dateTime;const st=all?null:new Date(e.start.dateTime),en=e.end&&e.end.dateTime?new Date(e.end.dateTime):null;
-    return {id:'g'+e.id,g:true,title:e.summary||'(sem título)',date:all?e.start.date:fmt(st),time:all?'Dia todo':hm(st),end:en?hm(en):'',meet:!!e.hangoutLink,link:e.hangoutLink||e.htmlLink}});
+    return {id:'g'+e.id,g:true,c:e.colorId||'',title:e.summary||'(sem título)',date:all?e.start.date:fmt(st),time:all?'Dia todo':hm(st),end:en?hm(en):'',meet:!!e.hangoutLink,link:e.hangoutLink||e.htmlLink}});
   S.events=S.events.filter(e=>!e.g).concat(evs);S.google.synced=Date.now();save();if(['hoje','agenda','integracoes'].includes(route))render();if(loud)toast(`${evs.length} compromissos trazidos da sua agenda`)}
   catch(e){toast('Não atualizei a agenda: '+e.message)}}
 async function gAddEvent(title,date,time,end,meet){try{const tz=Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -1679,7 +1712,10 @@ setTimeout(()=>{let nw=null,er=null;try{nw=sessionStorage.getItem('mesa-gnew');e
   if(gOn()&&gReady())gSync()},900);
 
 /* ============ Agenda estilo Google: Dia, Semana, Mês ============ */
-const HH=52,DOWS=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+const HH=48,DOWS=['DOM.','SEG.','TER.','QUA.','QUI.','SEX.','SÁB.'];
+const GCOL={'':'#039BE5','1':'#7986CB','2':'#33B679','3':'#8E24AA','4':'#E67C73','5':'#F6BF26','6':'#F4511E','7':'#039BE5','8':'#616161','9':'#3F51B5','10':'#0B8043','11':'#D50000'};
+const evCol=e=>e.g?GCOL[e.c||'']||'#039BE5':'#8E24AA';
+const calShow=k=>!(S.ui.calHide||{})[k];
 const t2m=t=>{const[h,m]=(t||'0:0').split(':').map(Number);return h*60+(m||0)};
 const m2t=m=>{m=Math.max(0,Math.min(1439,m));return `${String(Math.floor(m/60)).padStart(2,'0')}:${String(m%60).padStart(2,'0')}`};
 const timed=e=>/^\d\d:\d\d$/.test(e.time);
@@ -1697,16 +1733,22 @@ VIEWS.agenda=()=>{
   const title=mode==='dia'?a.toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long'}):(()=>{const f=days[0],l=days[6];return f.getMonth()===l.getMonth()?f.toLocaleDateString('pt-BR',{month:'long',year:'numeric'}):`${f.toLocaleDateString('pt-BR',{month:'short'})} – ${l.toLocaleDateString('pt-BR',{month:'short',year:'numeric'})}`})();
   const cols=days.length;const now=new Date();const nowM=now.getHours()*60+now.getMinutes();
   const allday=d=>{const s=fmt(d);return [
-    ...S.events.filter(e=>e.date===s&&!timed(e)).map(e=>`<div class="gc-chip g" data-act="evopen" data-id="${e.id}">${esc(e.title)}</div>`),
-    ...S.projects.filter(p=>p.due===s&&p.stage!=='Entregue').map(p=>`<div class="gc-chip dl" data-act="openproj" data-id="${p.id}">Prazo · ${esc(p.title)}</div>`),
-    ...S.tasks.filter(t=>t.date===s).map(t=>`<div class="gc-chip tk ${t.done?'dn':''}">${esc(t.title)}</div>`)].join('')};
-  const col=d=>{const s=fmt(d);const evs=lanes(S.events.filter(e=>e.date===s&&timed(e)));
+    ...S.events.filter(e=>e.date===s&&!timed(e)&&calShow(e.g?'g':'m')).map(e=>`<div class="gc-chip" style="--ec:${evCol(e)}" data-act="evopen" data-id="${e.id}">${esc(e.title)}</div>`),
+    ...(calShow('p')?S.projects.filter(p=>p.due===s&&p.stage!=='Entregue').map(p=>`<div class="gc-chip" style="--ec:#F4511E" data-act="openproj" data-id="${p.id}">Prazo · ${esc(p.title)}</div>`):[]),
+    ...(calShow('t')?S.tasks.filter(t=>t.date===s).map(t=>`<div class="gc-chip ${t.done?'dn':''}" style="--ec:#616161">${esc(t.title)}</div>`):[])].join('')};
+  const col=d=>{const s=fmt(d);const evs=lanes(S.events.filter(e=>e.date===s&&timed(e)&&calShow(e.g?'g':'m')));
     return `<div class="gc-col ${s===fmt(now)?'today':''}" data-d="${s}">${evs.map(x=>{const e=x.e;const w=100/x.n;const h=Math.max(22,(x.f-x.s)/60*HH-2);
-      return `<div class="gc-ev ${e.g?'g':'l'} ${h<40?'short':''}" data-ev="${e.id}" style="top:${x.s/60*HH}px;height:${h}px;left:calc(${x.lane*w}% + 2px);width:calc(${w}% - 6px)"><b>${esc(e.title)}</b><span>${e.time}${e.end?' – '+e.end:''}</span>${e.link&&e.meet?`<a class="gc-meet" href="${esc(e.link)}" target="_blank" rel="noopener" title="Entrar no Meet">Meet</a>`:''}<i class="gc-rs"></i></div>`}).join('')}
+      return `<div class="gc-ev ${h<40?'short':''}" data-ev="${e.id}" style="--ec:${evCol(e)};top:${x.s/60*HH}px;height:${h}px;left:calc(${x.lane*w}% + 2px);width:calc(${w}% - 6px)"><b>${esc(e.title)}</b><span>${e.time}${e.end?' – '+e.end:''}</span>${e.link&&e.meet?`<a class="gc-meet" href="${esc(e.link)}" target="_blank" rel="noopener" title="Entrar no Meet">Meet</a>`:''}<i class="gc-rs"></i></div>`}).join('')}
       ${s===fmt(now)?`<div class="gc-now" style="top:${nowM/60*HH}px"></div>`:''}</div>`};
   const T=title.charAt(0).toUpperCase()+title.slice(1);
-  return `<div class="toolbar gc-bar"><div class="row"><button class="btn sm" data-act="calnav" data-v="0">Hoje</button><button class="iconbtn" data-act="calnav" data-v="-1" aria-label="Anterior">${ic('left')}</button><button class="iconbtn" data-act="calnav" data-v="1" aria-label="Próximo">${ic('right')}</button><h2 class="gc-title">${T}</h2></div>
-    <div class="sp"></div>${conn}${seg}<button class="btn primary" data-act="new" data-k="event">${ic('plus')}Criar</button></div>
+  const mm=(()=>{const base=new Date(a.getFullYear(),a.getMonth()+(S.ui.miniOff||0),1);const st=new Date(base);st.setDate(1-base.getDay());const sel=new Set(days.map(fmt));
+    return `<div class="gm"><div class="gm-h"><b>${base.toLocaleDateString('pt-BR',{month:'long',year:'numeric'}).replace(/^./,c=>c.toUpperCase())}</b><span><button data-act="mininav" data-v="-1" aria-label="Mês anterior">${ic('left')}</button><button data-act="mininav" data-v="1" aria-label="Próximo mês">${ic('right')}</button></span></div>
+    <div class="gm-g">${['D','S','T','Q','Q','S','S'].map(x=>`<i>${x}</i>`).join('')}${[...Array(42)].map((_,i)=>{const d=new Date(st);d.setDate(st.getDate()+i);const f=fmt(d);return `<button data-act="calday" data-d="${f}" class="${d.getMonth()!==base.getMonth()?'out':''} ${f===fmt(now)?'today':''} ${sel.has(f)?'sel':''}">${d.getDate()}</button>`}).join('')}</div></div>`})();
+  const cals=[['g',gOn()?esc(S.google.email):'Google Agenda','#039BE5'],['m','Compromissos da Mesa','#8E24AA'],['p','Prazos dos projetos','#F4511E'],['t','Tarefas','#616161']];
+  const side=`<aside class="gc-side"><button class="gc-create" data-act="new" data-k="event"><svg viewBox="0 0 36 36" width="28" height="28"><path fill="#34A853" d="M16 16v14h4V20z"/><path fill="#4285F4" d="M30 16H20l-4 4h14z"/><path fill="#FBBC05" d="M6 16v4h10l4-4z"/><path fill="#EA4335" d="M20 16V6h-4v14z"/></svg>Criar</button>${mm}
+    <div class="gc-cals"><div class="gc-cals-h">Minhas agendas</div>${cals.map(([k,n,c])=>`<label class="gc-cal"><input type="checkbox" data-act="calvis" data-k="${k}" ${calShow(k)?'checked':''} style="--ec:${c}"><span>${n}</span></label>`).join('')}${gOn()?'':'<button class="pd-link" data-act="toggleint" data-k="gcal" style="margin-top:8px">Conectar Google Agenda</button>'}</div></aside>`;
+  return `<div class="gc-wrap">${side}<div class="gc-mainc"><div class="toolbar gc-bar"><div class="row"><button class="gc-today" data-act="calnav" data-v="0">Hoje</button><button class="iconbtn" data-act="calnav" data-v="-1" aria-label="Anterior">${ic('left')}</button><button class="iconbtn" data-act="calnav" data-v="1" aria-label="Próximo">${ic('right')}</button><h2 class="gc-title">${T}</h2></div>
+    <div class="sp"></div>${seg}</div>
   <div class="gcal" style="--cols:${cols};--hh:${HH}px">
     <div class="gc-head"><div class="gc-gut"></div>${days.map(d=>`<button class="gc-dh ${fmt(d)===fmt(now)?'today':''}" data-act="calday" data-d="${fmt(d)}"><span>${DOWS[d.getDay()]}</span><b>${d.getDate()}</b></button>`).join('')}</div>
     <div class="gc-all"><div class="gc-gut"><span>dia todo</span></div>${days.map(d=>`<div class="gc-allc">${allday(d)}</div>`).join('')}</div>
@@ -1714,7 +1756,7 @@ VIEWS.agenda=()=>{
       <div class="gc-hours">${[...Array(24)].map((_,h)=>`<div style="top:${h*HH}px">${h?String(h).padStart(2,'0')+':00':''}</div>`).join('')}</div>
       <div class="gc-cols">${days.map(col).join('')}</div>
     </div></div>
-  </div>`;
+  </div></div></div>`;
 };
 AFTER.agenda=()=>{const sc=$('#gcScroll');if(sc){sc.scrollTop=S.ui.calScroll!=null?S.ui.calScroll:7.5*HH;sc.addEventListener('scroll',()=>{S.ui.calScroll=sc.scrollTop},{passive:true})}};
 function evSave(e){e.end=e.end||m2t(t2m(e.time)+60);save();render();if(e.g)gPatchEvent(e)}
@@ -2604,9 +2646,11 @@ const A={
   dupload:()=>{const m=$('#dvNew');if(m)m.hidden=true;$('#dvUp').click()},
   gnewmenu:()=>{const m=$('#dvNew');if(m)m.hidden=!m.hidden},
   gcreate:d=>{const [path,n]=GAPP[d.k];gOpenFile({n:'Novo arquivo · '+n,m:'application/vnd.google-apps.'+d.k,u:`https://docs.google.com/${path}/create`});DRV.key=''},
+  calvis:(d,el)=>{S.ui.calHide=S.ui.calHide||{};S.ui.calHide[d.k]=!el.checked;save();render()},
+  mininav:d=>{S.ui.miniOff=(S.ui.miniOff||0)+ +d.v;render()},
   calmode:d=>{S.ui.calMode=d.v;save();render()},
   calnav:d=>{const m=S.ui.calMode||'semana';if(d.v==='0'){S.ui.calOff=0;S.ui.month=0}else if(m==='mes'){S.ui.month=(S.ui.month||0)+ +d.v}else S.ui.calOff=(S.ui.calOff||0)+(+d.v)*(m==='dia'?1:7);save();render()},
-  calday:(d,el,e)=>{if(e&&e.target.closest('[data-act=openproj]'))return;const t=new Date(d.d+'T12:00');const t0=new Date(fmt(T0)+'T12:00');S.ui.calOff=Math.round((t-t0)/864e5);S.ui.calMode='dia';save();if(route!=='agenda')location.hash='agenda';else render()},
+  calday:(d,el,e)=>{if(e&&e.target.closest('[data-act=openproj]'))return;S.ui.miniOff=0;if(el&&el.closest('.gm')&&(S.ui.calMode||'semana')!=='mes'){const t=new Date(d.d+'T12:00'),t0=new Date(fmt(T0)+'T12:00');S.ui.calOff=Math.round((t-t0)/864e5);save();render();return}const t=new Date(d.d+'T12:00');const t0=new Date(fmt(T0)+'T12:00');S.ui.calOff=Math.round((t-t0)/864e5);S.ui.calMode='dia';save();if(route!=='agenda')location.hash='agenda';else render()},
   evopen:d=>{const E=S.events.find(x=>x.id===d.id);if(E)evModal(E,false)},
   evdel:d=>{const E=S.events.find(x=>x.id===d.id);S.events=S.events.filter(x=>x.id!==d.id);closeLayer();save();render();if(E&&E.g)gDeleteEvent(E.id);else toast('Compromisso apagado')},
   gdisc:()=>gDisconnect(),
