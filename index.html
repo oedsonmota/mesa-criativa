@@ -1213,6 +1213,18 @@ a.pd-row:hover{background:color-mix(in srgb,var(--ink) 3%,transparent)}
 .gc-ev.short{gap:6px}
 .gc-ev.tiny{padding:0 6px!important;font-size:11px!important;line-height:14px!important;flex-direction:row;gap:6px;white-space:nowrap}
 .gc-ev.tiny span{font-size:11px}
+.gacc-list{display:flex;flex-direction:column;gap:8px;min-width:min(520px,100%)}.gacc{display:flex;align-items:center;gap:12px;background:var(--surface);border-radius:12px;padding:10px 12px}.gacc>div{flex:1;min-width:0;display:flex;flex-direction:column}.gacc b{font-size:14px;font-weight:600}.gacc span{font-size:12px;color:var(--muted)}
+.gacc-av{width:32px;height:32px;border-radius:50%;background:#1A73E8;color:#fff!important;display:grid;place-items:center;font-weight:600;font-size:14px!important;flex:0 0 auto}
+.gm-count{margin-left:auto;font-size:12px;font-weight:700}
+.gm-list{display:flex;flex-direction:column}.gm-row{display:grid;grid-template-columns:200px minmax(0,1fr) 70px;gap:14px;align-items:center;border:0;border-bottom:1px solid var(--line);background:none;font:inherit;font-size:14px;text-align:left;padding:11px 10px;cursor:pointer;color:var(--ink)}
+.gm-row:hover{background:color-mix(in srgb,var(--ink) 4%,transparent);box-shadow:inset 1px 0 0 #dadce0,inset -1px 0 0 #dadce0}.gm-row.sk{height:44px;animation:pulse 1.2s infinite}
+.gm-from,.gm-sn{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.gm-from i{font-style:normal;color:var(--muted);font-size:12px}.gm-sn{color:var(--muted)}.gm-sn b{color:var(--ink);font-weight:400}.gm-date{text-align:right;font-size:12.5px;color:var(--muted)}
+.gm-row.unread{background:color-mix(in srgb,#1A73E8 5%,transparent)}.gm-row.unread .gm-from,.gm-row.unread .gm-sn b,.gm-row.unread .gm-date{font-weight:700;color:var(--ink)}
+.gm-read{display:flex;flex-direction:column;gap:12px}.gm-rbar{display:flex;align-items:center;gap:4px}.gm-subj{font-size:22px;font-weight:400;margin:4px 0 6px}
+.gm-msg{border-top:1px solid var(--line);padding-top:12px}.gm-msg header{display:flex;align-items:center;gap:12px;margin-bottom:10px}.gm-msg header div{flex:1;min-width:0;display:flex;flex-direction:column}.gm-msg header b{font-size:14px}.gm-msg header span{font-size:12px;color:var(--muted)}.gm-msg time{font-size:12px;color:var(--muted)}
+.gm-text{white-space:pre-wrap;font-size:14px;line-height:1.5;padding-left:44px}.gm-frame{width:100%;border:0;min-height:200px;background:#fff;border-radius:8px}
+.gm-reply{display:flex;flex-direction:column;gap:8px;border:1px solid var(--line);border-radius:14px;padding:12px;margin-top:8px}.gm-reply textarea{border:0;outline:none;font:inherit;font-size:14px;resize:vertical;background:none;color:var(--ink)}
+.gm-wsub{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .exemplo{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:var(--tile);border-radius:16px;padding:14px 16px;margin-bottom:18px;font-size:14px}
 .exemplo>div{flex:1;min-width:240px}
 #boot{animation:none}
@@ -1741,29 +1753,43 @@ function openProject(id){
 
 /* ============ Google de verdade (Agenda e Drive) ============ */
 const GCID='373865012044-50d284tghfiss122ui29dumff1l2221u.apps.googleusercontent.com';
-const GSCOPES='openid email https://www.googleapis.com/auth/calendar.events https://www.googleapis.com/auth/drive';
-const GKEYS=['gcal','drive','docs','meet'],GSOON=['gmail','sheets','gtasks','contacts'];
-let gTok=null;try{gTok=JSON.parse(sessionStorage.getItem('mesa-gtok')||'null')}catch(e){}
+const GSCOPES='openid email https://www.googleapis.com/auth/calendar.events https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/gmail.modify https://www.googleapis.com/auth/gmail.send';
+const GKEYS=['gcal','drive','docs','meet','gmail'],GSOON=['sheets','gtasks','contacts'];
+/* várias contas Google: um acesso por e-mail, guardado só nesta sessão do navegador */
+let GT={};try{GT=JSON.parse(sessionStorage.getItem('mesa-gtoks')||'{}')}catch(e){}
+let gPend=null;try{gPend=JSON.parse(sessionStorage.getItem('mesa-gtok')||'null');sessionStorage.removeItem('mesa-gtok')}catch(e){}
+const gSaveT=()=>{try{sessionStorage.setItem('mesa-gtoks',JSON.stringify(GT))}catch(e){}};
 const gOn=()=>!!(S.google&&S.google.on);
-const gReady=()=>!!(gTok&&gTok.exp>Date.now()+60000);
+const gAccts=()=>gOn()?(S.google.accounts&&S.google.accounts.length?S.google.accounts:[S.google.email]):[];
+if(gOn()&&!S.google.accounts)S.google.accounts=[S.google.email];
+let gTok=gOn()?GT[S.google.email]||null:null;
+const gReady=em=>{const t=GT[em||(S.google&&S.google.email)];return !!(t&&t.exp>Date.now()+60000)};
+function gUse(em){S.google.email=em;gTok=GT[em]||null;DRV.key='';if(typeof GM!=='undefined')GM.key='';save();render()}
 const GREDIR=location.hostname==='oedsonmota.github.io'?'https://oedsonmota.github.io/mesa-criativa/':location.origin+location.pathname;
-function gAuth(prompt){const q={client_id:GCID,redirect_uri:GREDIR,response_type:'token',scope:GSCOPES,include_granted_scopes:'true',state:route||'hoje'};if(prompt)q.prompt=prompt;if(S.google&&S.google.email)q.login_hint=S.google.email;
+function gAuth(prompt,em){const q={client_id:GCID,redirect_uri:GREDIR,response_type:'token',scope:GSCOPES,include_granted_scopes:'true',state:route||'hoje'};if(prompt)q.prompt=prompt;const hint=em===null?null:(em||(S.google&&S.google.email));if(hint)q.login_hint=hint;
   toast('Abrindo o Google…');setTimeout(()=>{location.href='https://accounts.google.com/o/oauth2/v2/auth?'+new URLSearchParams(q)},800);return new Promise(()=>{})}
-async function gFetch(url,opt={},retry=true){if(!gReady())await gAuth('');
-  const r=await fetch(url,{...opt,headers:{Authorization:'Bearer '+gTok.t,'Content-Type':'application/json',...(opt.headers||{})}});
-  if(r.status===401&&retry){gTok=null;await gAuth('');return gFetch(url,opt,false)}
-  const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error&&j.error.message||('erro '+r.status));return j}
-function gConnect(){if(location.hostname!=='oedsonmota.github.io'){toast('O Google só conecta na Mesa no ar. Abrindo o site…');setTimeout(()=>window.open('https://oedsonmota.github.io/mesa-criativa/#integracoes','_blank','noopener'),700);return}gAuth('consent')}
-async function gFinish(){try{const u=await gFetch('https://www.googleapis.com/oauth2/v3/userinfo');S.google={on:true,email:u.email};GKEYS.forEach(k=>S.integrations[k]=true);save();render();toast('Google conectado: '+u.email);await gSync(true)}
+async function gFetch(url,opt={},retry=true,em){em=em||(S.google&&S.google.email);
+  if(!gReady(em)){if(em===(S.google&&S.google.email))await gAuth('',em);else throw new Error(`o acesso à conta ${em} expirou, entre nela de novo em Integrações`)}
+  const r=await fetch(url,{...opt,headers:{Authorization:'Bearer '+GT[em].t,'Content-Type':'application/json',...(opt.headers||{})}});
+  if(r.status===401&&retry){delete GT[em];gSaveT();if(em===S.google.email)await gAuth('',em);throw new Error('acesso expirou')}
+  if(r.status===204)return {};const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error&&j.error.message||('erro '+r.status));return j}
+function gConnect(add){if(location.hostname!=='oedsonmota.github.io'){toast('O Google só conecta na Mesa no ar. Abrindo o site…');setTimeout(()=>window.open('https://oedsonmota.github.io/mesa-criativa/#integracoes','_blank','noopener'),700);return}gAuth(add?'select_account consent':'consent',add?null:undefined)}
+async function gFinish(){if(!gPend)return;try{const r=await fetch('https://www.googleapis.com/oauth2/v3/userinfo',{headers:{Authorization:'Bearer '+gPend.t}});const u=await r.json();if(!u.email)throw new Error('não li o e-mail da conta');
+    GT[u.email]=gPend;gPend=null;gSaveT();const had=gOn()?gAccts():[];S.google={...(S.google||{}),on:true,email:u.email,accounts:[...new Set([...had,u.email])]};gTok=GT[u.email];GKEYS.forEach(k=>S.integrations[k]=true);
+    save();render();toast((had.length&&!had.includes(u.email)?'Conta adicionada: ':'Google conectado: ')+u.email);await gSync(true)}
   catch(e){toast('Não conectou o Google: '+e.message)}}
-function gDisconnect(){try{if(gTok)fetch('https://oauth2.googleapis.com/revoke?token='+encodeURIComponent(gTok.t),{method:'POST',mode:'no-cors'})}catch(e){}gTok=null;try{sessionStorage.removeItem('mesa-gtok')}catch(e){}S.google=null;S.events=S.events.filter(e=>!e.g);save();render();toast('Google desconectado')}
+function gDisconnect(em){em=em||S.google.email;try{if(GT[em])fetch('https://oauth2.googleapis.com/revoke?token='+encodeURIComponent(GT[em].t),{method:'POST',mode:'no-cors'})}catch(e){}
+  delete GT[em];gSaveT();const rest=gAccts().filter(x=>x!==em);S.events=S.events.filter(e=>!(e.g&&(e.acct===em||(!e.acct&&!rest.length))));
+  if(!rest.length){S.google=null;gTok=null;S.events=S.events.filter(e=>!e.g)}else{S.google.accounts=rest;if(S.google.email===em){S.google.email=rest[0];gTok=GT[rest[0]]||null}}
+  DRV.key='';save();render();toast('Conta desconectada: '+em)}
 const hm=d=>d.toTimeString().slice(0,5);
-async function gSync(loud){if(!gOn())return;try{const a=new Date(T0);a.setDate(a.getDate()-14);const b=new Date(T0);b.setDate(b.getDate()+90);
-  const j=await gFetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events?singleEvents=true&orderBy=startTime&maxResults=500&timeMin=${a.toISOString()}&timeMax=${b.toISOString()}`);
-  const evs=(j.items||[]).filter(e=>e.status!=='cancelled'&&e.start).map(e=>{const all=!e.start.dateTime;const st=all?null:new Date(e.start.dateTime),en=e.end&&e.end.dateTime?new Date(e.end.dateTime):null;
-    return {id:'g'+e.id,g:true,c:e.colorId||'',title:e.summary||'(sem título)',date:all?e.start.date:fmt(st),time:all?'Dia todo':hm(st),end:en?hm(en):'',meet:!!e.hangoutLink,link:e.hangoutLink||e.htmlLink}});
-  S.events=S.events.filter(e=>!e.g).concat(evs);S.google.synced=Date.now();save();if(['hoje','agenda','integracoes'].includes(route))render();if(loud)toast(`${evs.length} compromissos trazidos da sua agenda`)}
-  catch(e){toast('Não atualizei a agenda: '+e.message)}}
+async function gSync(loud){if(!gOn())return;const a=new Date(T0);a.setDate(a.getDate()-14);const b=new Date(T0);b.setDate(b.getDate()+90);let total=0;const stale=[];const keep=[];
+  for(const em of gAccts()){if(!gReady(em)){stale.push(em);keep.push(...S.events.filter(e=>e.g&&(e.acct||S.google.accounts[0])===em));continue}
+    try{const j=await gFetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events?singleEvents=true&orderBy=startTime&maxResults=500&timeMin=${a.toISOString()}&timeMax=${b.toISOString()}`,{},true,em);
+      const evs=(j.items||[]).filter(e=>e.status!=='cancelled'&&e.start).map(e=>{const all=!e.start.dateTime;const st=all?null:new Date(e.start.dateTime),en=e.end&&e.end.dateTime?new Date(e.end.dateTime):null;
+        return {id:'g'+e.id,g:true,acct:em,c:e.colorId||'',title:e.summary||'(sem título)',date:all?e.start.date:fmt(st),time:all?'Dia todo':hm(st),end:en?hm(en):'',meet:!!e.hangoutLink,link:e.hangoutLink||e.htmlLink}});
+      keep.push(...evs);total+=evs.length}catch(e){stale.push(em);keep.push(...S.events.filter(x=>x.g&&x.acct===em));toast('Não atualizei a agenda de '+em+': '+e.message)}}
+  S.events=S.events.filter(e=>!e.g).concat(keep);S.google.synced=Date.now();S.google.stale=stale;save();if(['hoje','agenda','integracoes'].includes(route))render();if(loud)toast(`${total} compromissos trazidos da sua agenda`)}
 async function gAddEvent(title,date,time,end,meet){try{const tz=Intl.DateTimeFormat().resolvedOptions().timeZone;
   const body={summary:title,start:{dateTime:`${date}T${time}:00`,timeZone:tz},end:{dateTime:`${date}T${end}:00`,timeZone:tz}};
   if(meet)body.conferenceData={createRequest:{requestId:'mesa'+uid(),conferenceSolutionKey:{type:'hangoutsMeet'}}};
@@ -1780,7 +1806,7 @@ function gDrivePicker(pid){layer(`<div class="overlay" data-act="closelayer"><di
 
 setTimeout(()=>{let nw=null,er=null;try{nw=sessionStorage.getItem('mesa-gnew');er=sessionStorage.getItem('mesa-gerr');sessionStorage.removeItem('mesa-gnew');sessionStorage.removeItem('mesa-gerr')}catch(e){}
   if(er){toast(er==='access_denied'?'Conexão com o Google cancelada':'O Google não liberou: '+er);return}
-  if(nw){gFinish();return}
+  if(nw||gPend){gFinish();return}
   if(gOn()&&gReady())gSync()},900);
 
 /* ============ Agenda estilo Google: Dia, Semana, Mês ============ */
@@ -1844,9 +1870,9 @@ function evModal(e,isNew){const st=e.time||'10:00';
      if(isNew){if(gOn())gAddEvent(o.title.trim(),o.date,o.time,o.end,!!o.meet);else S.events.push({id:uid(),title:o.title.trim(),date:o.date,time:o.time,end:o.end,meet:!!o.meet});return}
      Object.assign(e,{title:o.title.trim(),date:o.date,time:o.time,end:o.end});if(e.g)gPatchEvent(e)})}
 async function gPatchEvent(e){if(!gOn())return;try{const tz=Intl.DateTimeFormat().resolvedOptions().timeZone;
-  await gFetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events/${encodeURIComponent(e.id.slice(1))}`,{method:'PATCH',body:JSON.stringify({summary:e.title,start:{dateTime:`${e.date}T${e.time}:00`,timeZone:tz},end:{dateTime:`${e.date}T${e.end}:00`,timeZone:tz}})});toast('Atualizado no Google Agenda')}
+  await gFetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events/${encodeURIComponent(e.id.slice(1))}`,{method:'PATCH',body:JSON.stringify({summary:e.title,start:{dateTime:`${e.date}T${e.time}:00`,timeZone:tz},end:{dateTime:`${e.date}T${e.end}:00`,timeZone:tz}})},true,e.acct);toast('Atualizado no Google Agenda')}
   catch(err){toast('Não atualizei no Google: '+err.message);gSync()}}
-async function gDeleteEvent(id){try{const r=await fetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events/${encodeURIComponent(id.slice(1))}`,{method:'DELETE',headers:{Authorization:'Bearer '+(gTok&&gTok.t)}});if(!r.ok&&r.status!==410)throw new Error('erro '+r.status);toast('Apagado do Google Agenda')}catch(err){toast('Não apaguei no Google: '+err.message);gSync()}}
+async function gDeleteEvent(id,em){try{await gFetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events/${encodeURIComponent(id.slice(1))}`,{method:'DELETE'},true,em);toast('Apagado do Google Agenda')}catch(err){toast('Não apaguei no Google: '+err.message);gSync()}}
 /* arrastar, esticar e criar na grade */
 let gd=null;
 document.addEventListener('pointerdown',e=>{if(route!=='agenda'||e.button!==0)return;if(e.target.closest('a,.gc-meet,.gc-pop'))return;if($('.gc-pop')&&!e.target.closest('.gc-ev')){return}
@@ -1920,7 +1946,7 @@ async function dAct(fn,ok){try{await fn();if(ok)toast(ok)}catch(e){toast(/insuff
 function dMove(id,to){const f=(DRV.files||[]).find(x=>x.id===id);const from=(f&&f.parents||[]).join(',');dAct(()=>gFetch(`${DAPI}/${id}?addParents=${to}${from?'&removeParents='+from:''}&supportsAllDrives=true`,{method:'PATCH',body:'{}'}),'Movido')}
 async function dUpload(file){toast('Enviando '+file.name+'…');if(!gReady()){await gAuth('');return}
   const meta={name:file.name,parents:[dCur()]};const fd=new FormData();fd.append('metadata',new Blob([JSON.stringify(meta)],{type:'application/json'}));fd.append('file',file);
-  dAct(async()=>{const r=await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&supportsAllDrives=true',{method:'POST',headers:{Authorization:'Bearer '+gTok.t},body:fd});if(!r.ok){const j=await r.json().catch(()=>({}));throw new Error(j.error&&j.error.message||'erro '+r.status)}},file.name+' enviado')}
+  dAct(async()=>{const r=await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&supportsAllDrives=true',{method:'POST',headers:{Authorization:'Bearer '+GT[S.google.email].t},body:fd});if(!r.ok){const j=await r.json().catch(()=>({}));throw new Error(j.error&&j.error.message||'erro '+r.status)}},file.name+' enviado')}
 function dMenu(d,el){$$('.dv-pop').forEach(x=>x.remove());const r=el.getBoundingClientRect();const m=document.createElement('div');m.className='dv-pop';m.style.top=(r.bottom+4)+'px';m.style.left=Math.min(innerWidth-220,r.left-160)+'px';
   if(S.ui.drive&&S.ui.drive.tab==='lixeira')m.innerHTML=`<button data-act="drestore" data-id="${d.id}">Restaurar</button><button data-act="dkill" data-id="${d.id}" data-n="${esc(d.n)}" class="danger">Excluir para sempre</button>`;else m.innerHTML=`<button data-act="drename" data-id="${d.id}" data-n="${esc(d.n)}">Renomear</button><button data-act="dstar" data-id="${d.id}" data-s="${d.s}">${d.s==='1'?'Tirar estrela':'Marcar com estrela'}</button><button data-act="dtrash" data-id="${d.id}" data-n="${esc(d.n)}" class="danger">Mover para a lixeira</button>`;document.body.appendChild(m);
   setTimeout(()=>document.addEventListener('pointerdown',function f(e){if(!m.contains(e.target)){m.remove();document.removeEventListener('pointerdown',f)}}),0)}
@@ -2133,7 +2159,8 @@ const IMPORTS=[
 VIEWS.integracoes=()=>{
   const card=(x,imp)=>{const on=!imp&&(GKEYS.includes(x.k)?gOn():GSOON.includes(x.k)?false:S.integrations[x.k]);const soon=!imp&&GSOON.includes(x.k);return `<div class="intc ${on?'on':''}"><div class="int-top"><div class="logo" style="--c:${x.c}">${x.l}</div><h4>${x.n}</h4><div style="flex:1"></div>${imp?'':`<span class="pill ${on?'ok':''}">${on?'<span class="dot"></span>conectado':soon?'em breve':'desconectado'}</span>`}</div><p>${x.d}</p><div class="int-foot">${on&&GKEYS.includes(x.k)?`<span class="int-ok">${ic('check')}Ligado à sua conta Google</span>`:''}<span class="small muted int-note" ${on&&GKEYS.includes(x.k)?'hidden':''}>${on?'Última sincronização agora':imp?'Importação única':''}</span>${(on&&GKEYS.includes(x.k))||soon?'':imp?`<button class="btn sm" data-act="import" data-k="${x.k}">Importar</button>`:`<button class="btn sm ${on?'':'primary'}" data-act="toggleint" data-k="${x.k}" ${soon?'disabled':''}>${on?'Desconectar':'Conectar'}</button>`}</div></div>`};
   return `<div class="howto"><div><b>1</b><strong>Clique em Conectar</strong><span>Em qualquer serviço desta tela, ou direto no widget da tela Hoje.</span></div><div><b>2</b><strong>Entre e escolha o que liberar</strong><span>Abre a tela de login do próprio serviço. Você marca as permissões.</span></div><div><b>3</b><strong>Pronto, já aparece</strong><span>Os dados entram nos widgets, nas janelas de apps e no assistente.</span></div></div>
-  <div class="banner"><div><h3>Uma conexão com o Google liga tudo</h3><p>Ao conectar a sua conta Google, a Mesa Criativa pede permissão separada para cada serviço. Você escolhe o que liberar e pode desligar quando quiser. Agenda e Drive funcionam de verdade. Gmail, Sheets, Tasks e Contatos chegam nas próximas versões.</p></div><div class="sp"></div>${gOn()?`<button class="btn" data-act="gsync">Atualizar agora</button><button class="btn ghost" data-act="gdisc">Desconectar ${esc(S.google.email)}</button>`:'<button class="btn accent" data-act="connectall">Conectar minha conta Google</button>'}</div>
+  <div class="banner"><div><h3>Uma conexão com o Google liga tudo</h3><p>Ao conectar a sua conta Google, a Mesa Criativa pede permissão separada para cada serviço. Você escolhe o que liberar e pode desligar quando quiser. Agenda e Drive funcionam de verdade. Gmail, Sheets, Tasks e Contatos chegam nas próximas versões.</p></div><div class="sp"></div>${gOn()?`<div class="gacc-list">${gAccts().map(em=>`<div class="gacc"><span class="gacc-av">${esc(em[0].toUpperCase())}</span><div><b>${esc(em)}</b><span>${(S.google.stale||[]).includes(em)||!gReady(em)?'Precisa entrar de novo':em===S.google.email?'Conta ativa no Drive e no Gmail':'Conectada'}</span></div>${!gReady(em)?`<button class="btn sm" data-act="greauth" data-v="${esc(em)}">Entrar de novo</button>`:em!==S.google.email?`<button class="btn sm" data-act="guse" data-v="${esc(em)}">Usar esta</button>`:''}<button class="btn ghost sm" data-act="gdisc" data-v="${esc(em)}">Desconectar</button></div>`).join('')}
+  <div class="row" style="gap:8px;margin-top:8px"><button class="btn" data-act="gaddacct">${ic('plus')}Adicionar outra conta Google</button><button class="btn ghost" data-act="gsync">Atualizar agora</button></div></div>`:'<button class="btn accent" data-act="connectall">Conectar minha conta Google</button>'}</div>
   <div class="sec-t">Google</div><div class="int-grid">${INTS.map(x=>card(x)).join('')}</div>
   <div class="sec-t">Trazer o que você já tem</div><div class="int-grid">${IMPORTS.map(x=>card(x,true)).join('')}</div>
   <div class="sec-t">Música e vídeo</div><div class="int-grid">
@@ -2730,7 +2757,7 @@ const A={
   dvview:d=>{S.ui.dvView=d.v;save();render()},
   drestore:d=>{$$('.dv-pop').forEach(x=>x.remove());dAct(()=>gFetch(`${DAPI}/${d.id}?supportsAllDrives=true`,{method:'PATCH',body:JSON.stringify({trashed:false})}),'Restaurado')},
   dkill:d=>{$$('.dv-pop').forEach(x=>x.remove());layer(`<div class="overlay" data-act="closelayer"><div class="modal"><div class="modal-h"><h3>Excluir "${esc(d.n)}" para sempre?</h3></div><div class="modal-b"><p class="muted" style="margin:0">Não dá para desfazer. O arquivo some do seu Google Drive.</p></div><div class="modal-f"><button class="btn" data-act="closelayer">Cancelar</button><button class="btn accent" data-act="dkillok" data-id="${d.id}">Excluir para sempre</button></div></div></div>`)},
-  dkillok:d=>{closeLayer();dAct(async()=>{const r=await fetch(`${DAPI}/${d.id}?supportsAllDrives=true`,{method:'DELETE',headers:{Authorization:'Bearer '+gTok.t}});if(!r.ok&&r.status!==204)throw new Error('erro '+r.status)},'Excluído para sempre')},
+  dkillok:d=>{closeLayer();dAct(async()=>{const r=await fetch(`${DAPI}/${d.id}?supportsAllDrives=true`,{method:'DELETE',headers:{Authorization:'Bearer '+GT[S.google.email].t}});if(!r.ok&&r.status!==204)throw new Error('erro '+r.status)},'Excluído para sempre')},
   dnewfolder:()=>{const m=$('#dvNew');if(m)m.hidden=true;modal('Nova pasta',fld('m-n','Nome',`<input class="input" id="m-n" name="n" placeholder="Pasta sem título" autofocus>`),'Criar',o=>{dAct(()=>gFetch(`${DAPI}?supportsAllDrives=true`,{method:'POST',body:JSON.stringify({name:o.n.trim()||'Pasta sem título',mimeType:'application/vnd.google-apps.folder',parents:[dCur()]})}),'Pasta criada')})},
   dupload:()=>{const m=$('#dvNew');if(m)m.hidden=true;$('#dvUp').click()},
   gnewmenu:()=>{const m=$('#dvNew');if(m)m.hidden=!m.hidden},
@@ -2741,8 +2768,9 @@ const A={
   calnav:d=>{const m=S.ui.calMode||'semana';if(d.v==='0'){S.ui.calOff=0;S.ui.month=0}else if(m==='mes'){S.ui.month=(S.ui.month||0)+ +d.v}else S.ui.calOff=(S.ui.calOff||0)+(+d.v)*(m==='dia'?1:7);save();render()},
   calday:(d,el,e)=>{if(e&&e.target.closest('[data-act=openproj]'))return;S.ui.miniOff=0;if(el&&el.closest('.gm')&&(S.ui.calMode||'semana')!=='mes'){const t=new Date(d.d+'T12:00'),t0=new Date(fmt(T0)+'T12:00');S.ui.calOff=Math.round((t-t0)/864e5);save();render();return}const t=new Date(d.d+'T12:00');const t0=new Date(fmt(T0)+'T12:00');S.ui.calOff=Math.round((t-t0)/864e5);S.ui.calMode='dia';save();if(route!=='agenda')location.hash='agenda';else render()},
   evopen:d=>{const E=S.events.find(x=>x.id===d.id);if(E)evModal(E,false)},
-  evdel:d=>{const E=S.events.find(x=>x.id===d.id);S.events=S.events.filter(x=>x.id!==d.id);closeLayer();save();render();if(E&&E.g)gDeleteEvent(E.id);else toast('Compromisso apagado')},
-  gdisc:()=>gDisconnect(),
+  evdel:d=>{const E=S.events.find(x=>x.id===d.id);S.events=S.events.filter(x=>x.id!==d.id);closeLayer();save();render();if(E&&E.g)gDeleteEvent(E.id,E.acct);else toast('Compromisso apagado')},
+  gdisc:d=>gDisconnect(d.v),
+  guse:d=>gUse(d.v),greauth:d=>gAuth('',d.v),gaddacct:()=>gConnect(true),
   gpick:d=>{const p=project(d.id);p.files.push({n:d.n,k:d.k,url:d.u,gid:d.gid,m:d.m});save();closeLayer();setTimeout(()=>openProject(d.id),320);toast('Arquivo anexado do Drive')},
   toggleint:d=>{if(GKEYS.includes(d.k)){if(gOn())gDisconnect();else gConnect();return}if(GSOON.includes(d.k)){toast('Chega numa próxima versão');return}const x0=[...INTS,...OTHER].find(i=>i.k===d.k);if(!S.integrations[d.k]&&CONSENT[d.k]){const c=CONSENT[d.k];consent(c[0],c.slice(1),()=>{S.integrations[d.k]=true;save();render();toast(`${x0.n} conectado`)});return}S.integrations[d.k]=!S.integrations[d.k];save();render();const x=[...INTS,...OTHER].find(i=>i.k===d.k);toast(`${x.n} ${S.integrations[d.k]?'conectado':'desconectado'}`)},
   connectall:()=>{gConnect();return;INTS.forEach(i=>S.integrations[i.k]=true);save();render();toast('Todos os serviços Google conectados')},
@@ -3084,6 +3112,64 @@ VIEWS.ideias=()=>{const v=S.ui.ideaVotes||{};return `<p class="muted" style="max
 SUBT.ideias='Próximas melhorias para a Mesa ficar ainda mais útil para você.';
 A.ideavote=d=>{S.ui.ideaVotes=S.ui.ideaVotes||{};S.ui.ideaVotes[d.i]=!S.ui.ideaVotes[d.i];save();render();
   if(S.ui.ideaVotes[d.i]&&window.__SB__)window.__SB__.from('mesa_feedback').insert({email:S.user.email,nota:5,texto:'Quero: '+IDEAS[d.i][0],tela:'ideias'}).then(()=>{},()=>{})};
+
+/* ============ Gmail dentro da Mesa ============ */
+const GAPI='https://gmail.googleapis.com/gmail/v1/users/me';
+let GM={key:'',list:null,err:'',open:null,thread:null};
+const GFOLD=[['INBOX','Caixa de entrada','mail'],['STARRED','Com estrela','pin'],['SENT','Enviados','send'],['DRAFT','Rascunhos','doc'],['TRASH','Lixeira','trash']];
+const hdr=(m,n)=>((m.payload&&m.payload.headers)||[]).find(h=>h.name.toLowerCase()===n.toLowerCase())?.value||'';
+const fromName=f=>(f.match(/^"?([^"<]+?)"?\s*</)||[,f])[1].trim();
+const b64d=d=>{try{const b=atob(d.replace(/-/g,'+').replace(/_/g,'/'));return new TextDecoder().decode(Uint8Array.from(b,c=>c.charCodeAt(0)))}catch(e){return ''}};
+const b64e=str=>btoa(String.fromCharCode(...new TextEncoder().encode(str))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+function mBody(p){let html='',text='';(function walk(x){if(!x)return;if(x.mimeType==='text/html'&&x.body&&x.body.data)html=html||b64d(x.body.data);else if(x.mimeType==='text/plain'&&x.body&&x.body.data)text=text||b64d(x.body.data);(x.parts||[]).forEach(walk)})(p);return {html,text}}
+const mDate=d=>{const t=new Date(d);if(isNaN(t))return '';const today=new Date();return t.toDateString()===today.toDateString()?t.toTimeString().slice(0,5):t.toLocaleDateString('pt-BR',{day:'numeric',month:'short'})};
+async function gmLoad(){const f=S.ui.gmFolder||'INBOX',q=S.ui.gmQ||'';const key=S.google.email+'|'+f+'|'+q;if(GM.key===key&&(GM.list||GM.err))return;GM={...GM,key,list:null,err:''};
+  try{const j=await gFetch(`${GAPI}/threads?maxResults=30${q?'&q='+encodeURIComponent(q):'&labelIds='+f}`);const ts=j.threads||[];
+    const full=await Promise.all(ts.map(t=>gFetch(`${GAPI}/threads/${t.id}?format=metadata&metadataHeaders=From&metadataHeaders=Subject&metadataHeaders=Date&metadataHeaders=To`).catch(()=>null)));
+    if(GM.key!==key)return;GM.list=full.filter(Boolean).map(t=>{const m=t.messages[t.messages.length-1],m0=t.messages[0];const lab=new Set(t.messages.flatMap(x=>x.labelIds||[]));
+      return {id:t.id,from:f==='SENT'?'Para: '+fromName(hdr(m,'To')):fromName(hdr(m0,'From')),subj:hdr(m0,'Subject')||'(sem assunto)',snip:m.snippet||'',date:hdr(m,'Date'),unread:lab.has('UNREAD'),star:lab.has('STARRED'),n:t.messages.length}})}
+  catch(e){if(GM.key===key)GM.err=e.message}if(route==='email')render()}
+async function gmOpen(id){GM.open=id;GM.thread=null;render();try{const t=await gFetch(`${GAPI}/threads/${id}?format=full`);GM.thread=t;
+    if(t.messages.some(m=>(m.labelIds||[]).includes('UNREAD'))){gFetch(`${GAPI}/threads/${id}/modify`,{method:'POST',body:JSON.stringify({removeLabelIds:['UNREAD']})}).catch(()=>{});const it=(GM.list||[]).find(x=>x.id===id);if(it)it.unread=false}}
+  catch(e){toast('Não abri o e-mail: '+e.message);GM.open=null}if(route==='email')render()}
+function acctSwitch(){const ac=gAccts();if(ac.length<2)return `<span class="small muted">${esc(S.google.email)}</span>`;return `<select class="dv-sort acct-sel" aria-label="Conta Google">${ac.map(em=>`<option ${em===S.google.email?'selected':''}>${esc(em)}</option>`).join('')}</select>`}
+VIEWS.email=()=>{
+  if(!gOn())return `<div class="card" style="max-width:560px">${connectPrompt('gmail','Conecte a sua conta Google para ler e responder os seus e-mails aqui dentro.')}</div>`;
+  const f=S.ui.gmFolder||'INBOX';gmLoad();const L=GM.list;
+  const side=`<aside class="dv-side"><div class="dv-new"><button class="btn primary" data-act="gmnew">${ic('brush')}Escrever</button></div>${GFOLD.map(([k,n,i])=>`<button class="dv-tab ${f===k&&!S.ui.gmQ?'on':''}" data-act="gmfold" data-v="${k}">${ic(i)}${n}${k==='INBOX'&&L?`<span class="gm-count">${L.filter(x=>x.unread).length||''}</span>`:''}</button>`).join('')}</aside>`;
+  let main;
+  if(GM.open){const t=GM.thread;
+    main=!t?'<div class="empty">Abrindo…</div>':`<div class="gm-read"><div class="gm-rbar"><button class="iconbtn" data-act="gmback" aria-label="Voltar">${ic('left')}</button><div class="sp"></div>
+      <button class="iconbtn" data-act="gmarch" title="Arquivar" aria-label="Arquivar">${ic('folder')}</button><button class="iconbtn" data-act="gmtrash" title="Lixeira" aria-label="Mover para a lixeira">${ic('trash')}</button><button class="iconbtn" data-act="gmunread" title="Marcar como não lida" aria-label="Marcar como não lida">${ic('mail')}</button></div>
+      <h2 class="gm-subj">${esc(hdr(t.messages[0],'Subject')||'(sem assunto)')}</h2>
+      ${t.messages.map((m,i)=>{const b=mBody(m.payload);const last=i===t.messages.length-1;return `<article class="gm-msg ${last?'open':''}"><header><span class="gacc-av">${esc((fromName(hdr(m,'From'))[0]||'?').toUpperCase())}</span><div><b>${esc(fromName(hdr(m,'From')))}</b><span>para ${esc(hdr(m,'To').replace(/<[^>]+>/g,'').slice(0,80))}</span></div><time>${esc(new Date(hdr(m,'Date')).toLocaleString('pt-BR',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}))}</time></header>
+        ${last?(b.html?`<iframe class="gm-frame" sandbox="allow-popups allow-popups-to-escape-sandbox" data-i="${i}"></iframe>`:`<div class="gm-text">${esc(b.text||m.snippet)}</div>`):`<div class="gm-text muted">${esc(m.snippet)}</div>`}</article>`}).join('')}
+      <form class="gm-reply" data-trform="gmreply"><div class="small muted">Responder para ${esc(fromName(hdr(t.messages[t.messages.length-1],'Reply-To')||hdr(t.messages[t.messages.length-1],'From')))}</div><textarea name="b" rows="5" placeholder="Escreva a resposta…"></textarea><div class="row" style="gap:8px;justify-content:flex-end"><button class="btn primary">${ic('send')}Enviar</button></div></form></div>`}
+  else main=GM.err?`<div class="empty">Não consegui abrir o Gmail: ${esc(GM.err)}${/insufficient|scope|403/i.test(GM.err)?'. Entre de novo na conta Google em Integrações para liberar o Gmail.':''}</div>`:!L?'<div class="gm-list">'+[...Array(8)].map(()=>'<div class="gm-row sk"></div>').join('')+'</div>':
+    L.length?`<div class="gm-list">${L.map(m=>`<button class="gm-row ${m.unread?'unread':''}" data-act="gmopen" data-id="${m.id}"><span class="gm-from">${esc(m.from)}${m.n>1?` <i>${m.n}</i>`:''}</span><span class="gm-sn"><b>${esc(m.subj)}</b> – ${esc(m.snip)}</span><span class="gm-date">${mDate(m.date)}</span></button>`).join('')}</div>`:'<div class="empty">Nada por aqui.</div>';
+  return `<div class="dv">${side}<section class="dv-main"><div class="dv-top"><div class="dv-search">${ic('search')}<input id="gmq" placeholder="Pesquisar e-mail" value="${esc(S.ui.gmQ||'')}"></div><div class="sp"></div>${acctSwitch()}<button class="iconbtn" data-act="gmrefresh" title="Atualizar" aria-label="Atualizar">${ic('sync')}</button></div>${main}</section></div>`};
+AFTER.email=()=>{const q=$('#gmq');if(q)q.addEventListener('keydown',e=>{if(e.key==='Enter'){S.ui.gmQ=q.value.trim();GM.open=null;GM.key='';render()}});
+  const as=$('.acct-sel');if(as)as.addEventListener('change',()=>{GM.open=null;gUse(as.value)});
+  $$('.gm-frame').forEach(fr=>{const t=GM.thread;const m=t.messages[+fr.dataset.i];const b=mBody(m.payload);fr.srcdoc=`<base target="_blank"><style>body{font-family:-apple-system,Helvetica,Arial,sans-serif;font-size:14px;color:#1f1f1f;margin:0;word-wrap:break-word}img{max-width:100%;height:auto}</style>`+b.html.replace(/<script[\s\S]*?<\/script>/gi,'');fr.onload=()=>{try{fr.style.height=Math.min(4000,fr.contentDocument.body.scrollHeight+20)+'px'}catch(e){fr.style.height='600px'}}});
+  const rf=$('.gm-reply');if(rf)rf.addEventListener('submit',async e=>{e.preventDefault();const body=rf.b.value.trim();if(!body)return;const t=GM.thread;const m=t.messages[t.messages.length-1];
+    const to=hdr(m,'Reply-To')||hdr(m,'From');let subj=hdr(t.messages[0],'Subject')||'';if(!/^re:/i.test(subj))subj='Re: '+subj;const mid=hdr(m,'Message-ID')||hdr(m,'Message-Id');const refs=(hdr(m,'References')+' '+mid).trim();
+    await gmSend({to,subj,body,thread:t.id,mid,refs});rf.b.value=''})};
+async function gmSend({to,subj,body,thread,mid,refs}){const raw=[`To: ${to}`,`Subject: =?UTF-8?B?${btoa(String.fromCharCode(...new TextEncoder().encode(subj)))}?=`,'MIME-Version: 1.0','Content-Type: text/plain; charset=UTF-8','Content-Transfer-Encoding: base64',...(mid?[`In-Reply-To: ${mid}`,`References: ${refs}`]:[]),'',btoa(String.fromCharCode(...new TextEncoder().encode(body)))].join('\r\n');
+  try{await gFetch(`${GAPI}/messages/send`,{method:'POST',body:JSON.stringify({raw:b64e(raw),...(thread?{threadId:thread}:{})})});toast('E-mail enviado');if(thread)gmOpen(thread);else{GM.key='';render()}}catch(e){toast('Não enviei: '+e.message)}}
+const gmMod=(add,rem,msg,back=true)=>{const id=GM.open;gFetch(`${GAPI}/threads/${id}/modify`,{method:'POST',body:JSON.stringify({addLabelIds:add,removeLabelIds:rem})}).then(()=>{toast(msg);if(back){GM.open=null;GM.key='';render()}}).catch(e=>toast('Não deu: '+e.message))};
+Object.assign(A,{gmfold:d=>{S.ui.gmFolder=d.v;S.ui.gmQ='';GM.open=null;GM.key='';save();render()},gmopen:d=>gmOpen(d.id),gmback:()=>{GM.open=null;render()},gmrefresh:()=>{GM.key='';GM.open=null;render()},
+  gmarch:()=>gmMod([],['INBOX'],'Arquivado'),gmunread:()=>gmMod(['UNREAD'],[],'Marcado como não lida'),
+  gmtrash:()=>{const id=GM.open;gFetch(`${GAPI}/threads/${id}/trash`,{method:'POST'}).then(()=>{toast('Movido para a lixeira');GM.open=null;GM.key='';render()}).catch(e=>toast('Não deu: '+e.message))},
+  gmnew:()=>modal('Nova mensagem',fld('m-to','Para',`<input class="input" id="m-to" name="to" type="email" multiple required autofocus>`)+fld('m-s','Assunto',`<input class="input" id="m-s" name="s">`)+fld('m-b','Mensagem',`<textarea class="input" id="m-b" name="b" rows="9"></textarea>`)+`<p class="small muted" style="margin:0">Sai de ${esc(S.google.email)}</p>`,'Enviar',o=>{if(!o.to.trim())return false;gmSend({to:o.to.trim(),subj:o.s||'',body:o.b||''})})});
+/* menu, título e bloco da tela Hoje */
+NAV.splice(NAV.findIndex(n=>n[0]==='agenda')+1,0,['email','E-mail','mail','']);
+TILE.email=['mail','#8E8E93','#8E8E93'];SUBT.email='Seu Gmail aqui dentro. Leia, responda, arquive e escreva sem trocar de aba.';
+function wGmail(){if(!gOn())return connectPrompt('gmail','Conecte o Google para ver aqui os e-mails não lidos.');const f=S.ui.gmFolder;S.ui.gmFolder='INBOX';const q=S.ui.gmQ;S.ui.gmQ='';gmLoad();S.ui.gmFolder=f;S.ui.gmQ=q;
+  const L=(GM.key.endsWith('|INBOX|')&&GM.list)||null;if(!L)return '<div class="empty">Carregando…</div>';const un=L.filter(x=>x.unread).slice(0,6);
+  return un.length?`<div class="mp-list">${un.map(m=>`<button class="mp-row" data-act="gmgo" data-id="${m.id}"><b>${esc(m.from)}</b><span class="muted small gm-wsub">${esc(m.subj)}</span><span class="muted small">${mDate(m.date)}</span></button>`).join('')}</div>`:'<div class="empty">Nenhum e-mail não lido. Caixa em dia.</div>'}
+A.gmgo=d=>{location.hash='email';setTimeout(()=>gmOpen(d.id),60)};
+WIDGETS.gmail={t:'E-mails não lidos',d:'Sua caixa de entrada do Gmail',f:wGmail,head:()=>`<a class="btn ghost sm" href="#email">Abrir</a>`};TILE.gmail=['mail','#8E8E93','#8E8E93'];WTILE.gmail='gmail';
+if(!S.ui.v23){S.ui.v23=1;if(!S.ui.layout.some(x=>x.id==='gmail'))S.ui.layout.splice(2,0,{id:'gmail',w:5});save()}
 
 render();
 </script>
