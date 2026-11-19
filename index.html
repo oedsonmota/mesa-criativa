@@ -2,6 +2,10 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
+<script>/* volta do login do Google: guarda o acesso e limpa o endereço antes de tudo */
+(function(){var h=location.hash;if(h.indexOf('access_token=')<0&&h.indexOf('error=')<0)return;var p=new URLSearchParams(h.slice(1));
+try{if(p.get('access_token')){sessionStorage.setItem('mesa-gtok',JSON.stringify({t:p.get('access_token'),exp:Date.now()+((+p.get('expires_in')||3600)-30)*1000}));sessionStorage.setItem('mesa-gnew','1')}else sessionStorage.setItem('mesa-gerr',p.get('error')||'erro')}catch(e){}
+history.replaceState(null,'',location.pathname+location.search+'#'+(p.get('state')||'integracoes'))})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Mesa Criativa</title>
 <meta name="robots" content="noindex">
@@ -1549,17 +1553,17 @@ const GKEYS=['gcal','drive','docs','meet'],GSOON=['gmail','sheets','gtasks','con
 let gTok=null;try{gTok=JSON.parse(sessionStorage.getItem('mesa-gtok')||'null')}catch(e){}
 const gOn=()=>!!(S.google&&S.google.on);
 const gReady=()=>!!(gTok&&gTok.exp>Date.now()+60000);
-function gLoad(){return new Promise((res,rej)=>{if(window.google&&google.accounts&&google.accounts.oauth2)return res();const sc=document.createElement('script');sc.src='https://accounts.google.com/gsi/client';sc.onload=()=>res();sc.onerror=()=>rej(new Error('não consegui carregar o login do Google'));document.head.appendChild(sc)})}
-async function gAuth(prompt){await gLoad();return new Promise((res,rej)=>{const c=google.accounts.oauth2.initTokenClient({client_id:GCID,scope:GSCOPES,hint:S.google&&S.google.email||undefined,
-  callback:r=>{if(r.error)return rej(new Error(r.error_description||r.error));gTok={t:r.access_token,exp:Date.now()+(+r.expires_in-30)*1000};try{sessionStorage.setItem('mesa-gtok',JSON.stringify(gTok))}catch(e){}res()},
-  error_callback:e=>rej(new Error(e.type==='popup_closed'?'janela fechada':e.type||'cancelado'))});c.requestAccessToken({prompt})})}
+const GREDIR=location.origin+location.pathname;
+function gAuth(prompt){const q={client_id:GCID,redirect_uri:GREDIR,response_type:'token',scope:GSCOPES,include_granted_scopes:'true',state:route||'hoje'};if(prompt)q.prompt=prompt;if(S.google&&S.google.email)q.login_hint=S.google.email;
+  toast('Abrindo o Google…');setTimeout(()=>{location.href='https://accounts.google.com/o/oauth2/v2/auth?'+new URLSearchParams(q)},800);return new Promise(()=>{})}
 async function gFetch(url,opt={},retry=true){if(!gReady())await gAuth('');
   const r=await fetch(url,{...opt,headers:{Authorization:'Bearer '+gTok.t,'Content-Type':'application/json',...(opt.headers||{})}});
   if(r.status===401&&retry){gTok=null;await gAuth('');return gFetch(url,opt,false)}
   const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error&&j.error.message||('erro '+r.status));return j}
-async function gConnect(){try{await gAuth('consent');const u=await gFetch('https://www.googleapis.com/oauth2/v3/userinfo');S.google={on:true,email:u.email};GKEYS.forEach(k=>S.integrations[k]=true);save();render();toast('Google conectado: '+u.email);await gSync(true)}
+function gConnect(){gAuth('consent')}
+async function gFinish(){try{const u=await gFetch('https://www.googleapis.com/oauth2/v3/userinfo');S.google={on:true,email:u.email};GKEYS.forEach(k=>S.integrations[k]=true);save();render();toast('Google conectado: '+u.email);await gSync(true)}
   catch(e){toast('Não conectou o Google: '+e.message)}}
-function gDisconnect(){try{if(gTok&&window.google)google.accounts.oauth2.revoke(gTok.t,()=>{})}catch(e){}gTok=null;try{sessionStorage.removeItem('mesa-gtok')}catch(e){}S.google=null;S.events=S.events.filter(e=>!e.g);save();render();toast('Google desconectado')}
+function gDisconnect(){try{if(gTok)fetch('https://oauth2.googleapis.com/revoke?token='+encodeURIComponent(gTok.t),{method:'POST',mode:'no-cors'})}catch(e){}gTok=null;try{sessionStorage.removeItem('mesa-gtok')}catch(e){}S.google=null;S.events=S.events.filter(e=>!e.g);save();render();toast('Google desconectado')}
 const hm=d=>d.toTimeString().slice(0,5);
 async function gSync(loud){if(!gOn())return;try{const a=new Date(T0);a.setDate(a.getDate()-14);const b=new Date(T0);b.setDate(b.getDate()+90);
   const j=await gFetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events?singleEvents=true&orderBy=startTime&maxResults=500&timeMin=${a.toISOString()}&timeMax=${b.toISOString()}`);
@@ -1581,7 +1585,10 @@ function gDrivePicker(pid){layer(`<div class="overlay" data-act="closelayer"><di
     catch(e){L.innerHTML=`<div class="empty">Não consegui abrir o Drive: ${esc(e.message)}</div>`}};
   load('');setTimeout(()=>{const i=$('#gq');if(i){i.focus();i.addEventListener('input',()=>{clearTimeout(t);t=setTimeout(()=>load(i.value.trim()),300)})}},50)}
 
-setTimeout(()=>{if(gOn()&&gReady())gSync()},900);
+setTimeout(()=>{let nw=null,er=null;try{nw=sessionStorage.getItem('mesa-gnew');er=sessionStorage.getItem('mesa-gerr');sessionStorage.removeItem('mesa-gnew');sessionStorage.removeItem('mesa-gerr')}catch(e){}
+  if(er){toast(er==='access_denied'?'Conexão com o Google cancelada':'O Google não liberou: '+er);return}
+  if(nw){gFinish();return}
+  if(gOn()&&gReady())gSync()},900);
 /* ---- Agenda ---- */
 VIEWS.agenda=()=>{
   const m=new Date(T0.getFullYear(),T0.getMonth()+S.ui.month,1);
